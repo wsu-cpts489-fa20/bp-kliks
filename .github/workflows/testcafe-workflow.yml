@@ -4,16 +4,16 @@ on:
     branches:
       - master    
     paths:
-      - 'client/tests/**'  
+      - 'client/src/tests/**'  
   pull_request:
     branches:
       - master    
     paths:
-      - 'client/tests/**'  
+      - 'client/src/tests/**'  
 
 defaults:
   run:
-    working-directory: ./client/
+    working-directory: ./client/src/
 
 jobs:
   build:
