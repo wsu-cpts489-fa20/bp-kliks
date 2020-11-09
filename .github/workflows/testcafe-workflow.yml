@@ -32,4 +32,4 @@ jobs:
       - name: Run TestCafe Tests
         uses: DevExpress/testcafe-action@latest
         with:
-          args: "chrome ./client/tests/*.js"
+          args: "chrome ./tests/*.js"
