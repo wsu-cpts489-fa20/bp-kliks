@@ -70,15 +70,9 @@ const userSchema = new Schema({
 const User = mongoose.model("User",userSchema); 
 
 const surveySchema = new Schema({
-  courseInstructorFirstName: {type: String, required: true},
-  courseInstructorLastName: {type: String, required: true},
-  courseName: {type: String, required: true},
-  courseNumber: {type: String, required: true},
-  courseYear: {type: String, required: true},
-  courseSemester: {type: String, required: true, enum: ['Fall', 'Winter', 'Spring', 'Summer']},
-  courseEnrollmentLimit: {type: Number, required: true, min: 1, max: 300},
-  courseCurrentlyEnrolled: {type: Number, required: true, min: 1, max: 300},
-  courseNotes: {type: String, required: true},
+  surveyID: {type: String, required: true},
+  surveyQuestion: {type: String, required: true},
+  //surveyResponses?
 },
 {
   toObject: {
@@ -381,26 +375,27 @@ app.delete('/users/:userId', async(req, res, next) => {
 });
 
 /////////////////////////////////
-//ROUNDS ROUTES
+//COURSES ROUTES
 ////////////////////////////////
 
-//CREATE round route: Adds a new round as a subdocument to 
+//CREATE course route: Adds a new course as a subdocument to 
 //a document in the users collection (POST)
-app.post('/rounds/:userId', async (req, res, next) => {
-  console.log("in /rounds (POST) route with params = " + 
+app.post('/courses/:userId', async (req, res, next) => {
+  console.log("in /courses (POST) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  if (!req.body.hasOwnProperty("date") || 
-      !req.body.hasOwnProperty("course") || 
-      !req.body.hasOwnProperty("type") ||
-      !req.body.hasOwnProperty("holes") || 
-      !req.body.hasOwnProperty("strokes") ||
-      !req.body.hasOwnProperty("minutes") ||
-      !req.body.hasOwnProperty("seconds") || 
-      !req.body.hasOwnProperty("notes")) {
+  if (!req.body.hasOwnProperty("courseInstructorFirstName") || 
+      !req.body.hasOwnProperty("courseInstructorLastName") || 
+      !req.body.hasOwnProperty("courseName") ||
+      !req.body.hasOwnProperty("courseNumber") || 
+      !req.body.hasOwnProperty("courseYear") ||
+      !req.body.hasOwnProperty("courseSemester") ||
+      !req.body.hasOwnProperty("courseEnrollmentLimit") || 
+      !req.body.hasOwnProperty("courseCurrentlyEnrolled") || 
+      !req.body.hasOwnProperty("courseNotes")) {
     //Body does not contain correct properties
-    return res.status(400).send("POST request on /rounds formulated incorrectly." +
-      "Body must contain all 8 required fields: date, course, type, holes, strokes, "       +  "minutes, seconds, notes.");
+    return res.status(400).send("POST request on /courses formulated incorrectly." +
+      "Body must contain all 9 required fields: courseInstructorFirstName, courseInstructorLastName, courseName, courseNumber, courseYear, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, courseNotes");
   }
   try {
     let status = await User.updateOne(
@@ -408,13 +403,13 @@ app.post('/rounds/:userId', async (req, res, next) => {
     {$push: {rounds: req.body}});
     if (status.nModified != 1) { //Should never happen!
       res.status(400).send("Unexpected error occurred when adding round to"+
-        " database. Round was not added.");
+        " database. Course was not added.");
     } else {
-      res.status(200).send("Round successfully added to database.");
+      res.status(200).send("Course successfully added to database.");
     }
   } catch (err) {
     console.log(err);
-    return res.status(400).send("Unexpected error occurred when adding round" +
+    return res.status(400).send("Unexpected error occurred when adding course" +
      " to database: " + err);
   } 
 });
