@@ -472,13 +472,13 @@ app.put('/courses/:userId/:courseId', async (req, res, next) => {
 
 //DELETE round route: Deletes a specific round 
 //for a given user in the users collection (DELETE)
-app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
+app.delete('/courses/:userId/:courseId', async (req, res, next) => {
   console.log("in /rounds (DELETE) route with params = " + 
               JSON.stringify(req.params)); 
   try {
     let status = await User.updateOne(
       {id: req.params.userId},
-      {$pull: {rounds: {_id: mongoose.Types.ObjectId(req.params.roundId)}}});
+      {$pull: {courses: {_id: mongoose.Types.ObjectId(req.params.courseId)}}});
     if (status.nModified != 1) { //Should never happen!
       res.status(400).send("Unexpected error occurred when deleting round from database. Round was not deleted.");
     } else {
