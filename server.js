@@ -414,7 +414,7 @@ app.post('/courses/:userId', async (req, res, next) => {
   } 
 });
 
-//READ round route: Returns all rounds associated 
+//READ course route: Returns all courses associated 
 //with a given user in the users collection (GET)
 app.get('/courses/:userId', async(req, res) => {
   console.log("in /courses route (GET) with userId = " + 
@@ -432,32 +432,31 @@ app.get('/courses/:userId', async(req, res) => {
   }
 });
 
-//UPDATE round route: Updates a specific round 
+//UPDATE course route: Updates a specific course 
 //for a given user in the users collection (PUT)
-app.put('/rounds/:userId/:roundId', async (req, res, next) => {
-  console.log("in /rounds (PUT) route with params = " + 
+app.put('/courses/:userId/:courseId', async (req, res, next) => {
+  console.log("in /courses (PUT) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  const validProps = ['date', 'course', 'type', 'holes', 'strokes',
-    'minutes', 'seconds', 'notes'];
+  const validProps = ['courseInstructorFirstName', 'courseInstructorLastName', 'courseName', 'courseNumber', 'courseYear',
+    'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'];
   let bodyObj = {...req.body};
   delete bodyObj._id; //Not needed for update
   delete bodyObj.SGS; //We'll compute this below in seconds.
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
-      return res.status(400).send("rounds/ PUT request formulated incorrectly." +
+      return res.status(400).send("courses/ PUT request formulated incorrectly." +
         "It includes " + bodyProp + ". However, only the following props are allowed: " +
-        "'date', 'course', 'type', 'holes', 'strokes', " +
-        "'minutes', 'seconds', 'notes'");
+        "'courseInstructorFirstName', 'courseInstructorLastName', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'");
     } else {
-      bodyObj["rounds.$." + bodyProp] = bodyObj[bodyProp];
+      bodyObj["courses.$." + bodyProp] = bodyObj[bodyProp];
       delete bodyObj[bodyProp];
     }
   }
   try {
     let status = await User.updateOne(
       {"id": req.params.userId,
-       "rounds._id": mongoose.Types.ObjectId(req.params.roundId)}
+       "courses._id": mongoose.Types.ObjectId(req.params.courseId)}
       ,{"$set" : bodyObj}
     );
     if (status.nModified != 1) {
