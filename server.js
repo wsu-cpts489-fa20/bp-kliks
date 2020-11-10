@@ -34,15 +34,16 @@ mongoose.connect(connectStr, {useNewUrlParser: true, useUnifiedTopology: true})
   );
 
 const Schema = mongoose.Schema;
-const roundSchema = new Schema({
-  date: {type: Date, required: true},
-  course: {type: String, required: true},
-  type: {type: String, required: true, enum: ['practice','tournament']},
-  holes: {type: Number, required: true, min: 1, max: 18},
-  strokes: {type: Number, required: true, min: 1, max: 300},
-  minutes: {type: Number, required: true, min: 1, max: 240},
-  seconds: {type: Number, required: true, min: 0, max: 60},
-  notes: {type: String, required: true}
+const courseSchema = new Schema({
+  courseInstructorFirstName: {type: String, required: true},
+  courseInstructorLastName: {type: String, required: true},
+  courseName: {type: String, required: true},
+  courseNumber: {type: String, required: true},
+  courseYear: {type: String, required: true},
+  courseSemester: {type: String, required: true, enum: ['Fall', 'Winter', 'Spring', 'Summer']},
+  courseEnrollmentLimit: {type: Number, required: true, min: 1, max: 300},
+  courseCurrentlyEnrolled: {type: Number, required: true, min: 1, max: 300},
+  courseNotes: {type: String, required: true},
 },
 {
   toObject: {
@@ -51,10 +52,6 @@ const roundSchema = new Schema({
   toJSON: {
   virtuals: true 
   }
-});
-
-roundSchema.virtual('SGS').get(function() {
-  return (this.strokes * 60) + (this.minutes * 60) + this.seconds;
 });
 
 //Define schema that maps to a document in the Users collection in the appdb
@@ -68,9 +65,45 @@ const userSchema = new Schema({
   securityQuestion: String,
   securityAnswer: {type: String, required: function() 
     {return this.securityQuestion ? true: false}},
-  rounds: [roundSchema]
+  classes: [courseSchema]
 });
 const User = mongoose.model("User",userSchema); 
+
+const surveySchema = new Schema({
+  courseInstructorFirstName: {type: String, required: true},
+  courseInstructorLastName: {type: String, required: true},
+  courseName: {type: String, required: true},
+  courseNumber: {type: String, required: true},
+  courseYear: {type: String, required: true},
+  courseSemester: {type: String, required: true, enum: ['Fall', 'Winter', 'Spring', 'Summer']},
+  courseEnrollmentLimit: {type: Number, required: true, min: 1, max: 300},
+  courseCurrentlyEnrolled: {type: Number, required: true, min: 1, max: 300},
+  courseNotes: {type: String, required: true},
+},
+{
+  toObject: {
+  virtuals: true
+  },
+  toJSON: {
+  virtuals: true 
+  }
+});
+
+//Define schema that maps to a document in the Users collection in the appdb
+//database.
+const courseSchema = new Schema({
+  courseInstructorFirstName: String,
+  courseInstructorLastName: String,
+  courseName: String,
+  courseNumber: String,
+  courseYear: String,
+  courseSemester: String,
+  courseEnrollmentLimit: Number,
+  courseCurrentlyEnrolled: Number,
+  courseNotes: String,
+  surveys: [surveySchema]
+});
+const Course = mongoose.model("Courses",courseSchema); 
 
 //////////////////////////////////////////////////////////////////////////
 //PASSPORT SET-UP
