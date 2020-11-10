@@ -65,7 +65,7 @@ const userSchema = new Schema({
   securityQuestion: String,
   securityAnswer: {type: String, required: function() 
     {return this.securityQuestion ? true: false}},
-  classes: [courseSchema]
+  courses: [courseSchema]
 });
 const User = mongoose.model("User",userSchema); 
 
@@ -416,15 +416,15 @@ app.post('/courses/:userId', async (req, res, next) => {
 
 //READ round route: Returns all rounds associated 
 //with a given user in the users collection (GET)
-app.get('/rounds/:userId', async(req, res) => {
-  console.log("in /rounds route (GET) with userId = " + 
+app.get('/courses/:userId', async(req, res) => {
+  console.log("in /courses route (GET) with userId = " + 
     JSON.stringify(req.params.userId));
   try {
     let thisUser = await User.findOne({id: req.params.userId});
     if (!thisUser) {
       return res.status(400).message("No user account with specified userId was found in database.");
     } else {
-      return res.status(200).json(JSON.stringify(thisUser.rounds));
+      return res.status(200).json(JSON.stringify(thisUser.courses));
     }
   } catch (err) {
     console.log()
