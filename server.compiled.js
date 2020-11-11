@@ -16,6 +16,8 @@ var _express = _interopRequireDefault(require("express"));
 
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
+var _console = require("console");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -28,8 +30,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-require('dotenv').config();
-
 var LOCAL_PORT = 8081;
 var DEPLOY_URL = "http://localhost:8081";
 var PORT = process.env.HTTP_PORT || LOCAL_PORT;
@@ -41,7 +41,7 @@ var app = (0, _express["default"])(); //////////////////////////////////////////
 //using the mongoose library.
 //////////////////////////////////////////////////////////////////////////
 
-var connectStr = process.env.MONGO_STR;
+var connectStr = 'mongodb://localhost:27017/appdb';
 
 _mongoose["default"].connect(connectStr, {
   useNewUrlParser: true,
@@ -113,6 +113,7 @@ var userSchema = new Schema({
   //unique identifier for user
   password: String,
   displayName: String,
+  accountType: String,
   //Name to be displayed within app
   authStrategy: String,
   //strategy used to authenticate, e.g., github, local
@@ -136,8 +137,8 @@ var User = _mongoose["default"].model("User", userSchema); /////////////////////
 
 
 _passport["default"].use(new GithubStrategy({
-  clientID: process.env.GH_CLIENT_ID,
-  clientSecret: process.env.GH_CLIENT_SECRET,
+  clientID: "a075012c4b08543f42a8",
+  clientSecret: "8dde6978090028aee37c72df9ea7ce268678b6d3",
   callbackURL: DEPLOY_URL + "/auth/github/callback"
 },
 /*#__PURE__*/
@@ -149,7 +150,7 @@ function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log("User authenticated through GitHub! In passport callback."); //Our convention is to build userId from displayName and provider
+            console.log("User authenticated through GitHub! In passport callback."); //Our convention is to build userId from accountType and provider
 
             userId = "".concat(profile.username, "@").concat(profile.provider); //See if document with this unique userId exists in database 
 
@@ -170,6 +171,7 @@ function () {
             return new User({
               id: userId,
               displayName: profile.displayName,
+              accountType: profile.accountType,
               authStrategy: profile.provider,
               profilePicURL: profile.photos[0].value,
               rounds: []
@@ -459,12 +461,12 @@ app.post('/users/:userId', /*#__PURE__*/function () {
           case 0:
             console.log("in /users route (POST) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (!(req.body === undefined || !req.body.hasOwnProperty("password") || !req.body.hasOwnProperty("displayName") || !req.body.hasOwnProperty("profilePicURL") || !req.body.hasOwnProperty("securityQuestion") || !req.body.hasOwnProperty("securityAnswer"))) {
+            if (!(req.body === undefined || !req.body.hasOwnProperty("password") || !req.body.hasOwnProperty("displayName") || !req.body.hasOwnProperty("accountType") || !req.body.hasOwnProperty("profilePicURL") || !req.body.hasOwnProperty("securityQuestion") || !req.body.hasOwnProperty("securityAnswer"))) {
               _context5.next = 3;
               break;
             }
 
-            return _context5.abrupt("return", res.status(400).send("/users POST request formulated incorrectly. " + "It must contain 'password','displayName','profilePicURL','securityQuestion' and 'securityAnswer fields in message body."));
+            return _context5.abrupt("return", res.status(400).send("/users POST request formulated incorrectly. " + "It must contain 'password','accountType','profilePicURL','securityQuestion' and 'securityAnswer fields in message body."));
 
           case 3:
             _context5.prev = 3;
@@ -492,6 +494,7 @@ app.post('/users/:userId', /*#__PURE__*/function () {
               id: req.params.userId,
               password: req.body.password,
               displayName: req.body.displayName,
+              accountType: req.body.accountType,
               authStrategy: 'local',
               profilePicURL: req.body.profilePicURL,
               securityQuestion: req.body.securityQuestion,
@@ -542,7 +545,7 @@ app.put('/users/:userId', /*#__PURE__*/function () {
             return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "It must contain 'userId' as parameter."));
 
           case 3:
-            validProps = ['password', 'displayName', 'profilePicURL', 'securityQuestion', 'securityAnswer'];
+            validProps = ['password','displayName', 'accountType', 'profilePicURL', 'securityQuestion', 'securityAnswer'];
             _context6.t0 = _regeneratorRuntime["default"].keys(req.body);
 
           case 5:
@@ -558,7 +561,7 @@ app.put('/users/:userId', /*#__PURE__*/function () {
               break;
             }
 
-            return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'password', 'displayname', 'profilePicURL', 'securityQuestion', 'securityAnswer'"));
+            return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'password', 'accountType', 'profilePicURL', 'securityQuestion', 'securityAnswer'"));
 
           case 9:
             _context6.next = 5;

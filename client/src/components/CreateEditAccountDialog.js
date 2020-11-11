@@ -13,6 +13,7 @@ class CreateEditAccountDialog extends React.Component {
         this.profilePicRef = React.createRef();
         this.state = {accountName: "",
                       displayName: "",
+                      accountType: "",
                       profilePicURL: "https://icon-library.net//images/default-profile-icon/default-profile-icon-24.jpg",
                       password: "",
                       passwordRepeat: "",
@@ -35,6 +36,7 @@ class CreateEditAccountDialog extends React.Component {
             this.origAccountInfo.passwordRepeat = userData.password;
             this.setState({accountName: this.props.userId,
                            displayName: userData.displayName,
+                           accountType: userData.accountType,
                            profilePicURL: userData.profilePicURL,
                            password: userData.password,
                            passwordRepeat: userData.password,
@@ -95,6 +97,9 @@ class CreateEditAccountDialog extends React.Component {
         if (updateField != "displayName" && 
              this.state.displayName != this.origAccountInfo.displayName) 
              {return true;}
+        if (updateField != "accountType" && 
+             this.state.accountType != this.origAccountInfo.accountType) 
+             {return true;}
         if (updateField != "profilePicURL" && 
              this.state.profilePicURL != this.origAccountInfo.profilePicURL) 
              {return true;}
@@ -113,13 +118,12 @@ class CreateEditAccountDialog extends React.Component {
         return false;
     }
 
-    //setDefaultDisplayName -- Triggered by onBlur() event of Email field.
+    //setDefaultaccountType -- Triggered by onBlur() event of Email field.
     //Sets default value of display name to value entered into Email field 
     //as a courtesy.
-    setDefaultDisplayName = (event) => {
-      if (event.target.value.length > 0 && this.state.displayName === "") {
+    setDefaultaccountType = (event) => {
+        this.setState({accountType: event.target.value});
         this.setState({displayName: event.target.value});
-      }
     }
 
     //handleSubmit -- Triggered when user clicks on submit button to
@@ -133,6 +137,7 @@ class CreateEditAccountDialog extends React.Component {
         //Initialize user account
         let userData = {
             displayName: this.state.displayName,
+            accountType: this.state.accountType,
             password: this.state.password,
             profilePicURL: this.state.profilePicURL,
             securityQuestion: this.state.securityQuestion,
@@ -227,7 +232,7 @@ class CreateEditAccountDialog extends React.Component {
                 ref={this.newUserRef}
                 value={this.state.accountName}
                 onChange={this.handleChange}
-                onBlur={this.setDefaultDisplayName}
+                onBlur={this.setDefaultaccountType}
                 />
             </label>
             <br/>
@@ -276,6 +281,16 @@ class CreateEditAccountDialog extends React.Component {
                 onChange={this.handleChange}
                 />
             </label>
+            <br/>
+            <label>
+                Account Type:
+                <select name="accountType" value={this.state.accountType} 
+                className="form-control form-center" onChange={this.handleChange}>
+                <option value="SelectOne">Select One</option>
+                <option value="Student">Student</option>
+                <option value="Instructor">Instructor</option>
+                </select> 
+                </label>
             <br/>
             <label>
                 Profile Picture:<br/>
