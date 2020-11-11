@@ -10,11 +10,10 @@ on: [push]
 #       - master    
 #     paths:
 #       - 'client/src/tests/**'  
-
-defaults:
-  run:
-    working-directory: ./client/src/
-
+# defaults:
+#   run:
+#     working-directory: ./client/src/
+    
 jobs:
   build:
     name: Run Tests Across Node.js Versions and Operating Systems
@@ -32,4 +31,4 @@ jobs:
       - name: Run TestCafe Tests
         uses: DevExpress/testcafe-action@latest
         with:
-          args: "chrome ./tests/*.js"
+          args: "chrome ./client/src/tests/*.js"
