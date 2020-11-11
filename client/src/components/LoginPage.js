@@ -209,11 +209,11 @@ cancelCreateAccount = () => {
                         onClick={() => {this.setState({showLookUpAccountDialog: true});}}>
                 Reset your password</button>
             </p>  
-            <button type="button" className="btn btn-github"
+            {/* <button type="button" className="btn btn-github"
                onClick={() => this.handleOAuthLoginClick("github")}>
               <span className={this.state.githubIcon}></span>&nbsp;
                 {this.state.githubLabel}
-            </button>
+            </button> */}
             <p>
                 <i>Version CptS 489</i>
             </p>

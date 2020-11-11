@@ -53,6 +53,13 @@ class CreateEditAccountDialog extends React.Component {
     //If so, we update the 'formUpdated' state var, so that the form's submit
     //button is enabled.
     checkDataValidity = () => {
+        if(!this.state.accountName.endsWith("@wsu.edu")){
+            this.newUserRef.current.setCustomValidity("Email needs to be a wsu email: @wsu.edu");
+        }
+        else{
+            this.newUserRef.current.setCustomValidity("");
+        }
+
         if (this.state.password != this.state.passwordRepeat) {
             //Passwords don't match
             this.repeatPassRef.current.setCustomValidity(
