@@ -18,9 +18,6 @@ jobs:
   build:
     name: Run Tests Across Node.js Versions and Operating Systems
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: ./client/src/
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -34,4 +31,4 @@ jobs:
       - name: Run TestCafe Tests
         uses: DevExpress/testcafe-action@latest
         with:
-          args: "chrome ./tests/*.js"
+          args: "chrome .client/src/tests/*.js"
