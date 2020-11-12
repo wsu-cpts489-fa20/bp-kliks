@@ -34,9 +34,25 @@ mongoose.connect(connectStr, {useNewUrlParser: true, useUnifiedTopology: true})
   );
 
 const Schema = mongoose.Schema;
+
+const studentSchema = new Schema({
+  userID: {type: String, required: true},
+  studentDisplayName: {type: String, required: true}
+},
+{
+  toObject: {
+  virtuals: true
+  },
+  toJSON: {
+  virtuals: true 
+  }
+});
+  
 const courseSchema = new Schema({
+  courseID: {type: String, required: true},
   courseInstructorFirstName: {type: String, required: true},
   courseInstructorLastName: {type: String, required: true},
+  courseInstructorID: {type: String, required: true},
   courseName: {type: String, required: true},
   courseNumber: {type: String, required: true},
   courseYear: {type: String, required: true},
@@ -44,6 +60,39 @@ const courseSchema = new Schema({
   courseEnrollmentLimit: {type: Number, required: true, min: 1, max: 300},
   courseCurrentlyEnrolled: {type: Number, required: true, min: 1, max: 300},
   courseNotes: {type: String, required: true},
+  students: [studentSchema],
+},
+{
+  toObject: {
+  virtuals: true
+  },
+  toJSON: {
+  virtuals: true 
+  }
+});
+
+const responseSchema = new Schema({
+  students: [studentSchema],
+  responeDateTime: {type: String, required: true},
+  surveyResponse: {type: String, required: true}
+},
+{
+  toObject: {
+  virtuals: true
+  },
+  toJSON: {
+  virtuals: true 
+  }
+});
+
+const questionsSchema = new Schema({
+  questionID: {type: String, required: true},
+  questionTitle: {type: String, required: true},
+  questionText: {type: String, required: true},
+  questionType: {type: String, required: true},
+  questionAnswers: [String],
+  questionActive: {type: Boolean, required: true},
+  responses: [responseSchema]
 },
 {
   toObject: {
@@ -56,8 +105,20 @@ const courseSchema = new Schema({
 
 //Define schema that maps to a document in the Users collection in the appdb
 //database.
+const surveySchema = new Schema({
+  surveyID: String, //unique identifier for user
+  surveyTitle: String,
+  surveyDate: String,
+  courseID: String, //Name to be displayed within app
+  questions: [questionsSchema]
+});
+const Survey = mongoose.model("Survey",surveySchema); 
+
+//Define schema that maps to a document in the Users collection in the appdb
+//database.
 const userSchema = new Schema({
   id: String, //unique identifier for user
+  userType: String,
   password: String,
   displayName: String, //Name to be displayed within app
   authStrategy: String, //strategy used to authenticate, e.g., github, local
@@ -68,36 +129,6 @@ const userSchema = new Schema({
   courses: [courseSchema]
 });
 const User = mongoose.model("User",userSchema); 
-
-const surveySchema = new Schema({
-  surveyID: {type: String, required: true},
-  surveyQuestion: {type: String, required: true},
-  //surveyResponses?
-},
-{
-  toObject: {
-  virtuals: true
-  },
-  toJSON: {
-  virtuals: true 
-  }
-});
-
-//Define schema that maps to a document in the Users collection in the appdb
-//database.
-const courseSchema = new Schema({
-  courseInstructorFirstName: String,
-  courseInstructorLastName: String,
-  courseName: String,
-  courseNumber: String,
-  courseYear: String,
-  courseSemester: String,
-  courseEnrollmentLimit: Number,
-  courseCurrentlyEnrolled: Number,
-  courseNotes: String,
-  surveys: [surveySchema]
-});
-const Course = mongoose.model("Courses",courseSchema); 
 
 //////////////////////////////////////////////////////////////////////////
 //PASSPORT SET-UP
@@ -386,6 +417,7 @@ app.post('/courses/:userId', async (req, res, next) => {
               JSON.stringify(req.body));
   if (!req.body.hasOwnProperty("courseInstructorFirstName") || 
       !req.body.hasOwnProperty("courseInstructorLastName") || 
+      !req.body.hasOwnProperty("courseInstructorID") ||
       !req.body.hasOwnProperty("courseName") ||
       !req.body.hasOwnProperty("courseNumber") || 
       !req.body.hasOwnProperty("courseYear") ||
@@ -395,7 +427,7 @@ app.post('/courses/:userId', async (req, res, next) => {
       !req.body.hasOwnProperty("courseNotes")) {
     //Body does not contain correct properties
     return res.status(400).send("POST request on /courses formulated incorrectly." +
-      "Body must contain all 9 required fields: courseInstructorFirstName, courseInstructorLastName, courseName, courseNumber, courseYear, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, courseNotes");
+      "Body must contain all 9 required fields: courseInstructorFirstName, courseInstructorLastName, courseInstructorID, courseName, courseNumber, courseYear, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, courseNotes");
   }
   try {
     let status = await User.updateOne(
@@ -438,7 +470,7 @@ app.put('/courses/:userId/:courseId', async (req, res, next) => {
   console.log("in /courses (PUT) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  const validProps = ['courseInstructorFirstName', 'courseInstructorLastName', 'courseName', 'courseNumber', 'courseYear',
+  const validProps = ['courseInstructorFirstName', 'courseInstructorLastName','courseInstructorID', 'courseName', 'courseNumber', 'courseYear',
     'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'];
   let bodyObj = {...req.body};
   delete bodyObj._id; //Not needed for update
@@ -447,7 +479,7 @@ app.put('/courses/:userId/:courseId', async (req, res, next) => {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("courses/ PUT request formulated incorrectly." +
         "It includes " + bodyProp + ". However, only the following props are allowed: " +
-        "'courseInstructorFirstName', 'courseInstructorLastName', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'");
+        "'courseInstructorFirstName', 'courseInstructorLastName', 'courseInstructorID', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'");
     } else {
       bodyObj["courses.$." + bodyProp] = bodyObj[bodyProp];
       delete bodyObj[bodyProp];
@@ -470,7 +502,7 @@ app.put('/courses/:userId/:courseId', async (req, res, next) => {
   } 
 });
 
-//DELETE round route: Deletes a specific round 
+//DELETE course route: Deletes a specific course 
 //for a given user in the users collection (DELETE)
 app.delete('/courses/:userId/:courseId', async (req, res, next) => {
   console.log("in /rounds (DELETE) route with params = " + 
