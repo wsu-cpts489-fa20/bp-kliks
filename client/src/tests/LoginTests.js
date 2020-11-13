@@ -1,5 +1,3 @@
-import { async } from 'regenerator-runtime';
-import { ReactSelector, waitForReact } from 'testcafe-react-selectors';
 import { Selector } from 'testcafe';
 
 // fixture `SpeedScore Interactions`
@@ -12,20 +10,19 @@ import { Selector } from 'testcafe';
 
 fixture `TODO list test`
     .page('http://localhost:8081')
-    .beforeEach(async () => {
-        await waitForReact();
-    });
 
 test('Check list item', async t => {
-    const appElement = ReactSelector('App');
-    await t.expect(ReactSelector('App').exists).eql(true).wait(1000)
-    await t.expect(appElement.getReact(({ state }) => state.mode)).eql("Login")
+    // const appElement = ReactSelector('App');
+    // await t.expect(ReactSelector('App').exists).eql(true).wait(1000)
+    // await t.expect(appElement.getReact(({ state }) => state.mode)).eql("Login")
 
     await t
         .typeText('#emailInput', 'test35@wsu.edu')
         .typeText('#passwordInput', 'ASDFasdf12345')
+        .expect(Selector('#LoginMode').visible).eql(true)
         .click('#loginButton').wait(10000)
-        .expect(appElement.getReact(({ state }) => state.statusMsg)).eql("Login")
+        .expect(Selector('#FeedMode').visible).eql(true)
+        // .expect(appElement.getReact(({ state }) => state.statusMsg)).eql("Login")
         // .expect(appElement.getReact(({ state }) => state.statusMsg)).eql("Login")
     // const appComponent  = await appElement.getReact();
     // console.log(appComponent);
