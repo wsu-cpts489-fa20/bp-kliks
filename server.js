@@ -34,15 +34,33 @@ mongoose.connect(connectStr, {useNewUrlParser: true, useUnifiedTopology: true})
   );
 
 const Schema = mongoose.Schema;
-const roundSchema = new Schema({
-  date: {type: Date, required: true},
-  course: {type: String, required: true},
-  type: {type: String, required: true, enum: ['practice','tournament']},
-  holes: {type: Number, required: true, min: 1, max: 18},
-  strokes: {type: Number, required: true, min: 1, max: 300},
-  minutes: {type: Number, required: true, min: 1, max: 240},
-  seconds: {type: Number, required: true, min: 0, max: 60},
-  notes: {type: String, required: true}
+
+const studentSchema = new Schema({
+  userID: {type: String, required: true},
+  studentDisplayName: {type: String, required: true}
+},
+{
+  toObject: {
+  virtuals: true
+  },
+  toJSON: {
+  virtuals: true 
+  }
+});
+  
+const courseSchema = new Schema({
+  courseID: {type: String, required: true},
+  courseInstructorFirstName: {type: String, required: true},
+  courseInstructorLastName: {type: String, required: true},
+  courseInstructorID: {type: String, required: true},
+  courseName: {type: String, required: true},
+  courseNumber: {type: String, required: true},
+  courseYear: {type: String, required: true},
+  courseSemester: {type: String, required: true, enum: ['Fall', 'Winter', 'Spring', 'Summer']},
+  courseEnrollmentLimit: {type: Number, required: true, min: 1, max: 300},
+  courseCurrentlyEnrolled: {type: Number, required: true, min: 1, max: 300},
+  courseNotes: {type: String, required: true},
+  students: [studentSchema],
 },
 {
   toObject: {
@@ -53,14 +71,54 @@ const roundSchema = new Schema({
   }
 });
 
-roundSchema.virtual('SGS').get(function() {
-  return (this.strokes * 60) + (this.minutes * 60) + this.seconds;
+const responseSchema = new Schema({
+  students: [studentSchema],
+  responeDateTime: {type: String, required: true},
+  surveyResponse: {type: String, required: true}
+},
+{
+  toObject: {
+  virtuals: true
+  },
+  toJSON: {
+  virtuals: true 
+  }
 });
+
+const questionsSchema = new Schema({
+  questionID: {type: String, required: true},
+  questionTitle: {type: String, required: true},
+  questionText: {type: String, required: true},
+  questionType: {type: String, required: true},
+  questionAnswers: [String],
+  questionActive: {type: Boolean, required: true},
+  responses: [responseSchema]
+},
+{
+  toObject: {
+  virtuals: true
+  },
+  toJSON: {
+  virtuals: true 
+  }
+});
+
+//Define schema that maps to a document in the Users collection in the appdb
+//database.
+const surveySchema = new Schema({
+  surveyID: String, //unique identifier for user
+  surveyTitle: String,
+  surveyDate: String,
+  courseID: String, //Name to be displayed within app
+  questions: [questionsSchema]
+});
+const Survey = mongoose.model("Survey",surveySchema); 
 
 //Define schema that maps to a document in the Users collection in the appdb
 //database.
 const userSchema = new Schema({
   id: String, //unique identifier for user
+  userType: String,
   password: String,
   displayName: String, //Name to be displayed within app
   authStrategy: String, //strategy used to authenticate, e.g., github, local
@@ -68,7 +126,7 @@ const userSchema = new Schema({
   securityQuestion: String,
   securityAnswer: {type: String, required: function() 
     {return this.securityQuestion ? true: false}},
-  rounds: [roundSchema]
+  courses: [courseSchema]
 });
 const User = mongoose.model("User",userSchema); 
 
@@ -348,26 +406,28 @@ app.delete('/users/:userId', async(req, res, next) => {
 });
 
 /////////////////////////////////
-//ROUNDS ROUTES
+//COURSES ROUTES
 ////////////////////////////////
 
-//CREATE round route: Adds a new round as a subdocument to 
+//CREATE course route: Adds a new course as a subdocument to 
 //a document in the users collection (POST)
-app.post('/rounds/:userId', async (req, res, next) => {
-  console.log("in /rounds (POST) route with params = " + 
+app.post('/courses/:userId', async (req, res, next) => {
+  console.log("in /courses (POST) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  if (!req.body.hasOwnProperty("date") || 
-      !req.body.hasOwnProperty("course") || 
-      !req.body.hasOwnProperty("type") ||
-      !req.body.hasOwnProperty("holes") || 
-      !req.body.hasOwnProperty("strokes") ||
-      !req.body.hasOwnProperty("minutes") ||
-      !req.body.hasOwnProperty("seconds") || 
-      !req.body.hasOwnProperty("notes")) {
+  if (!req.body.hasOwnProperty("courseInstructorFirstName") || 
+      !req.body.hasOwnProperty("courseInstructorLastName") || 
+      !req.body.hasOwnProperty("courseInstructorID") ||
+      !req.body.hasOwnProperty("courseName") ||
+      !req.body.hasOwnProperty("courseNumber") || 
+      !req.body.hasOwnProperty("courseYear") ||
+      !req.body.hasOwnProperty("courseSemester") ||
+      !req.body.hasOwnProperty("courseEnrollmentLimit") || 
+      !req.body.hasOwnProperty("courseCurrentlyEnrolled") || 
+      !req.body.hasOwnProperty("courseNotes")) {
     //Body does not contain correct properties
-    return res.status(400).send("POST request on /rounds formulated incorrectly." +
-      "Body must contain all 8 required fields: date, course, type, holes, strokes, "       +  "minutes, seconds, notes.");
+    return res.status(400).send("POST request on /courses formulated incorrectly." +
+      "Body must contain all 9 required fields: courseInstructorFirstName, courseInstructorLastName, courseInstructorID, courseName, courseNumber, courseYear, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, courseNotes");
   }
   try {
     let status = await User.updateOne(
@@ -375,28 +435,28 @@ app.post('/rounds/:userId', async (req, res, next) => {
     {$push: {rounds: req.body}});
     if (status.nModified != 1) { //Should never happen!
       res.status(400).send("Unexpected error occurred when adding round to"+
-        " database. Round was not added.");
+        " database. Course was not added.");
     } else {
-      res.status(200).send("Round successfully added to database.");
+      res.status(200).send("Course successfully added to database.");
     }
   } catch (err) {
     console.log(err);
-    return res.status(400).send("Unexpected error occurred when adding round" +
+    return res.status(400).send("Unexpected error occurred when adding course" +
      " to database: " + err);
   } 
 });
 
-//READ round route: Returns all rounds associated 
+//READ course route: Returns all courses associated 
 //with a given user in the users collection (GET)
-app.get('/rounds/:userId', async(req, res) => {
-  console.log("in /rounds route (GET) with userId = " + 
+app.get('/courses/:userId', async(req, res) => {
+  console.log("in /courses route (GET) with userId = " + 
     JSON.stringify(req.params.userId));
   try {
     let thisUser = await User.findOne({id: req.params.userId});
     if (!thisUser) {
       return res.status(400).message("No user account with specified userId was found in database.");
     } else {
-      return res.status(200).json(JSON.stringify(thisUser.rounds));
+      return res.status(200).json(JSON.stringify(thisUser.courses));
     }
   } catch (err) {
     console.log()
@@ -404,32 +464,31 @@ app.get('/rounds/:userId', async(req, res) => {
   }
 });
 
-//UPDATE round route: Updates a specific round 
+//UPDATE course route: Updates a specific course 
 //for a given user in the users collection (PUT)
-app.put('/rounds/:userId/:roundId', async (req, res, next) => {
-  console.log("in /rounds (PUT) route with params = " + 
+app.put('/courses/:userId/:courseId', async (req, res, next) => {
+  console.log("in /courses (PUT) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  const validProps = ['date', 'course', 'type', 'holes', 'strokes',
-    'minutes', 'seconds', 'notes'];
+  const validProps = ['courseInstructorFirstName', 'courseInstructorLastName','courseInstructorID', 'courseName', 'courseNumber', 'courseYear',
+    'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'];
   let bodyObj = {...req.body};
   delete bodyObj._id; //Not needed for update
   delete bodyObj.SGS; //We'll compute this below in seconds.
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
-      return res.status(400).send("rounds/ PUT request formulated incorrectly." +
+      return res.status(400).send("courses/ PUT request formulated incorrectly." +
         "It includes " + bodyProp + ". However, only the following props are allowed: " +
-        "'date', 'course', 'type', 'holes', 'strokes', " +
-        "'minutes', 'seconds', 'notes'");
+        "'courseInstructorFirstName', 'courseInstructorLastName', 'courseInstructorID', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'");
     } else {
-      bodyObj["rounds.$." + bodyProp] = bodyObj[bodyProp];
+      bodyObj["courses.$." + bodyProp] = bodyObj[bodyProp];
       delete bodyObj[bodyProp];
     }
   }
   try {
     let status = await User.updateOne(
       {"id": req.params.userId,
-       "rounds._id": mongoose.Types.ObjectId(req.params.roundId)}
+       "courses._id": mongoose.Types.ObjectId(req.params.courseId)}
       ,{"$set" : bodyObj}
     );
     if (status.nModified != 1) {
@@ -443,15 +502,15 @@ app.put('/rounds/:userId/:roundId', async (req, res, next) => {
   } 
 });
 
-//DELETE round route: Deletes a specific round 
+//DELETE course route: Deletes a specific course 
 //for a given user in the users collection (DELETE)
-app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
+app.delete('/courses/:userId/:courseId', async (req, res, next) => {
   console.log("in /rounds (DELETE) route with params = " + 
               JSON.stringify(req.params)); 
   try {
     let status = await User.updateOne(
       {id: req.params.userId},
-      {$pull: {rounds: {_id: mongoose.Types.ObjectId(req.params.roundId)}}});
+      {$pull: {courses: {_id: mongoose.Types.ObjectId(req.params.courseId)}}});
     if (status.nModified != 1) { //Should never happen!
       res.status(400).send("Unexpected error occurred when deleting round from database. Round was not deleted.");
     } else {

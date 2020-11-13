@@ -16,7 +16,7 @@ var _express = _interopRequireDefault(require("express"));
 
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -33,9 +33,9 @@ require('dotenv').config();
 var LOCAL_PORT = 8081;
 var DEPLOY_URL = "http://localhost:8081";
 var PORT = process.env.HTTP_PORT || LOCAL_PORT;
-var GithubStrategy = _passportGithub["default"].Strategy;
-var LocalStrategy = _passportLocal["default"].Strategy;
-var app = (0, _express["default"])(); //////////////////////////////////////////////////////////////////////////
+var GithubStrategy = _passportGithub.default.Strategy;
+var LocalStrategy = _passportLocal.default.Strategy;
+var app = (0, _express.default)(); //////////////////////////////////////////////////////////////////////////
 //MONGOOSE SET-UP
 //The following code sets up the app to connect to a MongoDB database
 //using the mongoose library.
@@ -43,7 +43,7 @@ var app = (0, _express["default"])(); //////////////////////////////////////////
 
 var connectStr = process.env.MONGO_STR;
 
-_mongoose["default"].connect(connectStr, {
+_mongoose.default.connect(connectStr, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(function () {
@@ -52,46 +52,13 @@ _mongoose["default"].connect(connectStr, {
   console.error("Error connecting to ".concat(connectStr, ": ").concat(err));
 });
 
-var Schema = _mongoose["default"].Schema;
-var roundSchema = new Schema({
-  date: {
-    type: Date,
-    required: true
-  },
-  course: {
+var Schema = _mongoose.default.Schema;
+var studentSchema = new Schema({
+  userID: {
     type: String,
     required: true
   },
-  type: {
-    type: String,
-    required: true,
-    "enum": ['practice', 'tournament']
-  },
-  holes: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 18
-  },
-  strokes: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 300
-  },
-  minutes: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 240
-  },
-  seconds: {
-    type: Number,
-    required: true,
-    min: 0,
-    max: 60
-  },
-  notes: {
+  studentDisplayName: {
     type: String,
     required: true
   }
@@ -103,14 +70,134 @@ var roundSchema = new Schema({
     virtuals: true
   }
 });
-roundSchema.virtual('SGS').get(function () {
-  return this.strokes * 60 + this.minutes * 60 + this.seconds;
+var courseSchema = new Schema({
+  courseID: {
+    type: String,
+    required: true
+  },
+  courseInstructorFirstName: {
+    type: String,
+    required: true
+  },
+  courseInstructorLastName: {
+    type: String,
+    required: true
+  },
+  courseInstructorID: {
+    type: String,
+    required: true
+  },
+  courseName: {
+    type: String,
+    required: true
+  },
+  courseNumber: {
+    type: String,
+    required: true
+  },
+  courseYear: {
+    type: String,
+    required: true
+  },
+  courseSemester: {
+    type: String,
+    required: true,
+    enum: ['Fall', 'Winter', 'Spring', 'Summer']
+  },
+  courseEnrollmentLimit: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 300
+  },
+  courseCurrentlyEnrolled: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 300
+  },
+  courseNotes: {
+    type: String,
+    required: true
+  },
+  students: [studentSchema]
+}, {
+  toObject: {
+    virtuals: true
+  },
+  toJSON: {
+    virtuals: true
+  }
+});
+var responseSchema = new Schema({
+  students: [studentSchema],
+  responeDateTime: {
+    type: String,
+    required: true
+  },
+  surveyResponse: {
+    type: String,
+    required: true
+  }
+}, {
+  toObject: {
+    virtuals: true
+  },
+  toJSON: {
+    virtuals: true
+  }
+});
+var questionsSchema = new Schema({
+  questionID: {
+    type: String,
+    required: true
+  },
+  questionTitle: {
+    type: String,
+    required: true
+  },
+  questionText: {
+    type: String,
+    required: true
+  },
+  questionType: {
+    type: String,
+    required: true
+  },
+  questionAnswers: [String],
+  questionActive: {
+    type: Boolean,
+    required: true
+  },
+  responses: [responseSchema]
+}, {
+  toObject: {
+    virtuals: true
+  },
+  toJSON: {
+    virtuals: true
+  }
 }); //Define schema that maps to a document in the Users collection in the appdb
 //database.
+
+var surveySchema = new Schema({
+  surveyID: String,
+  //unique identifier for user
+  surveyTitle: String,
+  surveyDate: String,
+  courseID: String,
+  //Name to be displayed within app
+  questions: [questionsSchema]
+});
+
+var Survey = _mongoose.default.model("Survey", surveySchema); //Define schema that maps to a document in the Users collection in the appdb
+//database.
+
 
 var userSchema = new Schema({
   id: String,
   //unique identifier for user
+  userType: String,
   password: String,
   displayName: String,
   //Name to be displayed within app
@@ -125,17 +212,17 @@ var userSchema = new Schema({
       return this.securityQuestion ? true : false;
     }
   },
-  rounds: [roundSchema]
+  courses: [courseSchema]
 });
 
-var User = _mongoose["default"].model("User", userSchema); //////////////////////////////////////////////////////////////////////////
+var User = _mongoose.default.model("User", userSchema); //////////////////////////////////////////////////////////////////////////
 //PASSPORT SET-UP
 //The following code sets up the app with OAuth authentication using
 //the 'github' strategy in passport.js.
 //////////////////////////////////////////////////////////////////////////
 
 
-_passport["default"].use(new GithubStrategy({
+_passport.default.use(new GithubStrategy({
   clientID: process.env.GH_CLIENT_ID,
   clientSecret: process.env.GH_CLIENT_SECRET,
   callbackURL: DEPLOY_URL + "/auth/github/callback"
@@ -143,9 +230,9 @@ _passport["default"].use(new GithubStrategy({
 /*#__PURE__*/
 //The following function is called after user authenticates with github
 function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee(accessToken, refreshToken, profile, done) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee(accessToken, refreshToken, profile, done) {
     var userId, currentUser;
-    return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
+    return _regeneratorRuntime.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -194,7 +281,7 @@ function () {
   };
 }()));
 
-_passport["default"].use(new LocalStrategy({
+_passport.default.use(new LocalStrategy({
   passReqToCallback: true
 },
 /*#__PURE__*/
@@ -202,9 +289,9 @@ _passport["default"].use(new LocalStrategy({
 //userId contains the email address entered into the form and password
 //contains the password entered into the form.
 function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee2(req, userId, password, done) {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee2(req, userId, password, done) {
     var thisUser;
-    return _regeneratorRuntime["default"].wrap(function _callee2$(_context2) {
+    return _regeneratorRuntime.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
@@ -265,7 +352,7 @@ function () {
 }())); //Serialize the current user to the session
 
 
-_passport["default"].serializeUser(function (user, done) {
+_passport.default.serializeUser(function (user, done) {
   console.log("In serializeUser.");
   console.log("Contents of user param: " + JSON.stringify(user));
   done(null, user.id);
@@ -273,10 +360,10 @@ _passport["default"].serializeUser(function (user, done) {
 //to persistent storage.
 
 
-_passport["default"].deserializeUser( /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee3(userId, done) {
+_passport.default.deserializeUser( /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee3(userId, done) {
     var thisUser;
-    return _regeneratorRuntime["default"].wrap(function _callee3$(_context3) {
+    return _regeneratorRuntime.default.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
@@ -319,14 +406,14 @@ _passport["default"].deserializeUser( /*#__PURE__*/function () {
 /////////////////////////////////////////////////////////////////////////
 
 
-app.use((0, _expressSession["default"])({
+app.use((0, _expressSession.default)({
   secret: "speedgolf",
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60
   }
-})).use(_express["default"]["static"](_path["default"].join(__dirname, "client/build"))).use(_passport["default"].initialize()).use(_passport["default"].session()).use(_express["default"].json({
+})).use(_express.default.static(_path.default.join(__dirname, "client/build"))).use(_passport.default.initialize()).use(_passport.default.session()).use(_express.default.json({
   limit: '20mb'
 })).listen(PORT, function () {
   return console.log("Listening on ".concat(PORT));
@@ -340,11 +427,11 @@ app.use((0, _expressSession["default"])({
 //Should be accessed when user clicks on 'Login with GitHub' button on 
 //Log In page.
 
-app.get('/auth/github', _passport["default"].authenticate('github')); //CALLBACK route:  GitHub will call this route after the
+app.get('/auth/github', _passport.default.authenticate('github')); //CALLBACK route:  GitHub will call this route after the
 //OAuth authentication process is complete.
 //req.isAuthenticated() tells us whether authentication was successful.
 
-app.get('/auth/github/callback', _passport["default"].authenticate('github', {
+app.get('/auth/github/callback', _passport.default.authenticate('github', {
   failureRedirect: '/'
 }), function (req, res) {
   console.log("auth/github/callback reached.");
@@ -379,7 +466,7 @@ app.get('/auth/test', function (req, res) {
   });
 }); //LOGIN route: Attempts to log in user using local strategy
 
-app.post('/auth/login', _passport["default"].authenticate('local', {
+app.post('/auth/login', _passport.default.authenticate('local', {
   failWithError: true
 }), function (req, res) {
   console.log("/login route reached: successful authentication."); //Redirect to app's main page; the /auth/test route should return true
@@ -401,9 +488,9 @@ app.post('/auth/login', _passport["default"].authenticate('local', {
 //READ user route: Retrieves the user with the specified userId from users collection (GET)
 
 app.get('/users/:userId', /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee4(req, res, next) {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee4(req, res, next) {
     var thisUser;
-    return _regeneratorRuntime["default"].wrap(function _callee4$(_context4) {
+    return _regeneratorRuntime.default.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
@@ -451,9 +538,9 @@ app.get('/users/:userId', /*#__PURE__*/function () {
 }()); //CREATE user route: Adds a new user account to the users collection (POST)
 
 app.post('/users/:userId', /*#__PURE__*/function () {
-  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee5(req, res, next) {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee5(req, res, next) {
     var thisUser;
-    return _regeneratorRuntime["default"].wrap(function _callee5$(_context5) {
+    return _regeneratorRuntime.default.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
@@ -526,9 +613,9 @@ app.post('/users/:userId', /*#__PURE__*/function () {
 }()); //UPDATE user route: Updates a new user account in the users collection (POST)
 
 app.put('/users/:userId', /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee6(req, res, next) {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee6(req, res, next) {
     var validProps, bodyProp, status;
-    return _regeneratorRuntime["default"].wrap(function _callee6$(_context6) {
+    return _regeneratorRuntime.default.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
@@ -543,7 +630,7 @@ app.put('/users/:userId', /*#__PURE__*/function () {
 
           case 3:
             validProps = ['password', 'displayName', 'profilePicURL', 'securityQuestion', 'securityAnswer'];
-            _context6.t0 = _regeneratorRuntime["default"].keys(req.body);
+            _context6.t0 = _regeneratorRuntime.default.keys(req.body);
 
           case 5:
             if ((_context6.t1 = _context6.t0()).done) {
@@ -604,10 +691,10 @@ app.put('/users/:userId', /*#__PURE__*/function () {
   };
 }()); //DELETE user route: Deletes the document with the specified userId from users collection (DELETE)
 
-app["delete"]('/users/:userId', /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee7(req, res, next) {
+app.delete('/users/:userId', /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee7(req, res, next) {
     var status;
-    return _regeneratorRuntime["default"].wrap(function _callee7$(_context7) {
+    return _regeneratorRuntime.default.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
@@ -653,26 +740,26 @@ app["delete"]('/users/:userId', /*#__PURE__*/function () {
     return _ref7.apply(this, arguments);
   };
 }()); /////////////////////////////////
-//ROUNDS ROUTES
+//COURSES ROUTES
 ////////////////////////////////
-//CREATE round route: Adds a new round as a subdocument to 
+//CREATE course route: Adds a new course as a subdocument to 
 //a document in the users collection (POST)
 
-app.post('/rounds/:userId', /*#__PURE__*/function () {
-  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee8(req, res, next) {
+app.post('/courses/:userId', /*#__PURE__*/function () {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee8(req, res, next) {
     var status;
-    return _regeneratorRuntime["default"].wrap(function _callee8$(_context8) {
+    return _regeneratorRuntime.default.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
-            console.log("in /rounds (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            console.log("in /courses (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (!(!req.body.hasOwnProperty("date") || !req.body.hasOwnProperty("course") || !req.body.hasOwnProperty("type") || !req.body.hasOwnProperty("holes") || !req.body.hasOwnProperty("strokes") || !req.body.hasOwnProperty("minutes") || !req.body.hasOwnProperty("seconds") || !req.body.hasOwnProperty("notes"))) {
+            if (!(!req.body.hasOwnProperty("courseInstructorFirstName") || !req.body.hasOwnProperty("courseInstructorLastName") || !req.body.hasOwnProperty("courseInstructorID") || !req.body.hasOwnProperty("courseName") || !req.body.hasOwnProperty("courseNumber") || !req.body.hasOwnProperty("courseYear") || !req.body.hasOwnProperty("courseSemester") || !req.body.hasOwnProperty("courseEnrollmentLimit") || !req.body.hasOwnProperty("courseCurrentlyEnrolled") || !req.body.hasOwnProperty("courseNotes"))) {
               _context8.next = 3;
               break;
             }
 
-            return _context8.abrupt("return", res.status(400).send("POST request on /rounds formulated incorrectly." + "Body must contain all 8 required fields: date, course, type, holes, strokes, " + "minutes, seconds, notes."));
+            return _context8.abrupt("return", res.status(400).send("POST request on /courses formulated incorrectly." + "Body must contain all 9 required fields: courseInstructorFirstName, courseInstructorLastName, courseInstructorID, courseName, courseNumber, courseYear, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, courseNotes"));
 
           case 3:
             _context8.prev = 3;
@@ -690,9 +777,9 @@ app.post('/rounds/:userId', /*#__PURE__*/function () {
 
             if (status.nModified != 1) {
               //Should never happen!
-              res.status(400).send("Unexpected error occurred when adding round to" + " database. Round was not added.");
+              res.status(400).send("Unexpected error occurred when adding round to" + " database. Course was not added.");
             } else {
-              res.status(200).send("Round successfully added to database.");
+              res.status(200).send("Course successfully added to database.");
             }
 
             _context8.next = 14;
@@ -702,7 +789,7 @@ app.post('/rounds/:userId', /*#__PURE__*/function () {
             _context8.prev = 10;
             _context8.t0 = _context8["catch"](3);
             console.log(_context8.t0);
-            return _context8.abrupt("return", res.status(400).send("Unexpected error occurred when adding round" + " to database: " + _context8.t0));
+            return _context8.abrupt("return", res.status(400).send("Unexpected error occurred when adding course" + " to database: " + _context8.t0));
 
           case 14:
           case "end":
@@ -715,17 +802,17 @@ app.post('/rounds/:userId', /*#__PURE__*/function () {
   return function (_x23, _x24, _x25) {
     return _ref8.apply(this, arguments);
   };
-}()); //READ round route: Returns all rounds associated 
+}()); //READ course route: Returns all courses associated 
 //with a given user in the users collection (GET)
 
-app.get('/rounds/:userId', /*#__PURE__*/function () {
-  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee9(req, res) {
+app.get('/courses/:userId', /*#__PURE__*/function () {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee9(req, res) {
     var thisUser;
-    return _regeneratorRuntime["default"].wrap(function _callee9$(_context9) {
+    return _regeneratorRuntime.default.wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
-            console.log("in /rounds route (GET) with userId = " + JSON.stringify(req.params.userId));
+            console.log("in /courses route (GET) with userId = " + JSON.stringify(req.params.userId));
             _context9.prev = 1;
             _context9.next = 4;
             return User.findOne({
@@ -743,7 +830,7 @@ app.get('/rounds/:userId', /*#__PURE__*/function () {
             return _context9.abrupt("return", res.status(400).message("No user account with specified userId was found in database."));
 
           case 9:
-            return _context9.abrupt("return", res.status(200).json(JSON.stringify(thisUser.rounds)));
+            return _context9.abrupt("return", res.status(200).json(JSON.stringify(thisUser.courses)));
 
           case 10:
             _context9.next = 16;
@@ -766,24 +853,24 @@ app.get('/rounds/:userId', /*#__PURE__*/function () {
   return function (_x26, _x27) {
     return _ref9.apply(this, arguments);
   };
-}()); //UPDATE round route: Updates a specific round 
+}()); //UPDATE course route: Updates a specific course 
 //for a given user in the users collection (PUT)
 
-app.put('/rounds/:userId/:roundId', /*#__PURE__*/function () {
-  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee10(req, res, next) {
+app.put('/courses/:userId/:courseId', /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee10(req, res, next) {
     var validProps, bodyObj, bodyProp, status;
-    return _regeneratorRuntime["default"].wrap(function _callee10$(_context10) {
+    return _regeneratorRuntime.default.wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
-            console.log("in /rounds (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
-            validProps = ['date', 'course', 'type', 'holes', 'strokes', 'minutes', 'seconds', 'notes'];
+            console.log("in /courses (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            validProps = ['courseInstructorFirstName', 'courseInstructorLastName', 'courseInstructorID', 'courseName', 'courseNumber', 'courseYear', 'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'];
             bodyObj = _objectSpread({}, req.body);
             delete bodyObj._id; //Not needed for update
 
             delete bodyObj.SGS; //We'll compute this below in seconds.
 
-            _context10.t0 = _regeneratorRuntime["default"].keys(bodyObj);
+            _context10.t0 = _regeneratorRuntime.default.keys(bodyObj);
 
           case 6:
             if ((_context10.t1 = _context10.t0()).done) {
@@ -798,10 +885,10 @@ app.put('/rounds/:userId/:roundId', /*#__PURE__*/function () {
               break;
             }
 
-            return _context10.abrupt("return", res.status(400).send("rounds/ PUT request formulated incorrectly." + "It includes " + bodyProp + ". However, only the following props are allowed: " + "'date', 'course', 'type', 'holes', 'strokes', " + "'minutes', 'seconds', 'notes'"));
+            return _context10.abrupt("return", res.status(400).send("courses/ PUT request formulated incorrectly." + "It includes " + bodyProp + ". However, only the following props are allowed: " + "'courseInstructorFirstName', 'courseInstructorLastName', 'courseInstructorID', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'"));
 
           case 12:
-            bodyObj["rounds.$." + bodyProp] = bodyObj[bodyProp];
+            bodyObj["courses.$." + bodyProp] = bodyObj[bodyProp];
             delete bodyObj[bodyProp];
 
           case 14:
@@ -813,7 +900,7 @@ app.put('/rounds/:userId/:roundId', /*#__PURE__*/function () {
             _context10.next = 19;
             return User.updateOne({
               "id": req.params.userId,
-              "rounds._id": _mongoose["default"].Types.ObjectId(req.params.roundId)
+              "courses._id": _mongoose.default.Types.ObjectId(req.params.courseId)
             }, {
               "$set": bodyObj
             });
@@ -847,13 +934,13 @@ app.put('/rounds/:userId/:roundId', /*#__PURE__*/function () {
   return function (_x28, _x29, _x30) {
     return _ref10.apply(this, arguments);
   };
-}()); //DELETE round route: Deletes a specific round 
+}()); //DELETE course route: Deletes a specific course 
 //for a given user in the users collection (DELETE)
 
-app["delete"]('/rounds/:userId/:roundId', /*#__PURE__*/function () {
-  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee11(req, res, next) {
+app.delete('/courses/:userId/:courseId', /*#__PURE__*/function () {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee11(req, res, next) {
     var status;
-    return _regeneratorRuntime["default"].wrap(function _callee11$(_context11) {
+    return _regeneratorRuntime.default.wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
@@ -864,8 +951,8 @@ app["delete"]('/rounds/:userId/:roundId', /*#__PURE__*/function () {
               id: req.params.userId
             }, {
               $pull: {
-                rounds: {
-                  _id: _mongoose["default"].Types.ObjectId(req.params.roundId)
+                courses: {
+                  _id: _mongoose.default.Types.ObjectId(req.params.courseId)
                 }
               }
             });
