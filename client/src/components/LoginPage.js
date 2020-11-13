@@ -187,6 +187,7 @@ cancelCreateAccount = () => {
                 Password:
                 <input
                 ref={this.passwordInputRef}
+                id="passwordInput"
                 className="form-control login-text"
                 type="password"
                 placeholder="Enter Password"
@@ -196,6 +197,7 @@ cancelCreateAccount = () => {
             </label>
             <p className="bg-danger" id="feedback" style={{ fontSize: 16 }} />
             <button
+                id="loginButton"
                 type="submit"
                 className="btn-color-theme btn btn-primary btn-block login-btn">
                 <span id="login-btn-icon" className={this.state.loginBtnIcon}/>
