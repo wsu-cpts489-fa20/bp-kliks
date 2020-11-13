@@ -1,19 +1,15 @@
 name: TestCafe Tests-Target Multiple Node.js Versions and Operating Systems
-on: [push]
-#   push:
-#     branches:
-#       - master    
-#     paths:
-#       - 'client/src/tests/**'  
-#   pull_request:
-#     branches:
-#       - master    
-#     paths:
-#       - 'client/src/tests/**'  
-
-defaults:
-  run:
-    working-directory: ./client/src/
+on:
+  push:
+    branches:
+      - master    
+    paths:
+      - 'client/src/tests/**'  
+  pull_request:
+    branches:
+      - master    
+    paths:
+      - 'client/src/tests/**'  
 
 jobs:
   build:
@@ -32,4 +28,4 @@ jobs:
       - name: Run TestCafe Tests
         uses: DevExpress/testcafe-action@latest
         with:
-          args: "chrome ./tests/*.js"
+          args: "chrome ./client/src/tests/*.js"

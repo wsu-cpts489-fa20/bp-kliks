@@ -30,7 +30,7 @@ class NavBar extends React.Component {
         <span id="menuBtnIcon" className={"sidemenu-btn-icon " + this.getMenuBtnIcon()}>
         </span>
       </button>
-      <img src="https://1drv.ms/u/s!Ap0R1p55Agkow4pp2IgIBqwWCUx7KQ?e=QJ7nQW" alt="Kliks Logo" height="38px"
+      <img src="https://tinyurl.com/y2lr8yvu" alt="Kliks Logo" height="38px"
       width="38px" />
       <span className="navbar-title">
         &nbsp;{this.props.title}

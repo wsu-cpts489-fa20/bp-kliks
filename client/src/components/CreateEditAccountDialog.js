@@ -13,6 +13,7 @@ class CreateEditAccountDialog extends React.Component {
         this.profilePicRef = React.createRef();
         this.state = {accountName: "",
                       displayName: "",
+                      userType: "",
                       profilePicURL: "https://icon-library.net//images/default-profile-icon/default-profile-icon-24.jpg",
                       password: "",
                       passwordRepeat: "",
@@ -35,6 +36,7 @@ class CreateEditAccountDialog extends React.Component {
             this.origAccountInfo.passwordRepeat = userData.password;
             this.setState({accountName: this.props.userId,
                            displayName: userData.displayName,
+                           userType: userData.userType,
                            profilePicURL: userData.profilePicURL,
                            password: userData.password,
                            passwordRepeat: userData.password,
@@ -53,6 +55,13 @@ class CreateEditAccountDialog extends React.Component {
     //If so, we update the 'formUpdated' state var, so that the form's submit
     //button is enabled.
     checkDataValidity = () => {
+        if(!this.state.accountName.endsWith("@wsu.edu")){
+            this.newUserRef.current.setCustomValidity("Email needs to be a wsu email: @wsu.edu");
+        }
+        else{
+            this.newUserRef.current.setCustomValidity("");
+        }
+
         if (this.state.password != this.state.passwordRepeat) {
             //Passwords don't match
             this.repeatPassRef.current.setCustomValidity(
@@ -95,6 +104,9 @@ class CreateEditAccountDialog extends React.Component {
         if (updateField != "displayName" && 
              this.state.displayName != this.origAccountInfo.displayName) 
              {return true;}
+        if (updateField != "userType" && 
+             this.state.userType != this.origAccountInfo.userType) 
+             {return true;}
         if (updateField != "profilePicURL" && 
              this.state.profilePicURL != this.origAccountInfo.profilePicURL) 
              {return true;}
@@ -113,13 +125,12 @@ class CreateEditAccountDialog extends React.Component {
         return false;
     }
 
-    //setDefaultDisplayName -- Triggered by onBlur() event of Email field.
+    //setDefaultuserType -- Triggered by onBlur() event of Email field.
     //Sets default value of display name to value entered into Email field 
     //as a courtesy.
-    setDefaultDisplayName = (event) => {
-      if (event.target.value.length > 0 && this.state.displayName === "") {
+    setDefaultuserType = (event) => {
+        this.setState({userType: event.target.value});
         this.setState({displayName: event.target.value});
-      }
     }
 
     //handleSubmit -- Triggered when user clicks on submit button to
@@ -133,6 +144,7 @@ class CreateEditAccountDialog extends React.Component {
         //Initialize user account
         let userData = {
             displayName: this.state.displayName,
+            userType: this.state.userType,
             password: this.state.password,
             profilePicURL: this.state.profilePicURL,
             securityQuestion: this.state.securityQuestion,
@@ -227,7 +239,7 @@ class CreateEditAccountDialog extends React.Component {
                 ref={this.newUserRef}
                 value={this.state.accountName}
                 onChange={this.handleChange}
-                onBlur={this.setDefaultDisplayName}
+                onBlur={this.setDefaultuserType}
                 />
             </label>
             <br/>
@@ -276,6 +288,16 @@ class CreateEditAccountDialog extends React.Component {
                 onChange={this.handleChange}
                 />
             </label>
+            <br/>
+            <label>
+                Account Type:
+                <select name="userType" value={this.state.userType} 
+                className="form-control form-center" onChange={this.handleChange}>
+                <option value="SelectOne">Select One</option>
+                <option value="Student">Student</option>
+                <option value="Instructor">Instructor</option>
+                </select> 
+                </label>
             <br/>
             <label>
                 Profile Picture:<br/>

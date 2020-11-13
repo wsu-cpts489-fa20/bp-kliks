@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 //     .page `http://127.0.0.1:5500/index.html`;
 
 fixture `Kliks Login Tests`
-    .page `http://localhost/index.html`;    
+    .page `https://kliks.bfapp.org/`; //http://localhost/    
 
 test('LoginGoesToMainPage', async t => {
     await t
