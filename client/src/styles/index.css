@@ -384,3 +384,34 @@ text-align: center;
     color: black;
     background-color: lightgray;
   }
+
+  .survey-container {
+    height: 250px;
+    width: 400px;
+  }
+
+  .survey-card {
+    /* height: 250px; */
+    width: 400px;
+  }
+
+
+  .wrapper {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    row-gap: 20px;
+  }
+  * {box-sizing: border-box;}
+  
+  .wrapper {
+    border-radius: 5px;
+    /* background-color: #fff4e6; */
+  }
+  
+  .wrapper > div {
+    border: 2px solid gray;
+    border-radius: 5px;
+    /* background-color: #ffd8a8; */
+    padding: 1em;
+    /* color: #d9480f; */
+  }

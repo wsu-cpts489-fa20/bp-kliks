@@ -5,25 +5,36 @@ import ModeBar from './ModeBar.js';
 import CreateEditAccountDialog from './CreateEditAccountDialog.js'
 import LoginPage from './LoginPage.js';
 import AppMode from "./../AppMode.js"
-import FeedPage from './FeedPage.js';
+import SurveyManagementPage from './SurveyManagementPage.js';
 import Rounds from './Rounds.js';
 import CoursesPage from './CoursesPage.js';
 import AboutBox from './AboutBox.js';
 
 const modeTitle = {};
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
-modeTitle[AppMode.FEED] = "Activity Feed";
+modeTitle[AppMode.SURVEY_MANAGEMENT] = "Survey Management";
 modeTitle[AppMode.ROUNDS] = "My Rounds";
 modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
 
 const modeToPage = {};
+
+/*  Login/Register Pages */
 modeToPage[AppMode.LOGIN] = LoginPage;
-modeToPage[AppMode.FEED] = FeedPage;
+
+/*  Survey/Responses/Questions Pages */
+modeToPage[AppMode.SURVEY_MANAGEMENT] = SurveyManagementPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT_RESPONSES] = SurveyManagementPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT_CREATE] = SurveyManagementPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT_SEARCH] = SurveyManagementPage;
+
+/*  Dashboard Pages */
 modeToPage[AppMode.ROUNDS] = Rounds;
 modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
 modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
+
+/*  Course Pages */
 modeToPage[AppMode.COURSES] = CoursesPage;
 
 
@@ -53,7 +64,7 @@ class App extends React.Component {
             this.setState({
               userObj: obj.user,
               authenticated: true,
-              mode: AppMode.FEED //We're authenticated so can get into the app.
+              mode: AppMode.SURVEY_MANAGEMENT //We're authenticated so can get into the app.
             });
           }
         }
@@ -158,6 +169,7 @@ class App extends React.Component {
             localAccount={this.state.userObj.authStrategy === "local"}
             editAccount={this.showEditAccount}
             logOut={() => this.handleChangeMode(AppMode.LOGIN)}
+            changeMode={this.handleChangeMode}
             showAbout={() => {this.setState({showAboutDialog: true})}}/>
           <ModeBar 
             mode={this.state.mode} 

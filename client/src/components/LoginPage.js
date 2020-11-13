@@ -3,6 +3,7 @@ import CreateEditAccountDialog from './CreateEditAccountDialog.js';
 import ResetPasswordDialog from './ResetPasswordDialog.js';
 import LookUpAccountDialog from './LookUpAccountDialog.js';
 import SecurityQuestionDialog from './SecurityQuestionDialog.js';
+import AppMode from '../AppMode.js';
 
 class LoginPage extends React.Component {
 
