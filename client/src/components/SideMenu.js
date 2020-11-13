@@ -12,13 +12,13 @@ renderModeMenuItems = () => {
       return(
         <div>
         <a className="sidemenu-item">
-            <span className="fa fa-users"></span>&nbsp;Active Questions</a>
+            <span className="fa fa-bolt"></span>&nbsp;Active Questions</a>
         <a className="sidemenu-item ">
             <span className="fa fa-search"></span>&nbsp;Search Questions</a>
         <a className="sidemenu-item ">
-            <span className="fa fa-search"></span>&nbsp;Create Questions</a>
+            <span className="fa fa-plus"></span>&nbsp;Create Questions</a>
         <a className="sidemenu-item ">
-            <span className="fa fa-search"></span>&nbsp;Responses</a>            
+            <span className="fa fa-folder-open" onClick={() => {this.props.changeMode(AppMode.SURVEY_MANAGEMENT_RESPONSES);}} ></span>&nbsp;Responses</a>           
         </div>
       );
     break;
