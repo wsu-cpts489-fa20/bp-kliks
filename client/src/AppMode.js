@@ -2,12 +2,17 @@
 
 const AppMode = {
     LOGIN: "LoginMode",
+
     SURVEY_MANAGEMENT: "SurveyMode",
+    SURVEY_MANAGEMENT_RESPONSES: "SurveyModeResponses",
+    SURVEY_MANAGEMENT_CREATE: "SurveyModeCreate",
+    SURVEY_MANAGEMENT_SEARCH: "SurveyModeSearch",
+
     ROUNDS: "RoundsMode",
     ROUNDS_LOGROUND: "RoundsMode-LogRound",
     ROUNDS_EDITROUND: "RoundsMode-EditRound",
-    COURSES: "CoursesMode",
-    SURVEY_MANAGEMENT_RESPONSES: "SurveyModeResponses"
+
+    COURSES: "CoursesMode"
 };
 
 Object.freeze(AppMode); //This ensures that the object is immutable.

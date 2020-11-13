@@ -19,13 +19,23 @@ modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
 
 const modeToPage = {};
+
+/*  Login/Register Pages */
 modeToPage[AppMode.LOGIN] = LoginPage;
+
+/*  Survey/Responses/Questions Pages */
 modeToPage[AppMode.SURVEY_MANAGEMENT] = SurveyManagementPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT_RESPONSES] = SurveyManagementPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT_CREATE] = SurveyManagementPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT_SEARCH] = SurveyManagementPage;
+
+/*  Dashboard Pages */
 modeToPage[AppMode.ROUNDS] = Rounds;
 modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
 modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
+
+/*  Course Pages */
 modeToPage[AppMode.COURSES] = CoursesPage;
-modeToPage[AppMode.SURVEY_MANAGEMENT_RESPONSES] = SurveyManagementPage;
 
 
 class App extends React.Component {

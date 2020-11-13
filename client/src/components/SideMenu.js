@@ -1,24 +1,47 @@
 import React from 'react';
 import AppMode from './../AppMode.js'
+import App from './App.js';
 
 class SideMenu extends React.Component {
 
+  setGeneralMode = (mode) => {
+    if(AppMode.SURVEY_MANAGEMENT || AppMode.SURVEY_MANAGEMENT_CREATE || AppMode.SURVEY_MANAGEMENT_RESPONSES  || AppMode.SURVEY_MANAGEMENT_SEARCH){
+      return AppMode.SURVEY_MANAGEMENT;
+    }
+    
+    return mode;
+  }
+  
 //renderModeItems -- Renders correct subset of mode menu items based on
 //current mode, which is stored in this.prop.mode. Uses switch statement to
 //determine mode.
 renderModeMenuItems = () => {
-  switch (this.props.mode) {
-    case AppMode.SURVEY_MANAGEMENT:
+  // console.log(this.props.mode);
+  const mode = this.setGeneralMode(this.props.mode);
+  switch (mode) {
+    case AppMode.SURVEY_MANAGEMENT || AppMode.SURVEY_MANAGEMENT_CREATE || AppMode.SURVEY_MANAGEMENT_RESPONSES  || AppMode.SURVEY_MANAGEMENT_SEARCH:
       return(
         <div>
-        <a className="sidemenu-item">
+        <a className="sidemenu-item" onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.SURVEY_MANAGEMENT);
+          }}>
             <span className="fa fa-bolt"></span>&nbsp;Active Questions</a>
-        <a className="sidemenu-item ">
+        <a className="sidemenu-item " onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
+          }}>
             <span className="fa fa-search"></span>&nbsp;Search Questions</a>
-        <a className="sidemenu-item ">
+        <a className="sidemenu-item " onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_CREATE);
+          }}>
             <span className="fa fa-plus"></span>&nbsp;Create Questions</a>
-        <a className="sidemenu-item ">
-            <span className="fa fa-folder-open" onClick={() => {this.props.changeMode(AppMode.SURVEY_MANAGEMENT_RESPONSES);}} ></span>&nbsp;Responses</a>           
+        <a className="sidemenu-item " onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_RESPONSES);
+          }}>
+            <span className="fa fa-folder-open"></span>&nbsp;Responses</a>           
         </div>
       );
     break;
