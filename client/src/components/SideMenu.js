@@ -8,13 +8,17 @@ class SideMenu extends React.Component {
 //determine mode.
 renderModeMenuItems = () => {
   switch (this.props.mode) {
-    case AppMode.FEED:
+    case AppMode.SURVEY_MANAGEMENT:
       return(
         <div>
         <a className="sidemenu-item">
-            <span className="fa fa-users"></span>&nbsp;Followed Users</a>
+            <span className="fa fa-users"></span>&nbsp;Active Questions</a>
         <a className="sidemenu-item ">
-            <span className="fa fa-search"></span>&nbsp;Search Feed</a>
+            <span className="fa fa-search"></span>&nbsp;Search Questions</a>
+        <a className="sidemenu-item ">
+            <span className="fa fa-search"></span>&nbsp;Create Questions</a>
+        <a className="sidemenu-item ">
+            <span className="fa fa-search"></span>&nbsp;Responses</a>            
         </div>
       );
     break;

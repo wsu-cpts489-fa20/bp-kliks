@@ -5,14 +5,14 @@ import ModeBar from './ModeBar.js';
 import CreateEditAccountDialog from './CreateEditAccountDialog.js'
 import LoginPage from './LoginPage.js';
 import AppMode from "./../AppMode.js"
-import FeedPage from './FeedPage.js';
+import SurveyManagementPage from './SurveyManagementPage.js';
 import Rounds from './Rounds.js';
 import CoursesPage from './CoursesPage.js';
 import AboutBox from './AboutBox.js';
 
 const modeTitle = {};
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
-modeTitle[AppMode.FEED] = "Activity Feed";
+modeTitle[AppMode.SURVEY_MANAGEMENT] = "SURVEY MANAGEMENT";
 modeTitle[AppMode.ROUNDS] = "My Rounds";
 modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
@@ -20,7 +20,7 @@ modeTitle[AppMode.COURSES] = "Courses";
 
 const modeToPage = {};
 modeToPage[AppMode.LOGIN] = LoginPage;
-modeToPage[AppMode.FEED] = FeedPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT] = SurveyManagementPage;
 modeToPage[AppMode.ROUNDS] = Rounds;
 modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
 modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
@@ -53,7 +53,7 @@ class App extends React.Component {
             this.setState({
               userObj: obj.user,
               authenticated: true,
-              mode: AppMode.FEED //We're authenticated so can get into the app.
+              mode: AppMode.SURVEY_MANAGEMENT //We're authenticated so can get into the app.
             });
           }
         }
