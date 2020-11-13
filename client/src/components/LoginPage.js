@@ -3,6 +3,7 @@ import CreateEditAccountDialog from './CreateEditAccountDialog.js';
 import ResetPasswordDialog from './ResetPasswordDialog.js';
 import LookUpAccountDialog from './LookUpAccountDialog.js';
 import SecurityQuestionDialog from './SecurityQuestionDialog.js';
+import AppMode from '../AppMode.js';
 
 class LoginPage extends React.Component {
 
@@ -209,11 +210,11 @@ cancelCreateAccount = () => {
                         onClick={() => {this.setState({showLookUpAccountDialog: true});}}>
                 Reset your password</button>
             </p>  
-            <button type="button" className="btn btn-github"
+            {/* <button type="button" className="btn btn-github"
                onClick={() => this.handleOAuthLoginClick("github")}>
               <span className={this.state.githubIcon}></span>&nbsp;
                 {this.state.githubLabel}
-            </button>
+            </button> */}
             <p>
                 <i>Version CptS 489</i>
             </p>
