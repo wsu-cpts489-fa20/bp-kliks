@@ -3,8 +3,8 @@ import React from 'react';
 class SurveyItem extends React.Component {
 
     //Initialize a Rounds object based on local storage
-    constructor() {
-        super();          
+    constructor(props) {
+        super(props);
     }
 
     render(){

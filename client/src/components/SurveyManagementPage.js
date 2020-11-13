@@ -1,13 +1,20 @@
 import React from 'react';
+import CreateSurvey from './SurveyManagement/CreateSurvey.js';
 import SurveyItem from './SurveyManagement/surveyItem.js'
 
 class SurveyManagementPage extends React.Component {
+    constructor(props){
+        super(props);
+    }
 
     render() {
         return (
         <div className="padded-page" style={{paddingBottom: "50px"}}>
             <center>
-            <SurveyItem/>
+                <CreateSurvey>
+
+                </CreateSurvey>
+            {/* <SurveyItem/> */}
             {/* <h1 >SurveyManagement</h1>
             <h2>This page is under construction.</h2>
             <img src="https://dl.dropboxusercontent.com/s/qpjhy9x9gwdxpob/SpeedScoreLogo64Trans.png" 
