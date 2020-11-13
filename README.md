@@ -11,8 +11,6 @@ This repo serves as the starting code for all of the CptS 489 project teams in t
 Fa20 semester. It will be pushed to their repos, deployed to their instances on
 AWS EB, and served through https://[proj-name].bfapp.org.
 
-Kliks site is located here: https://kliks.bfapp.org/
-
 To connect the app to your MongoDB database, create a .env file in the 
 project root directory. On the first line of that file, add this:
 MONGO_STR=<YOUR_MONGO_CONNECTION_STRING>
