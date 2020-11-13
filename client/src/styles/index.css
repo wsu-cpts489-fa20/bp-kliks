@@ -415,3 +415,7 @@ text-align: center;
     padding: 1em;
     /* color: #d9480f; */
   }
+
+  .search-width{
+    width: 50%;
+  }
