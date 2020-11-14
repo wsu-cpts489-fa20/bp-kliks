@@ -5,6 +5,8 @@ In order to run the tests the following commands have to be ran:
 *npm install testcafe*  -- React selectors 
 *npm install testcafe-react-selectors*  -- React selectors 
 
+# Test videos:
+Milestone 1 test video [here](https://emailwsu.sharepoint.com/:f:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EgYInTuJz5pKglr_615juDMBV4EsRyeBsavs0LZj0w3jcA?e=r8CIlV).
 
 The resources to set up the GitActions for TestCafe
 *   Understanding the process of Github's continuous integration is located [here](https://docs.github.com/en/free-pro-team@latest/actions/guides/about-continuous-integration).
