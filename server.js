@@ -13,7 +13,8 @@ import express from 'express';
 require('dotenv').config();
 
 const LOCAL_PORT = 8081;
-const DEPLOY_URL = "http://localhost:8081";
+const DEPLOY_URL = "https://kliks.bfapp.org";
+const DEV_URL = "http://localhost:8081";
 const PORT = process.env.HTTP_PORT || LOCAL_PORT;
 const GithubStrategy = passportGithub.Strategy;
 const LocalStrategy = passportLocal.Strategy;
