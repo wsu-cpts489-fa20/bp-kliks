@@ -2,14 +2,14 @@ name: TestCafe Tests-Target Multiple Node.js Versions and Operating Systems
 on:
   push:
     branches:
-      - master    
+      - tests    
     paths:
       - 'client/src/tests/**'  
-  pull_request:
-    branches:
-      - master    
-    paths:
-      - 'client/src/tests/**'  
+#   pull_request:
+#     branches:
+#       - master    
+#     paths:
+#       - 'client/src/tests/**'  
 
 jobs:
   build:
