@@ -7,10 +7,10 @@ class ModeBar extends React.Component {
       return(
         <div className={"modebar" + (this.props.mode === AppMode.LOGIN ? 
           " invisible" : (this.props.menuOpen ? " ignore-click visible" : " visible"))}>
-        <a className={(this.props.mode === AppMode.FEED ? " item-selected" : null)}
-            onClick={()=>this.props.changeMode(AppMode.FEED)}>
+        <a className={(this.props.mode === AppMode.SURVEY_MANAGEMENT ? " item-selected" : null)}
+            onClick={()=>this.props.changeMode(AppMode.SURVEY_MANAGEMENT)}>
           <span className="modebaricon fa fa-th-list"></span>
-          <span className="modebar-text">Feed</span>
+          <span className="modebar-text">Survey Management</span>
         </a>
         <a className={(this.props.mode === AppMode.ROUNDS || 
                this.props.mode === AppMode.ROUNDS_EDITROUND || 
@@ -18,7 +18,7 @@ class ModeBar extends React.Component {
                   " item-selected" : null)}
            onClick={()=>this.props.changeMode(AppMode.ROUNDS)}>
           <span className="modebar-icon  fa fa-history"></span>
-          <span className="modebar-text">Rounds</span>
+          <span className="modebar-text">Dashboard</span>
         </a>
         <a className={(this.props.mode === AppMode.COURSES ? " item-selected" : null)}
           onClick={()=>this.props.changeMode(AppMode.COURSES)}>
