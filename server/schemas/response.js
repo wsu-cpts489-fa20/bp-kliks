@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+var studentSchema = require('./student.js');
 const Schema = mongoose.Schema;
 
 const responseSchema = new Schema({
