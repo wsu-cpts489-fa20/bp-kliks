@@ -330,7 +330,7 @@ app.post('/users/:userId',  async (req, res, next) => {
       !req.body.hasOwnProperty("securityAnswer")) {
     //Body does not contain correct properties
     return res.status(400).send("/users POST request formulated incorrectly. " + 
-      "It must contain 'password','displayName','profilePicURL','securityQuestion' and 'securityAnswer fields in message body.")
+      "It must contain 'password', 'userType', 'displayName','profilePicURL','securityQuestion' and 'securityAnswer fields in message body.")
   }
   try {
     let thisUser = await User.findOne({id: req.params.userId});
