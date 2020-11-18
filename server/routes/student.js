@@ -9,7 +9,7 @@ const Student = require('./../schemas/student');
 ////////////////////////////////
 
 //CREATE student route: Adds a student to a course in the users collection (POST)
-router.post('/student/:courseId', async (req, res, next) => {
+router.post('/students/:courseId', async (req, res, next) => {
     console.log("in /student (POST) route with params = " + 
                 JSON.stringify(req.params) + " and body = " + 
                 JSON.stringify(req.body));
@@ -20,7 +20,6 @@ router.post('/student/:courseId', async (req, res, next) => {
         "Body must contain all 2 required fields: userID and studentDisplayName");
     }
     try {
-      console.log(req.body.userID);
       let status = await User.updateMany(
       {"courses.courseID": req.params.courseId},
       {$push: {'courses.$.students': req.body}});
@@ -38,3 +37,21 @@ router.post('/student/:courseId', async (req, res, next) => {
   });
 
 module.exports = router;
+
+//READ course route: Returns all students associated 
+//with a given course in the users collection (GET)
+router.get('/students/:courseId', async(req, res) => {
+  console.log("in /students route (GET) with courseId = " + 
+    JSON.stringify(req.params.course));
+  try {
+    let thisUser = await User.findOne({"courses.courseID": req.params.courseId});
+    if (!thisUser) {
+      return res.status(400).message("No user account with specified userId was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisUser.courses[0].students));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
+  }
+});
