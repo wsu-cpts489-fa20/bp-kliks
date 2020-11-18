@@ -22,10 +22,11 @@ router.post('/courses/:userId', async (req, res, next) => {
       !req.body.hasOwnProperty("courseSemester") ||
       !req.body.hasOwnProperty("courseEnrollmentLimit") || 
       !req.body.hasOwnProperty("courseCurrentlyEnrolled") || 
+      !req.body.hasOwnProperty("courseID") ||
       !req.body.hasOwnProperty("courseNotes")) {
     //Body does not contain correct properties
     return res.status(400).send("POST request on /courses formulated incorrectly." +
-      "Body must contain all 10 required fields: courseInstructorFirstName, courseInstructorLastName, courseInstructorID, courseName, courseNumber, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, courseNotes");
+      "Body must contain all 11 required fields: courseInstructorFirstName, courseInstructorLastName, courseInstructorID, courseName, courseNumber, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, , courseID, courseNotes");
   }
   try {
     let status = await User.updateOne(
@@ -69,14 +70,14 @@ router.put('/courses/:userId/:courseId', async (req, res, next) => {
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
   const validProps = ['courseInstructorFirstName', 'courseInstructorLastName','courseInstructorID', 'courseName', 'courseNumber', 'courseYear',
-    'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'];
+    'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseID', 'courseNotes'];
   let bodyObj = {...req.body};
   delete bodyObj._id; //Not needed for update
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("courses/ PUT request formulated incorrectly." +
         "It includes " + bodyProp + ". However, only the following props are allowed: " +
-        "'courseInstructorFirstName', 'courseInstructorLastName', 'courseInstructorID', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'");
+        "'courseInstructorFirstName', 'courseInstructorLastName', 'courseInstructorID', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseID', 'courseNotes'");
     } else {
       bodyObj["courses.$." + bodyProp] = bodyObj[bodyProp];
       delete bodyObj[bodyProp];
