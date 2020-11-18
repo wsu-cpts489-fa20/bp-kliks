@@ -55,6 +55,38 @@ router.get('/students/:courseId', async(req, res) => {
   }
 });
 
+//UPDATE student route: Updates a specific student 
+//for a given course in the users collection (PUT)
+router.put('/students/:courseId/:userId', async (req, res, next) => {
+    console.log("in /courses (PUT) route with params = " + 
+                JSON.stringify(req.params) + " and body = " + 
+                JSON.stringify(req.body));
+    if (!req.body.hasOwnProperty("userID") ||
+        !req.body.hasOwnProperty("studentDisplayName")) {
+        //Body does not contain correct properties
+        return res.status(400).send("PUT request on /student formulated incorrectly." +
+        "Body must contain all 2 required fields: userID and studentDisplayName");
+    }
+    try {
+      let status = await User.updateMany(
+        {"courses.courseID": req.params.courseId,
+          'courses.0.students': {"userID" : req.params.userId}},
+        {$set: { 'courses.0.students' : req.body}},
+        function (val){
+            console.log(val);
+        }
+      );
+      if (status.nModified != 1) {
+        res.status(400).send("Unexpected error occurred when updating student in database. Student was not updated.");
+      } else {
+        res.status(200).send("Student successfully updated in database.");
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(400).send("Unexpected error occurred when updating student in database: " + err);
+    } 
+  });
+
 //DELETE student route: Deletes a specific student
 //from a course in the users collection (DELETE)
 router.delete('/students/:courseId/:userId', async (req, res, next) => {
