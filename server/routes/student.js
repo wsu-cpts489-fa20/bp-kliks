@@ -36,13 +36,12 @@ router.post('/students/:courseId', async (req, res, next) => {
     } 
   });
 
-module.exports = router;
 
 //READ course route: Returns all students associated 
 //with a given course in the users collection (GET)
 router.get('/students/:courseId', async(req, res) => {
   console.log("in /students route (GET) with courseId = " + 
-    JSON.stringify(req.params.course));
+                JSON.stringify(req.params.course));
   try {
     let thisUser = await User.findOne({"courses.courseID": req.params.courseId});
     if (!thisUser) {
@@ -55,3 +54,25 @@ router.get('/students/:courseId', async(req, res) => {
     return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
   }
 });
+
+//DELETE student route: Deletes a specific student
+//from a course in the users collection (DELETE)
+router.delete('/students/:courseId/:userId', async (req, res, next) => {
+  console.log("in /rounds (DELETE) route with params = " + 
+                JSON.stringify(req.params)); 
+  try {
+    let status = await User.updateMany(
+      {"courses.courseID": req.params.courseId},
+      {$pull: {'courses.0.students': {"userID" : req.params.userId}}});
+      if (status.nModified != 1) { //Should never happen!
+        res.status(400).send("Unexpected error occurred when deleting student from a course from database. Student was not deleted.");
+      } else {
+        res.status(200).send("Student successfully deleted from a course from database.");
+      }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when deleting student from a course from database: " + err);
+  } 
+});
+
+module.exports = router;
