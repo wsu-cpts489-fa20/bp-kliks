@@ -31,7 +31,9 @@ class SurveyManagementPage extends React.Component {
                 );
             case AppMode.SURVEY_MANAGEMENT_RESPONSES:
                 return (
-                    <SubmittedResponse>
+                    <SubmittedResponse
+                    userObj={this.props.userObj}
+                    >
                     </SubmittedResponse>
                 );
         }
