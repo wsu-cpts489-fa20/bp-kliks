@@ -14,10 +14,8 @@ router.get('/responses/:userId/:courses', async(req, res, next) => {
 
         if(thisSurvey){
             console.log(thisSurvey);
-
             return res.status(200).json(JSON.stringify(thisSurvey));
         }
-
 
     }catch(err){
         console.log()
@@ -26,7 +24,7 @@ router.get('/responses/:userId/:courses', async(req, res, next) => {
     }
   });
 
-  //CREATE reponse route: Adds a new response to the response collection (POST)
+  //CREATE response route: Adds a new response to the response collection (POST)
   router.post('/responses/',  async (req, res, next) => {
     console.log("in /users route (POST) with params = " + JSON.stringify(req.params) +
       " and body = " + JSON.stringify(req.body));  
@@ -133,6 +131,46 @@ router.delete('/responses/',  async (req, res, next) => {
     }
 });
 
+//DELETE ALL response route: Deletes ALL documents with the specified courseID, surveyID, and questionID from Survey collection (DELETE)
+router.delete('/responses/all',  async (req, res, next) => {
+    console.log("in /responses/ route (DELETE) with params = " + JSON.stringify(req.params) +
+        " and body = " + JSON.stringify(req.body));  
+    if (req.body === undefined ||
+        !req.body.hasOwnProperty("questionID") ||
+        !req.body.hasOwnProperty("courseID") ||
+        !req.body.hasOwnProperty("surveyID")) {
+        //Body does not contain correct properties
+        return res.status(400).send("/responses/all.\/ DELETE request formulated incorrectly. " + 
+        "It must contain 'questionID','courseID',and 'surveyID' fields in message body.")
+    }
+    try {
+        let thisSurvey = await Survey.findOne({surveyID: req.body.surveyID, courseID: req.body.courseID, 
+              questions : { $elemMatch : { questionID: req.body.questionID }}
+          });
 
+        if(!thisSurvey){
+        res.status(404).send("No survey with the id: " + req.body.surveyID + " and courseID: "+ req.body.courseID + " " + " and questionID: "+ req.body.questionID + " " + "'.");
+        }else{
+            thisSurvey.questions.forEach((question) => {
+                if(question.questionID == req.body.questionID){
+                    question.responses = [];
+                }
+            })
+
+            var results = thisSurvey.save();
+
+            if(!results){
+                return res.status(400).send("Unexpected error occurred when saving after deleting ALL responses. " + err);
+            }else{
+                console.log("Successfully deleted ALL Responses from database");
+                return res.status(200).send("Responses successfully deleted in database.");
+            }
+
+        }
+
+    } catch (err) {
+        return res.status(400).send("Unexpected error occurred when deleting ALL responses in database. " + err);
+    }
+});
 
 module.exports = router;
