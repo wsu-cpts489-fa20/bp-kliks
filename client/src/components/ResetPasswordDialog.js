@@ -54,6 +54,7 @@ class ResetPasswordDialog extends React.Component {
                         ref={this.resetPasswordRef}
                         />
                     </label>
+                    <p></p>
                     <label>
                         Repeat New Password: 
                         <input
@@ -64,6 +65,7 @@ class ResetPasswordDialog extends React.Component {
                         ref={this.resetPasswordRepeatRef}
                         />
                     </label>
+                    <p></p>
                     <button role="submit" 
                      className="btn btn-primary btn-color-theme form-submit-btn">
                         <span className="fa fa-key"></span>&nbsp;Reset Password
