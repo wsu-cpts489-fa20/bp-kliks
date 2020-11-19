@@ -23,7 +23,13 @@ class SubmittedResponse extends React.Component {
       editRowId: "",
       responseItem : {},
       searchKey : "",
-      showDeleteResponseModal : false
+      showDeleteResponseModal : false,
+
+      // Sort state variables
+      sortResponseInOrder: false,
+      sortDateInOrder: false,
+      sortQuestionInOrder: false,
+      sortResponseTypeInOrder: false
     };
 
     // this.getAllResponses();
@@ -45,7 +51,7 @@ class SubmittedResponse extends React.Component {
     allResponses.forEach((response)=>{
       table.push(
         <tr key={response.question.surveyID+"-"+response.question.questionID+"-"+response.responseId+"-"+index}>
-          <td>{response.response.students.length > 1 ? "Group" : "Individual"}</td>
+          <td>{response.responseType}</td>
           <td>{response.question.questionText}</td>
           <td>{response.response.responseDateTime}</td>
           <td>{response.response.surveyResponse}</td>
@@ -201,7 +207,7 @@ class SubmittedResponse extends React.Component {
 
     oldResponses.forEach((response) => {
       var rowString = "";
-      rowString += response.response.students.length > 1 ? "Group" : "Individual" + " ";
+      rowString += response.responseType;
       rowString += response.question.questionText + " ";
       rowString += response.response.responseDateTime + " ";
       rowString += response.response.surveyResponse + " ";
@@ -250,6 +256,11 @@ class SubmittedResponse extends React.Component {
     }); 
   }
 
+  /* SORT METHODS FOR THE TABLE */
+  sortTable = (searchCriterionCallBack) =>{
+    return this.state.responses.sort(searchCriterionCallBack);
+  }
+
   onSearchKeyChange = (event) => {
     this.setState({searchKey : event.target.value});
   }
@@ -257,17 +268,90 @@ class SubmittedResponse extends React.Component {
   sortByDate = (event) => {
     event.preventDefault();
 
+    // TO DO: Sort by TRUE DATE
+    var newResponses = this.sortTable((valueA, valueB) => {
+      if(valueA == null || valueB == null){
+        if(valueA == null){
+          return this.state.sortDateInOrder ? -1 : 1;
+        }
+        else if(valueB == null){
+          return this.state.sortDateInOrder ? 1 : -1;
+        }
+      }
+
+      if (valueA.response.responseDateTime < valueB.response.responseDateTime) {
+        return this.state.sortDateInOrder ? -1 : 1;
+      }
+      if (valueA.response.responseDateTime > valueB.response.responseDateTime) {
+        return this.state.sortDateInOrder ? 1 : -1;
+      }
+      return 0;
+    });
+    
+    this.setState({
+      responses : newResponses,
+      sortDateInOrder : !this.state.sortDateInOrder
+    });    
+
     console.log("sort responses by date");
   }
 
   sortByQuestion = (event) => {
     event.preventDefault();
 
+    var newResponses = this.sortTable((valueA, valueB) => {
+      if(valueA == null || valueB == null){
+        if(valueA == null){
+          return this.state.sortQuestionInOrder ? -1 : 1;
+        }
+        else if(valueB == null){
+          return this.state.sortQuestionInOrder ? 1 : -1;
+        }
+      }
+
+      if (valueA.question.questionText < valueB.question.questionText) {
+        return this.state.sortQuestionInOrder ? -1 : 1;
+      }
+      if (valueA.question.questionText > valueB.question.questionText) {
+        return this.state.sortQuestionInOrder ? 1 : -1;
+      }
+      return 0;
+    });
+    
+    this.setState({
+      responses : newResponses,
+      sortQuestionInOrder : !this.state.sortQuestionInOrder
+    });
+
     console.log("sort responses by question");
   }
 
-  sortByQuestionType = (event) => {
+  sortByResponseType = (event) => {
     event.preventDefault();
+
+    var newResponses = this.sortTable((valueA, valueB) => {
+      if(valueA == null || valueB == null){
+        if(valueA == null){
+          return this.state.sortResponseTypeInOrder ? -1 : 1;
+        }
+        else if(valueB == null){
+          return this.state.sortResponseTypeInOrder ? 1 : -1;
+        }
+      }
+
+      if (valueA.responseType < valueB.responseType) {
+        return this.state.sortResponseTypeInOrder ? -1 : 1;
+      }
+      if (valueA.responseType > valueB.responseType) {
+        return this.state.sortResponseTypeInOrder ? 1 : -1;
+      }
+      return 0;
+    });
+    
+    this.setState({
+      responses : newResponses,
+      sortResponseTypeInOrder : !this.state.sortResponseTypeInOrder
+    });
 
     console.log("sort responses by question type");
   }
@@ -275,9 +359,32 @@ class SubmittedResponse extends React.Component {
   sortByResponse = (event) => {
     event.preventDefault();
 
+    var newResponses = this.sortTable((valueA, valueB) => {
+      if(valueA == null || valueB == null){
+        if(valueA == null){
+          return this.state.sortResponseInOrder ? -1 : 1;
+        }
+        else if(valueB == null){
+          return this.state.sortResponseInOrder ? 1 : -1;
+        }
+      }
+
+      if (valueA.response.surveyResponse < valueB.response.surveyResponse) {
+        return this.state.sortResponseInOrder ? -1 : 1;
+      }
+      if (valueA.response.surveyResponse > valueB.response.surveyResponse) {
+        return this.state.sortResponseInOrder ? 1 : -1;
+      }
+      return 0;
+    });
+    
+    this.setState({
+      responses : newResponses,
+      sortResponseInOrder : !this.state.sortResponseInOrder
+    });        
+
     console.log("sort responses by response");
   }
-
 
   //render--render the entire responses table with header, displaying a "No
   //Responses Logged" message in case the table is empty.
@@ -297,7 +404,7 @@ class SubmittedResponse extends React.Component {
       <table className="table table-hover">
         <thead className="thead-light">
         <tr>
-          <th><span id="responseSortQuestionType" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByQuestionType}></span>&nbsp;Question type </th>
+          <th><span id="responseSortQuestionType" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByResponseType}></span>&nbsp;Response type </th>
           <th><span id="responseSortQuestion" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByQuestion}></span>&nbsp;Question</th>
           <th><span id="responseSortDate" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByDate}></span>&nbsp;Response Date-Time</th>
           <th><span id="responseSortResponse" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByResponse}></span>&nbsp;Response</th>

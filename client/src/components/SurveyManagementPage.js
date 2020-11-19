@@ -59,7 +59,8 @@ class SurveyManagementPage extends React.Component {
                       surveyID: survey.surveyID,
                       response: response,
                       survey: survey,
-                      question: question
+                      question: question,
+                      responseType: response.students.length > 1 ? "Group" : "Individual"
                     });
                 });
               });
