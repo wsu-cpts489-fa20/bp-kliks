@@ -6,7 +6,6 @@ const User = require('./../schemas/user');
 //USER ACCOUNT MANAGEMENT ROUTES
 ////////////////////////////////
 
-
 //READ user route: Retrieves the user with the specified userId from users collection (GET)
 router.get('/users/:userId', async(req, res, next) => {
   console.log("in /users route (GET) with userId = " + 
@@ -30,6 +29,7 @@ router.get('/users/:userId', async(req, res, next) => {
 router.post('/users/:userId',  async (req, res, next) => {
   console.log("in /users route (POST) with params = " + JSON.stringify(req.params) +
     " and body = " + JSON.stringify(req.body));  
+  // Specify what the body for the user is needed for the data collection
   if (req.body === undefined ||
       !req.body.hasOwnProperty("password") || 
       !req.body.hasOwnProperty("userType") ||
@@ -74,6 +74,7 @@ router.put('/users/:userId',  async (req, res, next) => {
     return res.status(400).send("users/ PUT request formulated incorrectly." +
         "It must contain 'userId' as parameter.");
   }
+  // Make sure only these props are being added to the database for user
   const validProps = ['password', 'userType', 'displayName', 'profilePicURL', 
     'securityQuestion', 'securityAnswer'];
   for (const bodyProp in req.body) {
