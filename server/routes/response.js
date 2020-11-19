@@ -49,7 +49,6 @@ router.get('/responses/:userId/:courses', async(req, res, next) => {
       }else{
           console.log(thisSurvey);
           try{
-
                 console.log("RESPONSE IN BODY IS:");
                 console.log(req.body.response);
 
@@ -81,8 +80,58 @@ router.get('/responses/:userId/:courses', async(req, res, next) => {
     } catch (err) {
       return res.status(400).send("Unexpected error occurred when adding or looking up survey in database. " + err);
     }
-  }); 
+  });
 
+//DELETE response route: Deletes the document with the specified responseId, courseID, surveyID, and questionID from Survey collection (DELETE)
+router.delete('/responses/',  async (req, res, next) => {
+    console.log("in /responses/ route (DELETE) with params = " + JSON.stringify(req.params) +
+        " and body = " + JSON.stringify(req.body));  
+    if (req.body === undefined ||
+        !req.body.hasOwnProperty("responseId") || 
+        !req.body.hasOwnProperty("questionID") ||
+        !req.body.hasOwnProperty("courseID") ||
+        !req.body.hasOwnProperty("surveyID")) {
+        //Body does not contain correct properties
+        return res.status(400).send("/responses.\/ DELETE request formulated incorrectly. " + 
+        "It must contain 'responseId','questionID','courseID',and 'surveyID' fields in message body.")
+    }
+    try {
+        let thisSurvey = await Survey.findOne({surveyID: req.body.surveyID, courseID: req.body.courseID, 
+              questions : { $elemMatch : { questionID: req.body.questionID, responses : {
+                  $elemMatch : {
+                      responseId : req.body.responseId
+                  }
+              } }}
+          });
+
+        if(!thisSurvey){
+        res.status(404).send("No survey with the id: " + req.body.surveyID + " and courseID: "+ req.body.courseID + " " + " and questionID: "+ req.body.questionID + " " + "'.");
+        }else{
+            thisSurvey.questions.forEach((question) => {
+                if(question.questionID == req.body.questionID){
+                    var removalIndex = question.responses.findIndex((response) => {
+                        return response.responseId == req.body.responseId;
+                    });
+
+                    question.responses.splice(removalIndex, 1);
+                }
+            })
+
+            var results = thisSurvey.save();
+
+            if(!results){
+                return res.status(400).send("Unexpected error occurred when saving after deleting a response. " + err);
+            }else{
+                console.log("Successfully deleted the Response");
+                return res.status(200).send("Response successfully deleted in database.");
+            }
+
+        }
+
+    } catch (err) {
+        return res.status(400).send("Unexpected error occurred when deleting/updating a responses in database. " + err);
+    }
+});
 
 
 
