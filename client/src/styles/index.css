@@ -242,6 +242,20 @@ text-align:center;
 box-shadow: 2px 2px 3px #999;
 }
 
+.floatbtn-upload {
+  position:fixed;
+  cursor: pointer;
+  width:60px;
+  height:60px;
+  bottom:60px;
+  right:120px;
+  background-color:#789E9E;
+  color:white;
+  border-radius:50px;
+  text-align:center;
+  box-shadow: 2px 2px 3px #999;
+  }
+
 .floatbtn-icon{
 margin-top:22px;
 }
@@ -419,3 +433,16 @@ text-align: center;
   .search-width{
     width: 50%;
   }
+
+  .backbtn {
+    position:fixed;
+    cursor: pointer;
+    width:60px;
+    height:60px;
+    bottom:60px;
+    left:120px;
+    background-color:#789E9E;
+    color:white;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+    }

@@ -3,8 +3,8 @@ import React from 'react';
 class FloatingButton extends React.Component {
     render() {
       return(
-        <div className="floatbtn" onClick={this.props.handleClick}>
-          <span className="floatbtn-icon fa fa-plus"></span>
+        <div className={(this.props.upload ? "floatbtn-upload" : "floatbtn")} onClick={this.props.handleClick}>
+          <span className={(this.props.upload ? "floatbtn-icon fa fa-upload" : "floatbtn-icon fa fa-plus")}></span>
         </div>  
       );
     }
