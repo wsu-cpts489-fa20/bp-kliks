@@ -1,5 +1,6 @@
 import React from 'react';
 import AppMode from '../AppMode';
+import logo from '../favicon.png'
 
 class NavBar extends React.Component {
 
@@ -30,7 +31,7 @@ class NavBar extends React.Component {
         <span id="menuBtnIcon" className={"sidemenu-btn-icon " + this.getMenuBtnIcon()}>
         </span>
       </button>
-      <img src="https://tinyurl.com/y2lr8yvu" alt="Kliks Logo" height="38px"
+      <img src={logo} alt="Kliks Logo" height="38px"
       width="38px" />
       <span className="navbar-title">
         &nbsp;{this.props.title}
