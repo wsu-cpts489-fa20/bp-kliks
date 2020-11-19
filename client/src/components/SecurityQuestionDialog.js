@@ -28,7 +28,7 @@ class SecurityQuestionDialog extends React.Component {
               <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h3 className="modal-title"><b>Answer Security Question</b>
+                    <h3 className="col-12 modal-title text-center"><b>Answer Security Question</b>
                     </h3>
                     <button className="modal-close" 
                         onClick={this.props.cancelResetPassword}>

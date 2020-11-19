@@ -350,6 +350,7 @@ text-align: center;
                padding-bottom: 12px;
                text-align: center;
               }
+
   
   .modal-footer {
     display: flex;
@@ -361,9 +362,11 @@ text-align: center;
 
 .modal-close {
   border: none;
-  float: right;
-  height:100%;
+  position: absolute;
+  right: 20px;
+  height: 20px;
   background-color: lightgray;
+  font-weight: bold;
 }
 
 .close:hover,

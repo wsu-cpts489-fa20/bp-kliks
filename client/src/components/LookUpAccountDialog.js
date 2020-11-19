@@ -36,7 +36,7 @@ class LookUpAccountDialog extends React.Component {
               <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h3 className="modal-title"><b>Look Up Account</b></h3>
+                    <h3 className="col-12 modal-title text-center"><b>Look Up Account</b></h3>
                     <button className="modal-close" 
                         onClick={() => {this.props.cancelResetPassword()}}>
                         &times;
