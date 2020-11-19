@@ -48,6 +48,7 @@ class SecurityQuestionDialog extends React.Component {
                         cols="35"
                         />
                     </label>
+                    <p></p>
                     <label>
                         Security Answer: 
                         <textarea
@@ -58,6 +59,7 @@ class SecurityQuestionDialog extends React.Component {
                         cols="35"
                         />
                     </label>
+                    <p></p>
                     <button role="submit" 
                       className="btn btn-primary btn-color-theme form-submit-btn">
                         <span className="fa fa-check"></span>&nbsp;Verify Answer
