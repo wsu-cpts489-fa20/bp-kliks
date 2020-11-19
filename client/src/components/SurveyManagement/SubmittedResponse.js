@@ -8,13 +8,6 @@ class SubmittedResponse extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.setState({
-    //   questions : obj
-    // }, () => {
-    //   this.getAllResponses();
-    // });
-
-
     this.state = {
       questions : this.props.questions,
       responses : this.props.responses,
@@ -31,12 +24,9 @@ class SubmittedResponse extends React.Component {
       sortQuestionInOrder: false,
       sortResponseTypeInOrder: false
     };
-
-    // this.getAllResponses();
   }
 
   componentDidMount() {
-    // this.props.getQuestions();
   }
 
 
@@ -46,27 +36,26 @@ class SubmittedResponse extends React.Component {
   let table = [];
   console.log("renderResponseTable");
   console.log(allResponses);
-  // allResponses.forEach((question)=>{
     var index = 0;
     allResponses.forEach((response)=>{
+      console.log("index");
       table.push(
-        <tr key={response.question.surveyID+"-"+response.question.questionID+"-"+response.responseId+"-"+index}>
+        <tr key={response.surveyID+"-"+response.question.questionID+"-"+response.responseId+"-"+index}>
           <td>{response.responseType}</td>
           <td>{response.question.questionText}</td>
           <td>{response.response.responseDateTime}</td>
           <td>{response.response.surveyResponse}</td>
           <td><button onClick={this.props.menuOpen ? null : () => 
-          this.viewResponse(response.question.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
+          this.viewResponse(response.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
               <span className="fa fa-eye"></span></button></td>
           <td><button onClick={this.props.menuOpen ? null : 
-          () => this.confirmDeleteResponse(response.question.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
+          () => this.confirmDeleteResponse(response.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
               <span className="fa fa-trash"></span></button></td>
         </tr>
       );
       index++;     
     });
     index = 0;
-  // });
 
   return table;
   }
@@ -78,7 +67,17 @@ class SubmittedResponse extends React.Component {
 
     let responseKeys = this.parseResponseRowId(rowId);    
 
-    var response = this.state.responses[responseKeys[3]];// this.getResponseItem(responseKeys);
+    var response = this.state.responses.find((response) => {
+      if(
+      (response.surveyID == responseKeys[0]) && 
+      (response.questionID == responseKeys[1]) && 
+      (response.response.responseId == responseKeys[2])){
+        return true;
+      }
+
+      return false;
+    }); //this.state.responses[responseKeys[3]];// this.getResponseItem(responseKeys);
+    
     
     console.log("viewResponse: responseObject");
 
@@ -139,7 +138,16 @@ class SubmittedResponse extends React.Component {
 
     let responseKeys = this.parseResponseRowId(rowId);    
 
-    var response = this.state.responses[responseKeys[3]];//this.getResponseItem(responseKeys);
+    var response = this.state.responses.find((response) => {
+      if(
+      (response.surveyID == responseKeys[0]) && 
+      (response.questionID == responseKeys[1]) && 
+      (response.response.responseId == responseKeys[2])){
+        return true;
+      }
+
+      return false;
+    });//this.state.responses[responseKeys[3]];//this.getResponseItem(responseKeys);
     
     console.log("confirmDeleteResponse: responseObject");
 
@@ -154,6 +162,7 @@ class SubmittedResponse extends React.Component {
   deleteResponse = (body) => {
     if(this.removeResponse(body)){
       console.log("GOOD");
+      this.props.getQuestions();
     }
 
     console.log("ERROR");
@@ -423,7 +432,7 @@ class SubmittedResponse extends React.Component {
       {
         this.state.showResponseModal ?
         <ViewResponse
-          closeResponse={() => this.setState({showResponseModal : false})}
+          closeResponse={() => {this.props.getQuestions(); this.setState({showResponseModal : false})}}
           responseItem={this.state.responseItem}
         >
         </ViewResponse> :
@@ -431,7 +440,7 @@ class SubmittedResponse extends React.Component {
       }
       {this.state.showDeleteResponseModal ?
         <DeleteResponseModal 
-          closeDeleteResponseModal={() => this.setState({showDeleteResponseModal: false})}
+          closeDeleteResponseModal={() => {this.props.getQuestions(); this.setState({showDeleteResponseModal: false})}}
           responseItem={this.state.responseItem}
           deleteResponse={this.deleteResponse} /> : null
         }
