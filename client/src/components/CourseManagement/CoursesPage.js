@@ -4,6 +4,7 @@ import AppMode from '../../AppMode';
 import StudentsTable from './StudentsTable.js';
 import CoursesTable from './CoursesTable';
 import FloatingButton from './../FloatingButton.js';
+import UploadStudents from './UploadStudents.js';
 
 class CoursesPage extends React.Component {
 
@@ -20,7 +21,7 @@ class CoursesPage extends React.Component {
     handleChangeMode = (newMode) => {
         this.setState({mode: newMode});
 
-        // if state changed to courses, possibly reset the course id/name
+        // if state changed to courses, possibly reset the forms to remove old text
     }
 
     handleChangeCourse = async (courseId, courseName) => {
@@ -47,12 +48,21 @@ class CoursesPage extends React.Component {
         console.log("Adding a course for user: " + this.props.userObj.id);
     }
 
-    handleAddStudent = async () => {
-        console.log("Adding a student for course: " + this.state.courseId);
+    handleAddStudent = () => {
+        this.handleChangeMode(AppMode.STUDENTS_CREATE);
     }
 
-    handleUploadStudents = async () => {
+    handleUploadStudents = () => {
+        this.handleChangeMode(AppMode.STUDENTS_UPLOAD);
+    }
+
+    uploadStudents = async () => {
         console.log("Uploading students for course: " + this.state.courseId);
+
+    }
+
+    addStudent = async (newStudent) => {
+        console.log("Adding a student for course: " + this.state.courseId);
     }
 
     render() {
@@ -73,6 +83,7 @@ class CoursesPage extends React.Component {
                     changeMode={this.handleChangeMode}/>
                 }
                 </center>
+
                 {this.props.userObj.userType === "instructor" &&  this.state.mode === AppMode.STUDENTS ?
                 <div className="floatingbtn-container">
                 <FloatingButton
@@ -81,10 +92,16 @@ class CoursesPage extends React.Component {
                 handleClick={this.handleUploadStudents}
                 upload={true}/>
                 </div> : null}
+
                 {this.props.userObj.userType === "instructor" && this.state.mode === AppMode.COURSES ?
                 <FloatingButton
                 handleClick={this.handleAddCourse}/>
                 : null}
+
+                {this.state.mode === AppMode.STUDENTS_UPLOAD ? 
+                <UploadStudents 
+                uploadStudents={this.uploadStudents}
+                changeMode={this.handleChangeMode} /> : null}
 
             </div>
         );

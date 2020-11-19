@@ -13,7 +13,11 @@ const AppMode = {
     ROUNDS_EDITROUND: "RoundsMode-EditRound",
 
     COURSES: "CoursesMode",
-    STUDENTS: "StudentsMode"
+    ADD_COURSES: "AddCourses",
+
+    STUDENTS: "StudentsMode",
+    STUDENTS_UPLOAD: "UploadStudents",
+    STUDENT_CREATE: "AddStudents"
 };
 
 Object.freeze(AppMode); //This ensures that the object is immutable.
