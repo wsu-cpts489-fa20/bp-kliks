@@ -5,11 +5,19 @@ import ViewResponse from './viewResponseModal';
 
 
 class SubmittedResponse extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    // this.setState({
+    //   questions : obj
+    // }, () => {
+    //   this.getAllResponses();
+    // });
+
+
     this.state = {
-      questions : [],
-      allResponses : [],
+      questions : this.props.questions,
+      responses : this.props.responses,
       showResponseModal : false,
       showConfirmDelete: false,
       editRowId: "",
@@ -17,146 +25,42 @@ class SubmittedResponse extends React.Component {
       searchKey : "",
       showDeleteResponseModal : false
     };
+
+    // this.getAllResponses();
   }
 
   componentDidMount() {
-    this.getQuestions();
-  }
-
-  getQuestions = async () => {
-    // const url = '/responses/' + this.props.userObj.id;
-    // const res = await fetch(url, {
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //         },
-    //     method: 'GET',
-    //     body: JSON.stringify({"courses": ["cpts489Fall2020"]})}); 
-    // const msg = await res.text();
-    // if (res.status == 200) {
-    //   console.log("getQuestions: SUCCESS");
-    //   console.log(res);
-    //   console.log(msg);
-    // } else {
-    //   console.log(res);
-    //   console.log(msg);
-    //   console.log("getQuestions: ERROR");
-    // }
-
-  // var newResponse = {
-  //   "students": [
-  //     {
-  //       "userID": "marco.arceo@wsu.edu",
-  //       "studentDisplayName": "marco.arceo@wsu.edu"
-  //     }],
-  //   "responseId": "rID55",
-  //   "responseDateTime": "Wed Nov 12 2020 14:19:12 GMT-0800",
-  //   "surveyResponse": "Choice 5"
-  // }
-
-  // var newData = {
-  //   "response" : newResponse,
-  //   "questionID": "questionID1",
-  //   "courseID": "cpts489Fall2020",
-  //   "surveyID": "testID",
-  // }
-
-
-  //   const url = '/responses/';// + this.props.userObj.id;
-  //   const res = await fetch(url, {
-  //       headers: {
-  //           'Accept': 'application/json',
-  //           'Content-Type': 'application/json'
-  //           },
-  //       method: 'POST',
-  //       body: JSON.stringify(newData)}); 
-  //   const msg = await res.text();
-  //   if (res.status == 200) {
-  //     console.log("getQuestions: SUCCESS");
-  //     console.log(res);
-  //     console.log(msg);
-  //   } else {
-  //     console.log(res);
-  //     console.log(msg);
-  //     console.log("getQuestions: ERROR");
-  //   }
-
-    let response = await fetch("/responses/" + this.props.userObj.id+"/"+["cpts489Fall2020"]);
-    response = await response.json();
-      console.log("getQuestions: RESPONSE");
-    const obj = JSON.parse(response);
-
-    console.log("GET /responses/"+ this.props.userObj.id);
-    console.log(obj);
-
-
-    this.setState({
-      questions : obj
-    }, () => {
-      this.getAllResponses();
-    });
-  }
-
-  getAllResponses = () => {
-    if(this.state.questions.length == 0){
-      return [];
-    }
-
-    console.log("getAllResponses");
-    console.log(this.state.questions);
-
-    var responses = [];
-
-    this.state.questions.forEach((survey) => {
-      var allQuestions = survey.questions;
-      console.log("Questions");
-      console.log(allQuestions);
-
-      allQuestions.forEach((question) => {
-        console.log(question);
-        responses.push({
-          questionID: question.questionID,
-          surveyID: survey.surveyID,
-          responses: question.responses
-        });
-      });
-    });
-
-    console.log("all responses:");
-    console.log(responses);
-    this.setState({
-      allResponses : responses
-    });
+    // this.props.getQuestions();
   }
 
 
   //renderResponseTable -- render an HTML table displaying the rounds logged
   //by the current user and providing buttons to view/edit and delete each round.
-  renderResponseTable = () => {
+  renderResponseTable = (allResponses) => {
   let table = [];
   console.log("renderResponseTable");
-  console.log(this.state.allResponses);
-  this.state.allResponses.forEach((question)=>{
+  console.log(allResponses);
+  // allResponses.forEach((question)=>{
     var index = 0;
-    question.responses.forEach((response)=>{
+    allResponses.forEach((response)=>{
       table.push(
-        <tr key={question.surveyID+"-"+question.questionID+"-"+response.responseId+"-"+index}>
-          <td>{response.students.length > 1 ? "Group" : "Individual"}</td>
-          <td>{question.questionID}</td>
-          <td>{response.responseDateTime}</td>
-          <td>{response.surveyResponse}</td>
+        <tr key={response.question.surveyID+"-"+response.question.questionID+"-"+response.responseId+"-"+index}>
+          <td>{response.response.students.length > 1 ? "Group" : "Individual"}</td>
+          <td>{response.question.questionText}</td>
+          <td>{response.response.responseDateTime}</td>
+          <td>{response.response.surveyResponse}</td>
           <td><button onClick={this.props.menuOpen ? null : () => 
-          this.viewResponse(question.surveyID+"-"+question.questionID+"-"+response.responseId+"-"+index)}>
+          this.viewResponse(response.question.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
               <span className="fa fa-eye"></span></button></td>
           <td><button onClick={this.props.menuOpen ? null : 
-          () => this.confirmDeleteResponse(question.surveyID+"-"+question.questionID+"-"+response.responseId+"-"+index)}>
+          () => this.confirmDeleteResponse(response.question.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
               <span className="fa fa-trash"></span></button></td>
         </tr>
       );
       index++;     
     });
     index = 0;
-  });
+  // });
 
   return table;
   }
@@ -168,7 +72,7 @@ class SubmittedResponse extends React.Component {
 
     let responseKeys = this.parseResponseRowId(rowId);    
 
-    var response = this.getResponseItem(responseKeys);
+    var response = this.state.responses[responseKeys[3]];// this.getResponseItem(responseKeys);
     
     console.log("viewResponse: responseObject");
 
@@ -229,7 +133,7 @@ class SubmittedResponse extends React.Component {
 
     let responseKeys = this.parseResponseRowId(rowId);    
 
-    var response = this.getResponseItem(responseKeys);
+    var response = this.state.responses[responseKeys[3]];//this.getResponseItem(responseKeys);
     
     console.log("confirmDeleteResponse: responseObject");
 
@@ -277,8 +181,73 @@ class SubmittedResponse extends React.Component {
       event.preventDefault();
     
       // Do some reduction to only display the elements that match that searchKey -- Responses ONLY not questions.
-      console.log("SEARCH for responses");
+      console.log("SEARCH for responses: search string");
+      console.log(this.state.searchKey);
+      if(this.state.searchKey.length > 0){
+        this.onSearch(this.state.searchKey);
+      }
+      else{
+        this.setState({
+          responses : this.props.responses
+        }); 
+      }
     }
+  }
+
+  onSearch = (searchTerm) => {
+    var oldResponses = this.props.responses;
+    var newResponses = [];
+
+
+    oldResponses.forEach((response) => {
+      var rowString = "";
+      rowString += response.response.students.length > 1 ? "Group" : "Individual" + " ";
+      rowString += response.question.questionText + " ";
+      rowString += response.response.responseDateTime + " ";
+      rowString += response.response.surveyResponse + " ";
+
+      console.log("onSearch: rowString");
+      console.log(rowString);
+
+      if(rowString.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1){
+        console.log("onSearch: substring found");
+        newResponses.push(response);
+      }
+      else
+      {
+        console.log("onSearch: No substring found");
+      }
+    });
+
+    // oldResponses.forEach((question) => {
+    //   var rowString = "";
+    //   question.responses.forEach((response) => {
+    //     rowString = "";
+    //     rowString += response.students.length > 1 ? "Group" : "Individual" + " ";
+    //     rowString += question.question.questionText + " ";
+    //     rowString += response.responseDateTime + " ";
+    //     rowString += response.surveyResponse + " ";
+
+    //     console.log("onSearch: rowString");
+    //     console.log(rowString);
+
+    //     if(rowString.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1){
+    //       console.log("onSearch: substring found");
+    //       newResponses.push(question);
+    //     }
+    //     else
+    //     {
+    //       console.log("onSearch: No substring found");
+    //     }
+    //   });
+    // });
+    
+    console.log("onSearch: newResponses");
+    console.log(newResponses);
+
+    this.setState({
+      responses : newResponses
+    }); 
   }
 
   onSearchKeyChange = (event) => {
@@ -309,6 +278,7 @@ class SubmittedResponse extends React.Component {
     console.log("sort responses by response");
   }
 
+
   //render--render the entire responses table with header, displaying a "No
   //Responses Logged" message in case the table is empty.
   render() {
@@ -336,10 +306,10 @@ class SubmittedResponse extends React.Component {
         </tr>
         </thead>
         <tbody>
-          {Object.keys(this.state.allResponses).length === 0 ? 
+          {Object.keys(this.props.responses).length === 0 ? 
           <tr>
           <td colSpan="5" style={{fontStyle: "italic"}}>No responses made</td>
-          </tr> : this.renderResponseTable()
+          </tr> : this.renderResponseTable(this.state.responses)
           }
         </tbody>
       </table>

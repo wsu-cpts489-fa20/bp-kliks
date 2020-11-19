@@ -4,8 +4,8 @@ import React from 'react';
 // import AppMode from './../AppMode.js';
 
 class DeleteResponseModal extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
         };
       }
