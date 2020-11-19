@@ -29,9 +29,11 @@ class SubmittedResponse extends React.Component {
   componentDidMount() {
   }
 
+  // TO DO Delete all RESPONSES BUTTON
 
-  //renderResponseTable -- render an HTML table displaying the rounds logged
-  //by the current user and providing buttons to view/edit and delete each round.
+
+  //renderResponseTable -- render an HTML table displaying the responses made
+  //by the students of all courses for the instructor and providing buttons to view and delete each response.
   renderResponseTable = (allResponses) => {
   let table = [];
   console.log("renderResponseTable");
@@ -55,83 +57,47 @@ class SubmittedResponse extends React.Component {
       );
       index++;     
     });
-    index = 0;
-
   return table;
   }
 
 
+  /* 
+    Name: ViewResponse
+    Purpose: Views a response from the specific row clicked on
+  */
   viewResponse = (rowId) => {
     console.log("viewResponse: rowId");
     console.log(rowId);
 
     let responseKeys = this.parseResponseRowId(rowId);    
-
     var response = this.state.responses.find((response) => {
-      if(
-      (response.surveyID == responseKeys[0]) && 
-      (response.questionID == responseKeys[1]) && 
+      if((response.surveyID == responseKeys[0]) && (response.questionID == responseKeys[1]) && 
       (response.response.responseId == responseKeys[2])){
         return true;
       }
-
       return false;
-    }); //this.state.responses[responseKeys[3]];// this.getResponseItem(responseKeys);
-    
+    });
     
     console.log("viewResponse: responseObject");
-
     console.log(response);
-
     this.setState({showResponseModal : true, editRowId: rowId, responseItem : response});
-
     console.log("Viewing a response");
   }
 
+  /* 
+    Name: parseResponseRowId
+    Purpose: Parses the row key from the response table and returns an array of keys
+    in the form: [surveyID, questionID, responseId, index]
+  */
   parseResponseRowId = (id) => {
     let keys = id.split("-");
-    console.log("Keys");
-    console.log(keys);
     return keys;
   }
 
-  getResponseItem = (responseKeys) => {
-
-    var toReturn = {};
-
-    this.state.questions.forEach((survey) => {
-      if(survey.surveyID == responseKeys[0]){
-        var allQuestions = survey.questions;
-        console.log("getResponseItem-Survey");
-        console.log(survey);
-        // console.log(allQuestions);
-
-        allQuestions.forEach((question) => {
-          console.log("getResponseItem-Question");
-          console.log(question);
-          if(question.questionID == responseKeys[1]){
-            var questionResponses = question.responses;
-            questionResponses.forEach((response) => {
-              console.log("getResponseItem-response");
-              console.log(response);
-              if(response.responseId == responseKeys[2]){
-                console.log("matchFound");
-                toReturn =  {
-                  question: question,
-                  survey: survey,
-                  response: response
-                };
-                return;
-              }
-            });
-          }
-        });
-      }
-    });
-
-    return toReturn;
-  }
-
+  /* 
+    Name: confirmDeleteResponse
+    Purpose: Confirms to delete a response from the database given the response object
+  */
   confirmDeleteResponse = (rowId) => {
     console.log("confirmDeleteResponse: rowId");
     console.log(rowId);
@@ -139,35 +105,33 @@ class SubmittedResponse extends React.Component {
     let responseKeys = this.parseResponseRowId(rowId);    
 
     var response = this.state.responses.find((response) => {
-      if(
-      (response.surveyID == responseKeys[0]) && 
-      (response.questionID == responseKeys[1]) && 
+      if((response.surveyID == responseKeys[0]) && (response.questionID == responseKeys[1]) && 
       (response.response.responseId == responseKeys[2])){
         return true;
       }
-
       return false;
-    });//this.state.responses[responseKeys[3]];//this.getResponseItem(responseKeys);
+    });
     
     console.log("confirmDeleteResponse: responseObject");
-
     console.log(response);
-
     this.setState({showDeleteResponseModal : true, editRowId: rowId, responseItem : response});
-
-    
     console.log("Deleting a response");
   }
 
+  /* 
+    Name: deleteResponse
+    Purpose: Deletes a response from the database given the response object
+  */
   deleteResponse = (body) => {
     if(this.removeResponse(body)){
-      console.log("GOOD");
       this.props.getQuestions();
     }
-
-    console.log("ERROR");
   }
 
+  /* 
+    Name: RemoveResponse
+    Purpose: Makes a call to delete the response.
+  */
   removeResponse = async (body) => {
     const url = '/responses/'
     const res = await fetch(url, {
@@ -179,9 +143,6 @@ class SubmittedResponse extends React.Component {
         body: JSON.stringify(body)}); 
     const msg = await res.text();
     if (res.status == 200) {
-      console.log("deleteResponse: SUCCESS");
-      console.log(res);
-      console.log(msg);
       return 1;
     } else {
       console.log(res);
@@ -191,13 +152,15 @@ class SubmittedResponse extends React.Component {
     }
   }
 
+  /* 
+    Name: SearchResponseTable
+    Purpose: Given a search query, it searches for responses/questions that contain that search query.
+  */
   searchResponseTable = (event) => {
     if(event.keyCode === 13){
       event.preventDefault();
     
       // Do some reduction to only display the elements that match that searchKey -- Responses ONLY not questions.
-      console.log("SEARCH for responses: search string");
-      console.log(this.state.searchKey);
       if(this.state.searchKey.length > 0){
         this.onSearch(this.state.searchKey);
       }
@@ -209,11 +172,14 @@ class SubmittedResponse extends React.Component {
     }
   }
 
+  /* 
+    Name: onSearch
+    Purpose: Looks for rows that contain the searchTerm by concatenting the text
+              for each column except the view/delete columns
+  */
   onSearch = (searchTerm) => {
     var oldResponses = this.props.responses;
     var newResponses = [];
-
-
     oldResponses.forEach((response) => {
       var rowString = "";
       rowString += response.responseType;
@@ -221,44 +187,10 @@ class SubmittedResponse extends React.Component {
       rowString += response.response.responseDateTime + " ";
       rowString += response.response.surveyResponse + " ";
 
-      console.log("onSearch: rowString");
-      console.log(rowString);
-
       if(rowString.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1){
-        console.log("onSearch: substring found");
         newResponses.push(response);
       }
-      else
-      {
-        console.log("onSearch: No substring found");
-      }
     });
-
-    // oldResponses.forEach((question) => {
-    //   var rowString = "";
-    //   question.responses.forEach((response) => {
-    //     rowString = "";
-    //     rowString += response.students.length > 1 ? "Group" : "Individual" + " ";
-    //     rowString += question.question.questionText + " ";
-    //     rowString += response.responseDateTime + " ";
-    //     rowString += response.surveyResponse + " ";
-
-    //     console.log("onSearch: rowString");
-    //     console.log(rowString);
-
-    //     if(rowString.toUpperCase().indexOf(searchTerm.toUpperCase()) > -1){
-    //       console.log("onSearch: substring found");
-    //       newResponses.push(question);
-    //     }
-    //     else
-    //     {
-    //       console.log("onSearch: No substring found");
-    //     }
-    //   });
-    // });
-    
-    console.log("onSearch: newResponses");
-    console.log(newResponses);
 
     this.setState({
       responses : newResponses
@@ -266,18 +198,31 @@ class SubmittedResponse extends React.Component {
   }
 
   /* SORT METHODS FOR THE TABLE */
+
+  /* 
+    Name: sortTable
+    Purpose: Sorts the response object given the compareFunction or the kind of 
+      sorting we are doing function
+  */
   sortTable = (searchCriterionCallBack) =>{
     return this.state.responses.sort(searchCriterionCallBack);
   }
 
+  /* 
+    Name: onSearchKeyChange
+    Purpose: Updates the searchTerm when it changes
+  */
   onSearchKeyChange = (event) => {
     this.setState({searchKey : event.target.value});
   }
 
+  /* 
+    Name: sortByDate
+    Purpose: Sorts the responses by comparing the date the responses were made
+  */
   sortByDate = (event) => {
     event.preventDefault();
 
-    // TO DO: Sort by TRUE DATE
     var newResponses = this.sortTable((valueA, valueB) => {
       if(valueA == null || valueB == null){
         if(valueA == null){
@@ -300,11 +245,13 @@ class SubmittedResponse extends React.Component {
     this.setState({
       responses : newResponses,
       sortDateInOrder : !this.state.sortDateInOrder
-    });    
-
-    console.log("sort responses by date");
+    });
   }
 
+  /* 
+    Name: sortByQuestion
+    Purpose: Sorts the responses by comparing the question text.[Actual question]
+  */  
   sortByQuestion = (event) => {
     event.preventDefault();
 
@@ -331,10 +278,12 @@ class SubmittedResponse extends React.Component {
       responses : newResponses,
       sortQuestionInOrder : !this.state.sortQuestionInOrder
     });
-
-    console.log("sort responses by question");
   }
 
+  /* 
+    Name: sortByResponseType
+    Purpose: Sorts the responses by comparing whether the responses are individual or group.
+  */
   sortByResponseType = (event) => {
     event.preventDefault();
 
@@ -361,10 +310,12 @@ class SubmittedResponse extends React.Component {
       responses : newResponses,
       sortResponseTypeInOrder : !this.state.sortResponseTypeInOrder
     });
-
-    console.log("sort responses by question type");
   }
 
+  /* 
+    Name: sortByResponse
+    Purpose: Sorts the responses by comparing the responses [Alphabet].
+  */  
   sortByResponse = (event) => {
     event.preventDefault();
 
@@ -391,12 +342,10 @@ class SubmittedResponse extends React.Component {
       responses : newResponses,
       sortResponseInOrder : !this.state.sortResponseInOrder
     });        
-
-    console.log("sort responses by response");
   }
 
   //render--render the entire responses table with header, displaying a "No
-  //Responses Logged" message in case the table is empty.
+  //Responses made" message in case the table is empty.
   render() {
     return(
     <div className="padded-page">

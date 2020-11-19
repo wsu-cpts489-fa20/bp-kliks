@@ -17,13 +17,15 @@ class SurveyManagementPage extends React.Component {
         this.getQuestions();
     }
 
+    /* 
+        Name: getQuestions
+        Purpose: Gets all of the questions, surveys, and responses for the particular instructor.
+    */     
     getQuestions = async () => {
 
         let response = await fetch("/responses/" + this.props.userObj.id+"/"+["cpts489Fall2020"]);
         response = await response.json();
-          console.log("getQuestions: RESPONSE");
-        const obj = JSON.parse(response);
-    
+        const obj = JSON.parse(response);    
         console.log("GET /responses/"+ this.props.userObj.id);
         console.log(obj);
     
@@ -32,19 +34,10 @@ class SurveyManagementPage extends React.Component {
               return [];
             }
         
-            console.log("getAllResponses");
-            console.log(questions);
-        
             var responses = [];
             var newquestions = [];
-        
             questions.forEach((survey) => {
-              var allQuestions = survey.questions;
-              console.log("Questions");
-              console.log(allQuestions);
-        
-              allQuestions.forEach((question) => {
-                console.log(question);
+              survey.questions.forEach((question) => {
                 newquestions.push({
                     questionID: question.questionID,
                     surveyID: survey.surveyID,
@@ -52,7 +45,6 @@ class SurveyManagementPage extends React.Component {
                     survey: survey,
                     question: question
                   });
-
                 question.responses.forEach((response) => {
                     responses.push({
                       questionID: question.questionID,
@@ -65,20 +57,10 @@ class SurveyManagementPage extends React.Component {
                 });
               });
             });
-        
-            console.log("all responses:");
-            console.log(responses);
-            console.log("all questions:");
-            console.log(newquestions);
             return [responses, newquestions];
-            // this.setState({
-            //   allResponses : responses,
-            //   origResponses : responses
-            // });
           }
 
         var data = getAllResponses(obj);
-    
         this.setState({
           surveys : obj,
           questions : data[1],
@@ -125,8 +107,7 @@ export default SurveyManagementPage;
 /*
     CODE TO HOW HOW TO CALL THE METHODS FOR RESPONSE
 
-        BELOW IS HOW YOU CAN CALL THE GET METHOD FOR responses
-
+BELOW IS HOW YOU CAN CALL THE GET METHOD FOR responses
         const url = '/responses/' + this.props.userObj.id;
         const res = await fetch(url, {
             headers: {
@@ -147,8 +128,7 @@ export default SurveyManagementPage;
         }
 
     
-        BELOW IS HOW YOU CAN CALL THE CREATE METHOD FOR responses
-
+BELOW IS HOW YOU CAN CALL THE CREATE METHOD FOR responses
     var newResponse = {
     "students": [
         {
@@ -186,6 +166,4 @@ export default SurveyManagementPage;
         console.log(msg);
         console.log("getQuestions: ERROR");
     }
-
-
 */

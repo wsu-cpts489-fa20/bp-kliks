@@ -10,6 +10,10 @@ class ViewResponse extends React.Component {
     };
   }
 
+ /* 
+    Name: handleAnswers
+    Purpose: Display the correct answer depending on the type of answer type.
+  */
   handleAnswers = () => {
       if(this.props.responseItem.question.questionAnswers.length == 1){
         if(this.props.responseItem.question.questionType == "FileUpload" || this.props.responseItem.question.questionType == "F"){
@@ -28,21 +32,16 @@ class ViewResponse extends React.Component {
         );
       }
 
-      var answers = this.props.responseItem.question.questionAnswers;
-      var elements = [];
+    var answers = this.props.responseItem.question.questionAnswers;
+    var elements = [];
     answers.forEach((answer) => {
         elements.push(
-            <div>
-                {answer}
-            </div>
+            <div>{answer}</div>
         );
     });
 
-    console.log("MC");
     return (
-        <div id="viewResponse-answer-multipleChoice">
-            {elements}
-        </div>
+        <div id="viewResponse-answer-multipleChoice">{elements}</div>
     );
   }
 

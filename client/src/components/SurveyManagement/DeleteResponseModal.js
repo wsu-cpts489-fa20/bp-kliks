@@ -1,7 +1,5 @@
 
 import React from 'react';
-//import ConfirmDeleteRound from './ConfirmDeleteRound.js';
-// import AppMode from './../AppMode.js';
 
 class DeleteResponseModal extends React.Component {
     constructor(props) {
@@ -10,6 +8,11 @@ class DeleteResponseModal extends React.Component {
         };
       }
 
+    /* 
+        Name: deleteResponse
+        Purpose: OnClick handler to delete the response.
+                Calls the delete response in the SubmittedResponse componenet.
+    */      
       deleteResponse = (event) => {
         event.preventDefault();
         this.props.deleteResponse({
@@ -21,11 +24,14 @@ class DeleteResponseModal extends React.Component {
         this.props.closeDeleteResponseModal();
       }
 
+        /* 
+            Name: closeModal
+            Purpose: Close the modal.
+        */ 
       closeModal = (event) => {
         event.preventDefault();
         this.props.closeDeleteResponseModal();
       }
-
 
     render(){
         return(
