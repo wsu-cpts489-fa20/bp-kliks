@@ -19,16 +19,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 //The following code imports necessary dependencies and initializes
 //variables used in the server middleware.
 //////////////////////////////////////////////////////////////////////////
-// import passportGithub from 'passport-github'; 
-// import passportLocal from 'passport-local';
 require('dotenv').config();
 
-var LOCAL_PORT = 8081; // const DEPLOY_URL = "https://kliks.bfapp.org";
-// const DEV_URL = "http://localhost:8081";
-
-var PORT = process.env.HTTP_PORT || LOCAL_PORT; // const GithubStrategy = passportGithub.Strategy;
-// const LocalStrategy = passportLocal.Strategy;
-
+var LOCAL_PORT = 8081;
+var PORT = process.env.HTTP_PORT || LOCAL_PORT;
 var app = (0, _express["default"])();
 
 var router = require('./server/routes/routes'); //////////////////////////////////////////////////////////////////////////
@@ -47,8 +41,7 @@ _mongoose["default"].connect(connectStr, {
   console.log("Connected to ".concat(connectStr, "."));
 }, function (err) {
   console.error("Error connecting to ".concat(connectStr, ": ").concat(err));
-}); // const Schema = mongoose.Schema;
-//////////////////////////////////////////////////////////////////////////
+}); //////////////////////////////////////////////////////////////////////////
 //INITIALIZE EXPRESS APP
 // The following code uses express.static to serve the React app defined 
 //in the client/ directory at PORT. It also writes an express session
