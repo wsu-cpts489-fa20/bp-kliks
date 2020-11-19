@@ -1,5 +1,6 @@
 import React from 'react';
 import AppMode from '../AppMode';
+import logo from '../favicon.png'; //Importing the logo from the src directory
 
 class NavBar extends React.Component {
 
@@ -21,7 +22,8 @@ class NavBar extends React.Component {
     }
   }
 
-    
+  // Directly added the logo from the src directory since importing it from onedrive was causing complications
+  // where the image would not load correctly
   render() {
     return (
     <div className="navbar">  
@@ -30,7 +32,7 @@ class NavBar extends React.Component {
         <span id="menuBtnIcon" className={"sidemenu-btn-icon " + this.getMenuBtnIcon()}>
         </span>
       </button>
-      <img src="https://tinyurl.com/y2lr8yvu" alt="Kliks Logo" height="38px"
+      <img src={logo} alt="Kliks Logo" height="38px"
       width="38px" />
       <span className="navbar-title">
         &nbsp;{this.props.title}

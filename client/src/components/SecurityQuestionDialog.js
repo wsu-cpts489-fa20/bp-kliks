@@ -22,13 +22,16 @@ class SecurityQuestionDialog extends React.Component {
         }
     }
 
+    // modified the modal-title inside the header so that the text can be centered in the modal
+    // this required using col-12 and text-center since messing with the CSS was not working
+    // I also included new paragraph tags between the labels and buttons to create a cleaner layout
     render() {
         return (
             <div className="modal" role="dialog">
               <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h3 className="modal-title"><b>Answer Security Question</b>
+                    <h3 className="col-12 modal-title text-center"><b>Answer Security Question</b>
                     </h3>
                     <button className="modal-close" 
                         onClick={this.props.cancelResetPassword}>
@@ -48,6 +51,7 @@ class SecurityQuestionDialog extends React.Component {
                         cols="35"
                         />
                     </label>
+                    <p></p>
                     <label>
                         Security Answer: 
                         <textarea
@@ -58,6 +62,7 @@ class SecurityQuestionDialog extends React.Component {
                         cols="35"
                         />
                     </label>
+                    <p></p>
                     <button role="submit" 
                       className="btn btn-primary btn-color-theme form-submit-btn">
                         <span className="fa fa-check"></span>&nbsp;Verify Answer
