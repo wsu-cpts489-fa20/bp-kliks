@@ -30,13 +30,16 @@ class LookUpAccountDialog extends React.Component {
         }
     }
 
+    // modified the modal-title inside the header so that the text can be centered in the modal
+    // this required using col-12 and text-center since messing with the CSS was not working
+    // I also included new paragraph tags between the labels and buttons to create a cleaner layout
     render() {
         return (
             <div className="modal" role="dialog">
               <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h3 className="modal-title"><b>Look Up Account</b></h3>
+                    <h3 className="col-12 modal-title text-center"><b>Look Up Account</b></h3>
                     <button className="modal-close" 
                         onClick={() => {this.props.cancelResetPassword()}}>
                         &times;
@@ -58,6 +61,7 @@ class LookUpAccountDialog extends React.Component {
                         required={true}
                         />
                     </label>
+                    <p></p>
                     <button type="submit" 
                         className="btn btn-primary btn-color-theme form-submit-btn">
                         <span className="fa fa-search"></span>&nbsp;Look Up Account

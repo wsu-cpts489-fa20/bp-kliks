@@ -364,6 +364,7 @@ text-align: center;
                padding-bottom: 12px;
                text-align: center;
               }
+
   
   .modal-footer {
     display: flex;
@@ -374,10 +375,14 @@ text-align: center;
   }
 
 .modal-close {
+  /*Added position, padding to the right, height restriction, and bolded the font
+  to better postion the button on the right corner of the modal header*/
   border: none;
-  float: right;
-  height:100%;
+  position: absolute;
+  right: 20px;
+  height: 20px;
   background-color: lightgray;
+  font-weight: bold;
 }
 
 .close:hover,
