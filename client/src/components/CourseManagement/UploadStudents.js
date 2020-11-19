@@ -1,9 +1,9 @@
 import React from 'react';
 
-class AddStudent extends React.Component {
+class UploadStudents extends React.Component {
     constructor(props) {
         super(props);
     }
 }
 
-export default AddStudent;
+export default UploadStudents;

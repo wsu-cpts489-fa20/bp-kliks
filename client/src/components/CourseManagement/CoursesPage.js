@@ -3,6 +3,7 @@ import SearchField from 'react-search-field'
 import AppMode from '../../AppMode';
 import StudentsTable from './StudentsTable.js';
 import CoursesTable from './CoursesTable';
+import FloatingButton from './../FloatingButton.js';
 
 class CoursesPage extends React.Component {
 
@@ -42,6 +43,18 @@ class CoursesPage extends React.Component {
         this.setState({students: body});
     }
 
+    handleAddCourse = async () => {
+        console.log("Adding a course for user: " + this.props.userObj.id);
+    }
+
+    handleAddStudent = async () => {
+        console.log("Adding a student for course: " + this.state.courseId);
+    }
+
+    handleUploadStudents = async () => {
+        console.log("Uploading students for course: " + this.state.courseId);
+    }
+
     render() {
         return (
             <div className="padded-page">
@@ -59,9 +72,20 @@ class CoursesPage extends React.Component {
                     menuOpen={this.props.menuOpen}
                     changeMode={this.handleChangeMode}/>
                 }
-                
-                
                 </center>
+                {this.props.userObj.userType === "instructor" &&  this.state.mode === AppMode.STUDENTS ?
+                <div className="floatingbtn-container">
+                <FloatingButton
+                handleClick={this.handleAddStudent}/>
+                <FloatingButton
+                handleClick={this.handleUploadStudents}
+                upload={true}/>
+                </div> : null}
+                {this.props.userObj.userType === "instructor" && this.state.mode === AppMode.COURSES ?
+                <FloatingButton
+                handleClick={this.handleAddCourse}/>
+                : null}
+
             </div>
         );
     }   
