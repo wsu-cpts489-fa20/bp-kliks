@@ -18,6 +18,7 @@ class DeleteResponseModal extends React.Component {
             "courseID" : this.props.responseItem.survey.courseID,
             "surveyID" : this.props.responseItem.survey.surveyID
         });
+        this.props.closeDeleteResponseModal();
       }
 
       closeModal = (event) => {
