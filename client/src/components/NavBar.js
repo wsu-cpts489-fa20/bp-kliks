@@ -1,6 +1,6 @@
 import React from 'react';
 import AppMode from '../AppMode';
-import logo from '../favicon.png'
+import logo from '../favicon.png'; //Importing the logo from the src directory
 
 class NavBar extends React.Component {
 
@@ -22,7 +22,8 @@ class NavBar extends React.Component {
     }
   }
 
-    
+  // Directly added the logo from the src directory since importing it from onedrive was causing complications
+  // where the image would not load correctly
   render() {
     return (
     <div className="navbar">  

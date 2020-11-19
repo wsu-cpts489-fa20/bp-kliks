@@ -22,6 +22,9 @@ class SecurityQuestionDialog extends React.Component {
         }
     }
 
+    // modified the modal-title inside the header so that the text can be centered in the modal
+    // this required using col-12 and text-center since messing with the CSS was not working
+    // I also included new paragraph tags between the labels and buttons to create a cleaner layout
     render() {
         return (
             <div className="modal" role="dialog">
