@@ -285,6 +285,29 @@ class SubmittedResponse extends React.Component {
     this.setState({searchKey : event.target.value});
   }
 
+  sortByDate = (event) => {
+    event.preventDefault();
+
+    console.log("sort responses by date");
+  }
+
+  sortByQuestion = (event) => {
+    event.preventDefault();
+
+    console.log("sort responses by question");
+  }
+
+  sortByQuestionType = (event) => {
+    event.preventDefault();
+
+    console.log("sort responses by question type");
+  }
+
+  sortByResponse = (event) => {
+    event.preventDefault();
+
+    console.log("sort responses by response");
+  }
 
   //render--render the entire responses table with header, displaying a "No
   //Responses Logged" message in case the table is empty.
@@ -304,12 +327,10 @@ class SubmittedResponse extends React.Component {
       <table className="table table-hover">
         <thead className="thead-light">
         <tr>
-          {/* <th>First Name</th> */}
-          <th>Question type </th>
-          <th>Question</th>
-          <th>Response Date-Time</th>
-          {/* <th>Last Name</th> */}
-          <th>Response</th>
+          <th><span id="responseSortQuestionType" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByQuestionType}></span>&nbsp;Question type </th>
+          <th><span id="responseSortQuestion" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByQuestion}></span>&nbsp;Question</th>
+          <th><span id="responseSortDate" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByDate}></span>&nbsp;Response Date-Time</th>
+          <th><span id="responseSortResponse" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByResponse}></span>&nbsp;Response</th>
           <th>View</th>
           <th>Delete</th>
         </tr>
