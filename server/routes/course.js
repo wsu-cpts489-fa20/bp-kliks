@@ -13,6 +13,7 @@ router.post('/courses/:userId', async (req, res, next) => {
   console.log("in /courses (POST) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
+  // Specify what the body for the course is needed for the data collection     
   if (!req.body.hasOwnProperty("courseInstructorFirstName") || 
       !req.body.hasOwnProperty("courseInstructorLastName") || 
       !req.body.hasOwnProperty("courseInstructorID") ||
@@ -69,6 +70,7 @@ router.put('/courses/:userId/:courseId', async (req, res, next) => {
   console.log("in /courses (PUT) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
+  // Make sure only these props are being added to the database for user
   const validProps = ['courseInstructorFirstName', 'courseInstructorLastName','courseInstructorID', 'courseName', 'courseNumber', 'courseYear',
     'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseID', 'courseNotes'];
   let bodyObj = {...req.body};
