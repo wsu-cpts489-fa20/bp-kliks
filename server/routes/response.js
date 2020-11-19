@@ -5,37 +5,24 @@ var User = require('../schemas/user');
 var Survey = require('../schemas/survey');
 
 //READ user route: Retrieves the user with the specified userId from users collection (GET)
-router.get('/responses/:userId', async(req, res, next) => {
+router.get('/responses/:userId/:courses', async(req, res, next) => {
     console.log("in /users route (GET) with userId = " + 
-      JSON.stringify(req.params.userId));
-    try {
-      let thisUser = await User.findOne({id: req.params.userId});
-      if (!thisUser) {
-        return res.status(404).send("No user account with id " +
-          req.params.userId + " was found in database.");
-      } else {
-        var courses = thisUser.courses;
-        var questions = [];
-        courses.forEach(course => {
-            async function getQuestion(course){
-                let thisQuestion = await Survey.find({courseID: course.courseID});
-                // if(thisQuestion){
-                    return thisQuestion;
-                // }
-            }
-            
-            let thisQuestion = getQuestion(course);
-            if(thisQuestion){
-                questions.push(thisQuestion);
-            }
-        });
+      JSON.stringify(req.params.userId) + "  and courses=" + JSON.stringify(req.params.courses));
 
-        return res.status(200).json(JSON.stringify(questions));
-      }
-    } catch (err) {
-      console.log()
-      return res.status(400).send("Unexpected error occurred when all responses for the user with id " +
-        req.params.userId + " in database: " + err);
+    try{
+        let thisSurvey = await Survey.find({courseID: { $in: req.params.courses }});
+
+        if(thisSurvey){
+            console.log(thisSurvey);
+
+            return res.status(200).json(JSON.stringify(thisSurvey));
+        }
+
+
+    }catch(err){
+        console.log()
+        return res.status(400).send("Unexpected error occurred when getting all responses for the user with id " +
+          req.params.userId + " in database: " + err);
     }
   });
 
@@ -62,17 +49,25 @@ router.get('/responses/:userId', async(req, res, next) => {
       }else{
           console.log(thisSurvey);
           try{
-              let pushResponse = await Survey.updateOne({surveyID: req.body.surveyID, courseID: req.body.courseID, 
-                  questions : { $elemMatch : { questionID: req.body.questionID }}
-              }, {
-                  $push : { questions : { responses: new Response({
-                      students: req.body.response.students,
-                      responseDateTime: req.body.response.responseDateTime,
-                      surveyResponse: req.body.response.surveyResponse
-                  })}} // Or this could be just req.body.response
-              } );
 
-              if (pushResponse) {
+                console.log("RESPONSE IN BODY IS:");
+                console.log(req.body.response);
+
+                console.log("FOUND one");
+                console.log(thisSurvey);
+            var questions = thisSurvey.questions;
+            questions.forEach((question) => {
+                if(question.questionID == req.body.questionID){
+                    question.responses.push(req.body.response);
+                }
+            });
+
+            console.log(thisSurvey);
+            console.log(thisSurvey.questions[0].responses);
+
+            let pushResponse = thisSurvey.save();
+
+              if (!pushResponse) {
                 res.status(400).send("Unexpected error occurred when updating responses in database. Response was not added.");
               }
               else{
@@ -87,8 +82,6 @@ router.get('/responses/:userId', async(req, res, next) => {
       return res.status(400).send("Unexpected error occurred when adding or looking up survey in database. " + err);
     }
   }); 
-
-
 
 
 

@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const responseSchema = new Schema({
     students: [studentSchema],
-    responeDateTime: {type: String, required: true},
+    responseId: {type: String, required: true},
+    responseDateTime: {type: String, required: true},
     surveyResponse: {type: String, required: true}
   },
   {
