@@ -47,12 +47,12 @@ class ViewResponse extends React.Component {
 
   render(){
     return (
-        <div className="modal" itemID="exampleModalLong" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div id="viewResponseModal" className="modal" itemID="exampleModalLong" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
             <div className="modal-content">
             <div className="modal-header">
                 <h5 className="modal-title" id="exampleModalLongTitle">{this.props.responseItem.survey.surveyTitle}</h5>
-                <button type="button" className="close" data-dismiss="modal"  onClick={ () => { this.props.closeResponse();} } aria-label="Close">
+                <button type="button" className="close" data-dismiss="modal" id="viewResponseModal-exitBtn"  onClick={ () => { this.props.closeResponse();} } aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -73,7 +73,7 @@ class ViewResponse extends React.Component {
                 </div>       
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={ () => { this.props.closeResponse();}} data-dismiss="modal">Close</button>
+                <button id="viewResponseModal-closeBtn" type="button" className="btn btn-secondary" onClick={ () => { this.props.closeResponse();}} data-dismiss="modal">Close</button>
                 {/* <button type="button" className="btn btn-primary">Save changes</button> */}
             </div>
             </div>

@@ -7,7 +7,7 @@ const DEV_TEST_URL = 'http://localhost:8081';
 // Testing new user, updating user, and deleting user.
 
 fixture `User Tests`
-    .page(isLocalTesting ? DEV_TEST_URL : DEV_TEST_URL);
+    .page(isLocalTesting ? DEV_TEST_URL : DEPLOY_TEST_URL);
 
 test('Test Tempalte', async t => {
     await t

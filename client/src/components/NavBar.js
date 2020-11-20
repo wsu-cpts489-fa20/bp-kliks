@@ -26,9 +26,9 @@ class NavBar extends React.Component {
   // where the image would not load correctly
   render() {
     return (
-    <div className="navbar">  
+    <div id="navBarMenu" className="navbar">  
     <span className="navbar-items">
-      <button className="sidemenu-btn" onClick={this.handleMenuBtnClick}>
+      <button id="menuBtn" className="sidemenu-btn" onClick={this.handleMenuBtnClick}>
         <span id="menuBtnIcon" className={"sidemenu-btn-icon " + this.getMenuBtnIcon()}>
         </span>
       </button>

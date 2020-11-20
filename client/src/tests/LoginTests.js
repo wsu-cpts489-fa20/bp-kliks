@@ -1,7 +1,11 @@
 import { Selector } from 'testcafe';
 
+var isLocalTesting = true;
+const DEPLOY_TEST_URL = 'https://kliks.bfapp.org/';
+const DEV_TEST_URL = 'http://localhost:8081';
+
 fixture `Login Tests`
-    .page('http://localhost:8081')
+    .page(isLocalTesting ? DEV_TEST_URL : DEPLOY_TEST_URL)
 
 test('Test login', async t => {
     await t
