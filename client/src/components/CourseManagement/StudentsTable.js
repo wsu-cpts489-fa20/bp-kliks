@@ -43,7 +43,7 @@ class StudentsTable extends React.Component {
         return(
             <div className="padded-page">
                 <h1></h1>
-                <table className="table table-hover">
+                <table id="StudentsTable" className="table table-hover">
                     <thead className="thead-light">
                     <tr>
                         <th>Name</th>
