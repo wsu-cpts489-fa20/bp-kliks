@@ -1,4 +1,7 @@
 # BP Kliks app
+Kliks is a classroom response system implemented by Professor Emeritus Carl Hauser in Python, HTML and CGI (I believe). While the back-end system is solid, anyone who has used the front-end user interface is aware of its limitations. This project aims to reimplement, improve and expand the Kliks environment so that it is more useful and easier to use. The new Kliks will be fully integrated into OSBLE, so it can minimally share OSBLE’s user management system. A number of epics will be defined to address different aspects of Kliks, including the student and instructor interfaces.
+
+**Goal**: To build a usable and useful classroom response/polling/participation app.
 
 Kliks site is located [here](https://kliks.bfapp.org/): https://kliks.bfapp.org/
 
@@ -16,8 +19,24 @@ features for the Kliks application are below:
 * Ability to view responses.
 * Ability to remove responses.
 
+#  Files To Check For Milestones
+**Milestone 2:**\
+*\
+*\
+*
 
-# BP Kliks app Milestone Changes
+**Milestone 3:**\
+*\
+*\
+*
+
+**Milestone 4:**\
+*\
+*\
+*
+
+
+# BP Kliks App Milestone Changes
 **Milestone 1 Changes:**
     Check out the demo video for those changes.
 
