@@ -116,7 +116,7 @@ In order to run the tests the following commands have to be ran:
 
 # Test Videos Below
 **Milestone 1** test video located [here](https://emailwsu.sharepoint.com/:i:/r/teams/2020.fall.PULLM.Cpt.S.489-2.Kliks/Shared%20Documents/2.%20Kliks/milestone1Tests.gif?csf=1&web=1&e=RRSgPZ).\
-**Milestone 2** test video located [here]().\
+**Milestone 2** test video located [here](https://emailwsu.sharepoint.com/:i:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/Eff57N1Yn1pHpghcn7qDg_EBYiCv74Jnu0QlBZlpE_8X8A?e=uX4hGm).\
 **Milestone 3** test video located [here]().\
 **Milestone 4** test video located [here]().
 
