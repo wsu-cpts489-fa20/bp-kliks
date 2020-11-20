@@ -7,7 +7,7 @@ import LoginPage from './LoginPage.js';
 import AppMode from "./../AppMode.js"
 import SurveyManagementPage from './SurveyManagementPage.js';
 import Rounds from './Rounds.js';
-import CoursesPage from './CoursesPage.js';
+import CoursesPage from './CourseManagement/CoursesPage.js';
 import AboutBox from './AboutBox.js';
 
 const modeTitle = {};
