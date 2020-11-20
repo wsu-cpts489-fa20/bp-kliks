@@ -21,9 +21,9 @@ features for the Kliks application are below:
 
 #  Files To Check For Milestones
 **Milestone 2:**\
-*\
-*\
-*
+*Student Route file that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/server/routes/student.js).\
+*Course Page component that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/CourseManagement/CoursesPage.js).\
+*Course route file that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/server/routes/course.js).
 
 **Milestone 3:**\
 *\
