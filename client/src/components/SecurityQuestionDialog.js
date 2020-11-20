@@ -56,6 +56,7 @@ class SecurityQuestionDialog extends React.Component {
                         Security Answer: 
                         <textarea
                         className="form-control form-text"
+                        id="SecurityAnswer"
                         placeholder="Enter Security Question Answer"
                         ref={this.securityAnswerRef}
                         rows="3"
@@ -63,7 +64,7 @@ class SecurityQuestionDialog extends React.Component {
                         />
                     </label>
                     <p></p>
-                    <button role="submit" 
+                    <button role="submit" id="SecurityButton"
                       className="btn btn-primary btn-color-theme form-submit-btn">
                         <span className="fa fa-check"></span>&nbsp;Verify Answer
                     </button>

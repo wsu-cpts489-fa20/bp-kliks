@@ -208,7 +208,7 @@ cancelCreateAccount = () => {
             <button type="button" className="btn btn-link login-link" 
                     onClick={() => {this.setState({showCreateAccountDialog: true});}}>
                 Create an account</button> | 
-                <button type="button" className="btn btn-link login-link"
+                <button id="ResetPassword" type="button" id="ResetPassword" className="btn btn-link login-link"
                         onClick={() => {this.setState({showLookUpAccountDialog: true});}}>
                 Reset your password</button>
             </p>  

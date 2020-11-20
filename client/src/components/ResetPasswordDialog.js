@@ -51,6 +51,7 @@ class ResetPasswordDialog extends React.Component {
                         New Password: 
                         <input
                         type="password"
+                        id="NewPassword"
                         placeholder="Enter new password"
                 pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
                         className="form-control form-text"
@@ -62,6 +63,7 @@ class ResetPasswordDialog extends React.Component {
                         Repeat New Password: 
                         <input
                         type="password"
+                        id="RepeatPassword"
                         placeholder="Repeat new password"
                         className="form-control form-text"
                         onKeyUp={this.checkForSubmit}
@@ -69,7 +71,7 @@ class ResetPasswordDialog extends React.Component {
                         />
                     </label>
                     <p></p>
-                    <button role="submit" 
+                    <button role="submit" id="PasswordButton"
                      className="btn btn-primary btn-color-theme form-submit-btn">
                         <span className="fa fa-key"></span>&nbsp;Reset Password
                     </button>
