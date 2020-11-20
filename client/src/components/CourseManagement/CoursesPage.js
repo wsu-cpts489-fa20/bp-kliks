@@ -138,6 +138,13 @@ class CoursesPage extends React.Component {
                 uploadStudents={this.uploadStudents}
                 changeMode={this.handleChangeMode} /> : null}
 
+                {this.state.mode === AppMode.STUDENTS ?
+                <button type="button"
+                onClick={ () => { this.handleChangeMode(AppMode.COURSES);} }
+                className="backbtn">
+                    Back
+                </button> : null}
+
             </div>
         );
     }   
