@@ -22,7 +22,7 @@ class LookUpAccountDialog extends React.Component {
             if (obj.authStrategy === "local") {
                 this.props.getSecurityAnswer(obj.id,obj.securityQuestion, obj.securityAnswer);
             } else { //Account exists but was created through OAuth so password can't be reset 
-                this.setState({ErrMsg: "That account is authenticated through " + obj.authStrategy + ". " +
+                this.setState({errorMsg: "That account is authenticated through " + obj.authStrategy + ". " +
                                "Please log in to " + obj.authStrategy + " to reset the password."});
             }
         } else {
@@ -46,7 +46,7 @@ class LookUpAccountDialog extends React.Component {
                     </button>
                   </div>
                   <div className="modal-body">
-                    {this.state.errMsg != "" ? <p className="emphasis">{this.state.errorMsg}</p> : null}
+                    {this.state.errorMsg != "" ? <p className="emphasis">{this.state.errorMsg}</p> : null}
                     <form onSubmit={this.handleLookUpAccount}>
                     <label>
                         Account Email Address: 
