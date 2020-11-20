@@ -1,3 +1,5 @@
+// A table that displays all the courses a student is in
+
 import React from 'react';
 import AppMode from "./../../AppMode.js";
 

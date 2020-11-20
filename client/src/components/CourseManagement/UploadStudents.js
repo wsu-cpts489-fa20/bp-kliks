@@ -1,3 +1,5 @@
+// A modal component that has a file input that accepts only .csv files of a class roster
+
 import React from 'react';
 import AppMode from '../../AppMode';
 
@@ -6,19 +8,69 @@ class UploadStudents extends React.Component {
         super(props);
 
         this.rosterRef = React.createRef();
+        this.fileReadingFinished = this.fileReadingFinished.bind(this);
 
         this.state = {
-            rosterFile: "",
+            roster: [],
         }
     }
 
+    // handles the modal closure
     handleCloseModal = (event) => {
         event.preventDefault();
         this.props.changeMode(AppMode.STUDENTS);
     }
 
-    handleChange = (event) => {
-        this.setState({[event.target.name]: event.target.value});
+    // handles when a new file is chosen
+    handleFile = (files) => {
+        if (window.FileReader) {
+            // FileReader are supported.
+            this.getAsText(this.rosterRef.current.files[0]);
+        }
+    }
+
+    // handles upload button click
+    handleUploadSubmit = (event) => {
+        event.preventDefault();
+        this.props.uploadStudents(this.state.roster);
+        this.props.changeMode(AppMode.STUDENTS);
+    }
+
+    // reades the file as a string
+    getAsText(fileToRead) {
+        var reader = new FileReader();
+        // Read file into memory as UTF-8      
+        reader.readAsText(fileToRead);
+        // Handle errors load
+        reader.onload = this.fileReadingFinished;
+        reader.onerror = this.errorHandler;
+    }
+
+    // processes the file and extracts data
+    fileReadingFinished(event) {
+        var csv = event.target.result;
+        var allTextLines = csv.split(/\r\n|\n/);
+
+        // remove header entry and blank entries
+        allTextLines = allTextLines.filter(function (student) {
+            return student !== "userID,displayName" && student !== "";
+        })
+        var lines = allTextLines.map(data => data.split(';'));
+        
+        // split each string into two array elements
+        lines = lines.map(function(val, index) {
+            val = val[0].split(',');
+            return val;
+        });
+
+        this.setState({roster : lines});
+    }
+
+    // handles erros when uploading a file
+    errorHandler(event) {
+        if (event.target.error.name === "NotReadableError") {
+            alert("Cannot read file!");
+        }
     }
 
     render() {
@@ -33,9 +85,10 @@ class UploadStudents extends React.Component {
                         &times;</button>
                     </div>
                     <div className="modal-body">
-                    <p>Add multiple students to this course at once by using uploading a class roster CSV file.<br />
+                    <p>Add multiple students to this course at once by using uploading a class roster CSV file. 
+                        Each student entry needs a userID and DisplayName column.<br />
                     </p>
-                    <form onSubmit={this.props.uploadStudents}>
+                    <form onSubmit={this.handleUploadSubmit}>
                         <label>
                             Select a Roster File:
                             <br/>
@@ -43,11 +96,11 @@ class UploadStudents extends React.Component {
                             className="form-control form-text form-center"
                             name="roster"
                             type="file"
-                            accept="image/x-png,image/gif,image/jpeg"
+                            accept=".csv"
                             required={true}
                             ref={this.rosterRef}
-                            value={this.state.rosterFile}
-                            onChange={this.handleChange}
+                            value={this.state.rosterFileName}
+                            onChange={this.handleFile}
                             />
                         </label>
                         <div className="modal-footer">

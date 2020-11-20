@@ -1,3 +1,5 @@
+// Students table displays the students in a currently selected course
+
 import React from 'react';
 import AppMode from "./../../AppMode.js";
 
@@ -6,10 +8,12 @@ class StudentsTable extends React.Component {
         super(props);
     }
 
+    // handles a click on edit student button in the table
     editStudent = (userId) => {
         console.log("Editing student: " + userId);
     }
 
+    // handles a click on delete student button in the table
     deleteStudent = (userId) => {
         console.log("Deleting student: " + userId);
     }

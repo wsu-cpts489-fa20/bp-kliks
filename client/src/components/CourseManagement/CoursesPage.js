@@ -1,5 +1,9 @@
+// Main manage courses page
+// From here a student can view courses they are in and see the students that are in their courses
+// An intructor is able to add courses, delete courses, add students, upload a roster of students
+// and add an individual student
+
 import React from 'react';
-import SearchField from 'react-search-field'
 import AppMode from '../../AppMode';
 import StudentsTable from './StudentsTable.js';
 import CoursesTable from './CoursesTable';
@@ -18,12 +22,14 @@ class CoursesPage extends React.Component {
         };
     }
 
+    // changes the courses page mode to display different componeents based on state
     handleChangeMode = (newMode) => {
         this.setState({mode: newMode});
 
         // if state changed to courses, possibly reset the forms to remove old text
     }
 
+    // fetches the students for the selected course
     handleChangeCourse = async (courseId, courseName) => {
         this.setState({
             courseId: courseId,
@@ -44,23 +50,52 @@ class CoursesPage extends React.Component {
         this.setState({students: body});
     }
 
+    // handle click on the add course button
     handleAddCourse = async () => {
         console.log("Adding a course for user: " + this.props.userObj.id);
     }
 
+    // handle click on the add students button
     handleAddStudent = () => {
         this.handleChangeMode(AppMode.STUDENTS_CREATE);
     }
 
+    // handle click on upload students button
     handleUploadStudents = () => {
         this.handleChangeMode(AppMode.STUDENTS_UPLOAD);
     }
 
-    uploadStudents = async () => {
-        console.log("Uploading students for course: " + this.state.courseId);
+    // upload the list of students extracted from csv file
+    uploadStudents = async (students) => {
 
+        // make a post request for each student
+        for(const student of students) {
+            var newData = {
+                "userID" : student[0],
+                "studentDisplayName": student[1],
+                };
+            
+            const url = '/students/' + this.state.courseId;
+            const res = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                    },
+                method: 'POST',
+                body: JSON.stringify(newData)}); 
+            const msg = await res.text();
+            if (res.status != 200) {
+                console.log("Successfully added students");
+            } else {
+                console.log("Error adding students");
+            }
+        }
+
+        // refetch the students list
+        this.handleChangeCourse(this.state.courseId, this.state.courseName);
     }
 
+    // handle adding a student to the currently selected course
     addStudent = async (newStudent) => {
         console.log("Adding a student for course: " + this.state.courseId);
     }
