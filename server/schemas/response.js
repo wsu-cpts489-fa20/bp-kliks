@@ -1,9 +1,11 @@
-/*const mongoose = require("mongoose");
+const mongoose = require("mongoose");
+var studentSchema = require('./student.js');
 const Schema = mongoose.Schema;
 
 const responseSchema = new Schema({
     students: [studentSchema],
-    responeDateTime: {type: String, required: true},
+    responseId: {type: String, required: true},
+    responseDateTime: {type: String, required: true},
     surveyResponse: {type: String, required: true}
   },
   {
@@ -15,4 +17,4 @@ const responseSchema = new Schema({
     }
   });
 
-  module.exports = responseSchema;*/
+  module.exports = responseSchema;

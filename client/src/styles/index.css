@@ -242,6 +242,20 @@ text-align:center;
 box-shadow: 2px 2px 3px #999;
 }
 
+.floatbtn-upload {
+  position:fixed;
+  cursor: pointer;
+  width:60px;
+  height:60px;
+  bottom:60px;
+  right:120px;
+  background-color:#789E9E;
+  color:white;
+  border-radius:50px;
+  text-align:center;
+  box-shadow: 2px 2px 3px #999;
+  }
+
 .floatbtn-icon{
 margin-top:22px;
 }
@@ -350,6 +364,7 @@ text-align: center;
                padding-bottom: 12px;
                text-align: center;
               }
+
   
   .modal-footer {
     display: flex;
@@ -360,10 +375,14 @@ text-align: center;
   }
 
 .modal-close {
+  /*Added position, padding to the right, height restriction, and bolded the font
+  to better postion the button on the right corner of the modal header*/
   border: none;
-  float: right;
-  height:100%;
+  position: absolute;
+  right: 20px;
+  height: 20px;
   background-color: lightgray;
+  font-weight: bold;
 }
 
 .close:hover,
@@ -419,3 +438,16 @@ text-align: center;
   .search-width{
     width: 50%;
   }
+
+  .backbtn {
+    position:fixed;
+    cursor: pointer;
+    width:60px;
+    height:60px;
+    bottom:60px;
+    left:120px;
+    background-color:#789E9E;
+    color:white;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+    }
