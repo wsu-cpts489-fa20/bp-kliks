@@ -11,8 +11,8 @@ fixture `Courses Tests`
 
 test('Courses: Test Instructor Courses Table and Buttons', async t => {
     await t
-        .typeText('#emailInput', 'instructor@wsu.edu')
-        .typeText('#passwordInput', 'Password123!')
+        .typeText('#emailInput', accounts.coursesTest.username)
+        .typeText('#passwordInput', accounts.coursesTest.password)
         .expect(Selector('#LoginMode').visible).eql(true)
         .click('#loginButton').wait(10000)
 
@@ -25,8 +25,8 @@ test('Courses: Test Instructor Courses Table and Buttons', async t => {
 
 test('Courses: Test Student Courses Table', async t => {
     await t
-        .typeText('#emailInput', 'rebecca@wsu.edu')
-        .typeText('#passwordInput', 'Password123!')
+        .typeText('#emailInput', accounts.coursesTest.username)
+        .typeText('#passwordInput', accounts.coursesTest.password)
         .expect(Selector('#LoginMode').visible).eql(true)
         .click('#loginButton').wait(10000)
 
@@ -39,8 +39,8 @@ test('Courses: Test Student Courses Table', async t => {
 
 test('Courses: Test Instructor Students Table and Buttons', async t => {
     await t
-        .typeText('#emailInput', 'instructor@wsu.edu')
-        .typeText('#passwordInput', 'Password123!')
+        .typeText('#emailInput', accounts.coursesTest.username)
+        .typeText('#passwordInput', accounts.coursesTest.password)
         .expect(Selector('#LoginMode').visible).eql(true)
         .click('#loginButton').wait(10000)
 
@@ -59,8 +59,8 @@ test('Courses: Test Instructor Students Table and Buttons', async t => {
 
 test('Courses: Test Student Students Table', async t => {
     await t
-        .typeText('#emailInput', 'rebecca@wsu.edu')
-        .typeText('#passwordInput', 'Password123!')
+        .typeText('#emailInput', accounts.coursesTest.username)
+        .typeText('#passwordInput', accounts.coursesTest.password)
         .expect(Selector('#LoginMode').visible).eql(true)
         .click('#loginButton').wait(10000)
 
