@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { accounts } from './config.js';
 
 var isLocalTesting = true;
 const DEPLOY_TEST_URL = 'https://kliks.bfapp.org/';
@@ -9,9 +10,9 @@ fixture `Login Tests`
 
 test('Test login', async t => {
     await t
-        .typeText('#emailInput', 'test35@wsu.edu')
-        .typeText('#passwordInput', 'ASDFasdf12345')
+        .typeText('#emailInput', accounts.coursesInstructor.username)
+        .typeText('#passwordInput', accounts.coursesInstructor.password)
         .expect(Selector('#LoginMode').visible).eql(true)
         .click('#loginButton').wait(10000)
-        .expect(Selector('#FeedMode').visible).eql(true)
+        .expect(Selector('#activeQuestionPage').visible).eql(true)
 });
