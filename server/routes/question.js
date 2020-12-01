@@ -17,10 +17,11 @@ router.post('/questions/:surveyID',  async (req, res, next) => {
     !req.body.hasOwnProperty("questionText") ||
     !req.body.hasOwnProperty("questionType") ||
     !req.body.hasOwnProperty("questionAnswers") || 
+    !req.body.hasOwnProperty("acceptableAnswerTypes") ||
     !req.body.hasOwnProperty("questionActive"))
     {
         return res.status(400).sent("POST request on /questions formulated incorrectly." +
-        "Body must contain all 6 required fields, questionID, quiestionTitle, questionText, questionType, questionAnswers, questionActive");
+        "Body must contain all 6 required fields, questionID, quiestionTitle, questionText, questionType, acceptableAnswerTypes, questionAnswers, questionActive");
     }
   try {
       thisSurvey = await Survey.updateOne(
@@ -47,14 +48,14 @@ router.put('/questions/:surveyID/:questionID', async (req, res, next) => {
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
   // Make sure only these props are being added to the database for question
-  const validProps = ['questionID', 'questionTitle','questionText', 'questionType', 'questionAnswers', 'questionActive'];
+  const validProps = ['questionID', 'questionTitle','questionText', 'questionType','acceptableAnswerTypes', 'questionAnswers', 'questionActive'];
   let bodyObj = {...req.body};
   delete bodyObj._id; //Not needed for update
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("questions/ PUT request formulated incorrectly." +
         "It includes " + bodyProp + ". However, only the following props are allowed: " +
-        "'questionID', 'questionTitle','questionText', 'questionType', 'questionAnswers', 'questionActive'");
+        "'questionID', 'questionTitle','questionText', 'questionType', 'acceptableAnswerTypes', 'questionAnswers', 'questionActive'");
     } else {
       bodyObj["questions.$." + bodyProp] = bodyObj[bodyProp];
       delete bodyObj[bodyProp];
