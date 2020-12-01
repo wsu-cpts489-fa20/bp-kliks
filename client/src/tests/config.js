@@ -7,6 +7,14 @@ var accounts = {
         username: "test_student_courses@wsu.edu",
         password: "Password123!"
     },
+    surveysInstructor: {
+        username: "test_instructor_surveys@wsu.edu",
+        password: "Password123!"
+    },
+    surveysStudent: {
+        username: "test_instructor_surveys@wsu.edu",
+        password: "Password123!"
+    },
 }
 
 export { accounts };

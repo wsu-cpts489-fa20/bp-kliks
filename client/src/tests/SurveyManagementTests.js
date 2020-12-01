@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { accounts } from './config.js';
 
 var isLocalTesting = true;
 const DEPLOY_TEST_URL = 'https://kliks.bfapp.org/';
@@ -14,8 +15,8 @@ fixture `Questions/Survey Management Tests`
 */    
 test('Response Table: Test View Response Table', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -27,8 +28,8 @@ test('Response Table: Test View Response Table', async t => {
 
 test('Response Table: Test View Response', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -45,8 +46,8 @@ test('Response Table: Test View Response', async t => {
 
 test('Response Table: Test Cancel View Response', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -67,8 +68,8 @@ test('Response Table: Test Cancel View Response', async t => {
 
 test('Response Table: Test Search Responses', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -92,8 +93,8 @@ test('Response Table: Test Search Responses', async t => {
 
 test('Test Sort by Question Responses', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -111,8 +112,8 @@ test('Test Sort by Question Responses', async t => {
 
 test('Response Table: Test Sort by Question Type', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -130,8 +131,8 @@ test('Response Table: Test Sort by Question Type', async t => {
 
 test('Response Table: Test Sort by Question', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -149,8 +150,8 @@ test('Response Table: Test Sort by Question', async t => {
 
 test('Response Table: Test Sort by Response Date-Time', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -168,8 +169,8 @@ test('Response Table: Test Sort by Response Date-Time', async t => {
 
 test('Response Table: Test View Delete Response Modal', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -185,8 +186,8 @@ test('Response Table: Test View Delete Response Modal', async t => {
 
 test('Response Table: Test View Delete Response Modal on cancel clicked', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
@@ -206,8 +207,8 @@ test('Response Table: Test View Delete Response Modal on cancel clicked', async 
 // THIS TEST REQUIRES THAT YOU PRELOAD THE test json data into mongoDB survey database
 test('Response Table: Test View Delete Response Modal on delete clicked', async t => {
     await t
-    .typeText('#emailInput', 'rebecca@wsu.edu')
-    .typeText('#passwordInput', 'Password123!')
+    .typeText('#emailInput', accounts.surveysStudent.username)
+    .typeText('#passwordInput', accounts.surveysStudent.password)
     .click('#loginButton')
 
     .expect(Selector('#activeQuestionPage').exists).eql(true)
