@@ -1,5 +1,5 @@
 import { Selector } from 'testcafe';
-import { accounts } from './config.js'
+import { accounts } from './config.js';
 
 var isLocalTesting = true;
 const DEPLOY_TEST_URL = 'https://kliks.bfapp.org/';
