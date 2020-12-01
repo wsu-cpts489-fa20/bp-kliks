@@ -153,7 +153,7 @@ cancelCreateAccount = () => {
 
   render() {
     return(
-        <div>
+        <div id={"LoginMode"}>
         <center>
         {this.state.statusMsg != "" ? <div className="status-msg"><span>{this.state.statusMsg}</span>
                        <button className="modal-close" onClick={this.closeStatusMsg}>
@@ -188,6 +188,7 @@ cancelCreateAccount = () => {
                 Password:
                 <input
                 ref={this.passwordInputRef}
+                id="passwordInput"
                 className="form-control login-text"
                 type="password"
                 placeholder="Enter Password"
@@ -197,6 +198,7 @@ cancelCreateAccount = () => {
             </label>
             <p className="bg-danger" id="feedback" style={{ fontSize: 16 }} />
             <button
+                id="loginButton"
                 type="submit"
                 className="btn-color-theme btn btn-primary btn-block login-btn">
                 <span id="login-btn-icon" className={this.state.loginBtnIcon}/>
@@ -206,7 +208,7 @@ cancelCreateAccount = () => {
             <button type="button" className="btn btn-link login-link" 
                     onClick={() => {this.setState({showCreateAccountDialog: true});}}>
                 Create an account</button> | 
-                <button type="button" className="btn btn-link login-link"
+                <button id="ResetPassword" type="button" id="ResetPassword" className="btn btn-link login-link"
                         onClick={() => {this.setState({showLookUpAccountDialog: true});}}>
                 Reset your password</button>
             </p>  

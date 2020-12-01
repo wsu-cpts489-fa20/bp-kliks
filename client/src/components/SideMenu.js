@@ -22,22 +22,22 @@ renderModeMenuItems = () => {
     case AppMode.SURVEY_MANAGEMENT || AppMode.SURVEY_MANAGEMENT_CREATE || AppMode.SURVEY_MANAGEMENT_RESPONSES  || AppMode.SURVEY_MANAGEMENT_SEARCH:
       return(
         <div>
-        <a className="sidemenu-item" onClick={(e) => { 
+        <a className="sidemenu-item" id="surveyManagement-MainPage" onClick={(e) => { 
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT);
           }}>
             <span className="fa fa-bolt"></span>&nbsp;Active Questions</a>
-        <a className="sidemenu-item " onClick={(e) => { 
+        <a className="sidemenu-item " id="surveyManagement-search" onClick={(e) => { 
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
           }}>
             <span className="fa fa-search"></span>&nbsp;Search Questions</a>
-        <a className="sidemenu-item " onClick={(e) => { 
+        <a className="sidemenu-item " id="surveyManagement-create" onClick={(e) => { 
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_CREATE);
           }}>
             <span className="fa fa-plus"></span>&nbsp;Create Questions</a>
-        <a className="sidemenu-item " onClick={(e) => { 
+        <a className="sidemenu-item " id="surveyManagement-responses" onClick={(e) => { 
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_RESPONSES);
           }}>
@@ -71,7 +71,7 @@ renderModeMenuItems = () => {
 
     render() {
        return (
-        <div className={"sidemenu " + (this.props.menuOpen ? "sidemenu-open" : "sidemenu-closed")}
+        <div id="sidemenu" className={"sidemenu " + (this.props.menuOpen ? "sidemenu-open" : "sidemenu-closed")}
              onClick={this.props.toggleMenuOpen}>
           {/* SIDE MENU TITLE */}
           <div className="sidemenu-title">

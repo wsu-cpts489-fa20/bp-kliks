@@ -53,6 +53,7 @@ class LookUpAccountDialog extends React.Component {
                         <input
                         ref={this.emailRef}
                         className="form-control form-text"
+                        id="AccountEmail"
                         type="email"
                         size="35"
                         placeholder="Enter Email Address"
@@ -62,7 +63,7 @@ class LookUpAccountDialog extends React.Component {
                         />
                     </label>
                     <p></p>
-                    <button type="submit" 
+                    <button type="submit" id="AccountButton"
                         className="btn btn-primary btn-color-theme form-submit-btn">
                         <span className="fa fa-search"></span>&nbsp;Look Up Account
                     </button>

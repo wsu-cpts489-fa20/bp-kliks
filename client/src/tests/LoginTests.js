@@ -1,12 +1,18 @@
 import { Selector } from 'testcafe';
+import { accounts } from './config.js';
 
-// fixture `SpeedScore Interactions`
-//     .page `http://127.0.0.1:5500/index.html`;
+var isLocalTesting = true;
+const DEPLOY_TEST_URL = 'https://kliks.bfapp.org/';
+const DEV_TEST_URL = 'http://localhost:8081';
 
-fixture `Kliks Login Tests`
-    .page `https://kliks.bfapp.org/`; //http://localhost/    
+fixture `Login Tests`
+    .page(isLocalTesting ? DEV_TEST_URL : DEPLOY_TEST_URL)
 
-test('LoginGoesToMainPage', async t => {
+test('Test login', async t => {
     await t
-        .expect(true).ok("This is a test to check to make sure GitHub Actions TestCafe workflow works");
+        .typeText('#emailInput', accounts.coursesInstructor.username)
+        .typeText('#passwordInput', accounts.coursesInstructor.password)
+        .expect(Selector('#LoginMode').visible).eql(true)
+        .click('#loginButton').wait(10000)
+        .expect(Selector('#activeQuestionPage').visible).eql(true)
 });

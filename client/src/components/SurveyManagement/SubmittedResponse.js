@@ -47,10 +47,10 @@ class SubmittedResponse extends React.Component {
           <td>{response.question.questionText}</td>
           <td>{response.response.responseDateTime}</td>
           <td>{response.response.surveyResponse}</td>
-          <td><button onClick={this.props.menuOpen ? null : () => 
+          <td><button id={response.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index+"-"+"view"} onClick={this.props.menuOpen ? null : () => 
           this.viewResponse(response.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
               <span className="fa fa-eye"></span></button></td>
-          <td><button onClick={this.props.menuOpen ? null : 
+          <td><button id={response.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index+"-"+"delete"} onClick={this.props.menuOpen ? null : 
           () => this.confirmDeleteResponse(response.surveyID+"-"+response.question.questionID+"-"+response.response.responseId+"-"+index)}>
               <span className="fa fa-trash"></span></button></td>
         </tr>
@@ -123,9 +123,7 @@ class SubmittedResponse extends React.Component {
     Purpose: Deletes a response from the database given the response object
   */
   deleteResponse = (body) => {
-    if(this.removeResponse(body)){
-      this.props.getQuestions();
-    }
+    this.removeResponse(body);
   }
 
   /* 
@@ -143,6 +141,7 @@ class SubmittedResponse extends React.Component {
         body: JSON.stringify(body)}); 
     const msg = await res.text();
     if (res.status == 200) {
+      this.props.getQuestions();
       return 1;
     } else {
       console.log(res);
@@ -348,7 +347,7 @@ class SubmittedResponse extends React.Component {
   //Responses made" message in case the table is empty.
   render() {
     return(
-    <div className="padded-page">
+    <div id="responseTableMode" className="padded-page">
       <h1></h1>
       <div className="input-group center-search" style={{justifyContent: "center", paddingBottom: "20px"}}>
              <span className="input-group-prepend">
@@ -370,7 +369,7 @@ class SubmittedResponse extends React.Component {
           <th>Delete</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="responseTableBody">
           {Object.keys(this.props.responses).length === 0 ? 
           <tr>
           <td colSpan="5" style={{fontStyle: "italic"}}>No responses made</td>

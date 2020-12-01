@@ -76,7 +76,7 @@ class UploadStudents extends React.Component {
     render() {
         return (
             <div id="aboutModal" className="modal" role="dialog">
-                <div className="modal-content">
+                <div id="UploadStudentsModal" className="modal-content">
                     <div className="modal-header">
                     <center>
                         <h3 className="modal-title"><b>Upload Students</b></h3>

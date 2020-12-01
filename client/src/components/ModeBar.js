@@ -20,7 +20,7 @@ class ModeBar extends React.Component {
           <span className="modebar-icon  fa fa-history"></span>
           <span className="modebar-text">Dashboard</span>
         </a>
-        <a className={(this.props.mode === AppMode.COURSES ? " item-selected" : null)}
+        <a id="CoursesMode" className={(this.props.mode === AppMode.COURSES ? " item-selected" : null)}
           onClick={()=>this.props.changeMode(AppMode.COURSES)}>
           <span className="modebar-icon  fa fa-flag"></span>
           <span className="modebar-text">Courses</span>
