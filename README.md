@@ -21,9 +21,9 @@ features for the Kliks application are below:
 
 #  Files To Check For Milestones
 **Milestone 2:**\
-*\
-*\
-*
+*Student Route file that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/server/routes/student.js).\
+*Course Page component that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/CourseManagement/CoursesPage.js).\
+*Course route file that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/server/routes/course.js).
 
 **Milestone 3:**\
 *\
@@ -51,7 +51,7 @@ features for the Kliks application are below:
     *   Created paragraph tags to improve the reset password modal layouts.
     *   Modified the modal title to center the text.
     *   Modified the modal close to better position it inside the modal header
-<!-- *   **Roster Upload**:
+*   **Roster Upload**:
     *   The components and pages for the course roster upload.
     *   Upload course through uploading a .csv file.
     *   Created a table to be able to view all students in the course.
@@ -61,7 +61,7 @@ features for the Kliks application are below:
     *   Added neccessary information to the create account component to store the correct informaton.
 *   **Modify Survey Questions**:
     *   Updated current frontend for the create question management to allow users (instructors) to modify an active/inactive question.
-    *   Updated the UI for other parts of the Survey/Question Management mode of the application. -->
+    *   Updated the UI for other parts of the Survey/Question Management mode of the application.
 *   **App Logo:**
     *   Added the logo into the src directory and modified the navbar.js to use this logo.
 *   **Routes:**
@@ -88,20 +88,25 @@ features for the Kliks application are below:
             *   Create responses route.\
             *   Read responses route.\
             *   Delete responses route.
-    <!-- *   Surveys:\
+    *   Surveys:\
             Created the survey CRUD routes. Issue located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/issues/19).\
             *   Create surveys route.\
             *   Read surveys route.\
             *   Update surveys route.\
-            *   Delete surveys route. -->
-
+            *   Delete surveys route.
+    *   Questions:\
+            Created the questions CRUD routes. Issue located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/issues/19).\
+            *   Create questions route.\
+            *   Read questions route.\
+            *   Update questions route.\
+            *   Delete questions route.
 
 **Milestone 3 Changes:**\
 **Milestone 4 Changes:**
 
 # Demo Videos
 **Milestone 1** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EYJFRvVwQB1Ei845_Z_hgXYBFDZqn2fp3BTiS6R-f82o5A?e=lfTQXZ).\
-**Milestone 2** demo video located [here]().\
+**Milestone 2** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EZQWneBwPQlOoSml5YvrWKsBhytCH0yv_a1eoKIin89UFg?e=B161j1).\
 **Milestone 3** demo video located [here]().\
 **Milestone 4** demo video located [here]().
 
@@ -116,7 +121,7 @@ In order to run the tests the following commands have to be ran:
 
 # Test Videos Below
 **Milestone 1** test video located [here](https://emailwsu.sharepoint.com/:i:/r/teams/2020.fall.PULLM.Cpt.S.489-2.Kliks/Shared%20Documents/2.%20Kliks/milestone1Tests.gif?csf=1&web=1&e=RRSgPZ).\
-**Milestone 2** test video located [here]().\
+**Milestone 2** test video located [here](https://emailwsu.sharepoint.com/:i:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/Eff57N1Yn1pHpghcn7qDg_EBYiCv74Jnu0QlBZlpE_8X8A?e=uX4hGm).\
 **Milestone 3** test video located [here]().\
 **Milestone 4** test video located [here]().
 
