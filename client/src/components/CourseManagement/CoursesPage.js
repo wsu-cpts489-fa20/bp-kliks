@@ -119,7 +119,7 @@ class CoursesPage extends React.Component {
                 }
                 </center>
 
-                {this.props.userObj.userType === "instructor" &&  this.state.mode === AppMode.STUDENTS ?
+                {this.props.userObj.userType === "Instructor" &&  this.state.mode === AppMode.STUDENTS ?
                 <div className="floatingbtn-container">
                 <FloatingButton
                 id={"AddStudentBtn"}
@@ -130,7 +130,7 @@ class CoursesPage extends React.Component {
                 upload={true}/>
                 </div> : null}
 
-                {this.props.userObj.userType === "instructor" && this.state.mode === AppMode.COURSES ?
+                {this.props.userObj.userType === "Instructor" && this.state.mode === AppMode.COURSES ?
                 <FloatingButton
                 id="AddCourseBtn"
                 handleClick={this.handleAddCourse}/>

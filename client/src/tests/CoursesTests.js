@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { accounts } from './config.js'
 
 var isLocalTesting = true;
 const DEPLOY_TEST_URL = 'https://kliks.bfapp.org/';
@@ -11,10 +12,10 @@ fixture `Courses Tests`
 
 test('Courses: Test Instructor Courses Table and Buttons', async t => {
     await t
-        .typeText('#emailInput', accounts.coursesTest.username)
-        .typeText('#passwordInput', accounts.coursesTest.password)
+        .typeText('#emailInput', accounts.coursesInstructor.username)
+        .typeText('#passwordInput', accounts.coursesInstructor.password)
         .expect(Selector('#LoginMode').visible).eql(true)
-        .click('#loginButton').wait(10000)
+        .click('#loginButton').wait(5000)
 
         .expect(Selector('#CoursesMode').visible).eql(true)
         .click('#CoursesMode')
@@ -25,10 +26,10 @@ test('Courses: Test Instructor Courses Table and Buttons', async t => {
 
 test('Courses: Test Student Courses Table', async t => {
     await t
-        .typeText('#emailInput', accounts.coursesTest.username)
-        .typeText('#passwordInput', accounts.coursesTest.password)
+        .typeText('#emailInput', accounts.coursesStudent.username)
+        .typeText('#passwordInput', accounts.coursesStudent.password)
         .expect(Selector('#LoginMode').visible).eql(true)
-        .click('#loginButton').wait(10000)
+        .click('#loginButton').wait(5000)
 
         .expect(Selector('#CoursesMode').visible).eql(true)
         .click('#CoursesMode')
@@ -39,10 +40,10 @@ test('Courses: Test Student Courses Table', async t => {
 
 test('Courses: Test Instructor Students Table and Buttons', async t => {
     await t
-        .typeText('#emailInput', accounts.coursesTest.username)
-        .typeText('#passwordInput', accounts.coursesTest.password)
+        .typeText('#emailInput', accounts.coursesInstructor.username)
+        .typeText('#passwordInput', accounts.coursesInstructor.password)
         .expect(Selector('#LoginMode').visible).eql(true)
-        .click('#loginButton').wait(10000)
+        .click('#loginButton').wait(5000)
 
         .expect(Selector('#CoursesMode').visible).eql(true)
         .click('#CoursesMode')
@@ -59,10 +60,10 @@ test('Courses: Test Instructor Students Table and Buttons', async t => {
 
 test('Courses: Test Student Students Table', async t => {
     await t
-        .typeText('#emailInput', accounts.coursesTest.username)
-        .typeText('#passwordInput', accounts.coursesTest.password)
+        .typeText('#emailInput', accounts.coursesStudent.username)
+        .typeText('#passwordInput', accounts.coursesStudent.password)
         .expect(Selector('#LoginMode').visible).eql(true)
-        .click('#loginButton').wait(10000)
+        .click('#loginButton').wait(5000)
 
         .expect(Selector('#CoursesMode').visible).eql(true)
         .click('#CoursesMode')

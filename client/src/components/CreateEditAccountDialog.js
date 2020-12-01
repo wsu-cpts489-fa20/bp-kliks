@@ -87,7 +87,7 @@ class CreateEditAccountDialog extends React.Component {
                     self.setState({profilePicURL:  this.result,
                                    formUpdated: formUpdated},this.checkDataValidity);
                 });
-                
+                console.log(this.state.profilePicURL);
             }
         } else {
             this.setState({[event.target.name]: event.target.value,
