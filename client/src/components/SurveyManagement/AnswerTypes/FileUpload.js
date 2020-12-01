@@ -32,7 +32,7 @@ class FileUpload extends React.Component {
         }
       }
 
-      this.setState({ selectedOptions: selectedOptions }, ()=> { console.log(this.state.selectedOptions);});
+      this.setState({ selectedOptions: selectedOptions }, ()=> { console.log("String representation:"); console.log(this.state.selectedOptions.toString()); console.log(this.state.selectedOptions);});
     }
 
     render(){
@@ -55,7 +55,7 @@ class FileUpload extends React.Component {
               <label>
                 File:
                 <input name="filename" className="form-control form-center" 
-                  type="file"/>
+                  type="file" accept={this.state.selectedOptions.toString()}/>
               </label>
             <p></p>
             </center>
