@@ -6,20 +6,33 @@ import SearchField from 'react-search-field'
 class SubmittedResponse extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {ActiveFilter: false};
   }
 
-    onSearchClicked = () => {
-        console.log("onSearchClicked");
+  onSearchClicked = () => {
+      console.log("onSearchClicked");
+  }
+
+  switchHandler = () => {
+    console.log(this.state.ActiveFilter);
+    if (this.state.ActiveFilter == false)
+    {
+      this.setState({ActiveFilter: true});
     }
+    else
+    {
+      this.setState({ActiveFilter: false});
+    }
+  }
+  
   //render--render the entire rounds table with header, displaying a "No
   //Rounds Logged" message in case the table is empty.
   render() {
     return(
     <div className="padded-page">
       <center>
-
-      <h3>Question Filter (Active Only or All Questions): </h3>  
-      <label class="switch"><input type="checkbox" id="togBtn"/>
+      <h4>Question Filter (Active Only or All Questions): </h4>  
+      <label class="switch"><input type="checkbox" id="togBtn" onClick={this.switchHandler}/>
         <div class="slider round">
         <span class="on">Active</span><span class="off">All</span>
         </div>
