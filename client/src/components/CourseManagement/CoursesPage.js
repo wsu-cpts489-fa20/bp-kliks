@@ -15,7 +15,6 @@ class CoursesPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mode: AppMode.COURSES,
             courseId: "",
             courseName: "",
             students: [],
@@ -57,12 +56,14 @@ class CoursesPage extends React.Component {
 
     // handle click on the add students button
     handleAddStudent = () => {
-        this.handleChangeMode(AppMode.STUDENTS_CREATE);
+        //this.handleChangeMode(AppMode.STUDENTS_CREATE);
+        this.props.changeMode(AppMode.STUDENTS_CREATE);
     }
 
     // handle click on upload students button
     handleUploadStudents = () => {
-        this.handleChangeMode(AppMode.STUDENTS_UPLOAD);
+        //this.handleChangeMode(AppMode.STUDENTS_UPLOAD);
+        this.props.changeMode(AppMode.STUDENTS_UPLOAD);
     }
 
     // upload the list of students extracted from csv file
@@ -104,22 +105,24 @@ class CoursesPage extends React.Component {
         return (
             <div className="padded-page">
                 <center>
-                <h1>{this.state.mode === AppMode.COURSES ? "Courses" : "Students in " + this.state.courseName}</h1>
+                <h1>{this.props.mode === AppMode.COURSES ? "Courses" : "Students in " + this.state.courseName}</h1>
 
-                {this.state.mode === AppMode.COURSES ?
+                {this.props.mode === AppMode.COURSES ?
                     <CoursesTable 
                     courses={this.props.userObj.courses}
+                    userType={this.props.userObj.userType}
                     menuOpen={this.props.menuOpen}
-                    changeMode={this.handleChangeMode}
+                    changeMode={this.props.changeMode}
                     changeCourse={this.handleChangeCourse}/> :
                     <StudentsTable 
                     students={this.state.students}
+                    userType={this.props.userObj.userType}
                     menuOpen={this.props.menuOpen}
-                    changeMode={this.handleChangeMode}/>
+                    changeMode={this.props.changeMode}/>
                 }
                 </center>
 
-                {this.props.userObj.userType === "Instructor" &&  this.state.mode === AppMode.STUDENTS ?
+                {this.props.userObj.userType === "Instructor" &&  this.props.mode === AppMode.STUDENTS ?
                 <div className="floatingbtn-container">
                 <FloatingButton
                 id={"AddStudentBtn"}
@@ -130,20 +133,20 @@ class CoursesPage extends React.Component {
                 upload={true}/>
                 </div> : null}
 
-                {this.props.userObj.userType === "Instructor" && this.state.mode === AppMode.COURSES ?
+                {this.props.userObj.userType === "Instructor" && this.props.mode === AppMode.COURSES ?
                 <FloatingButton
                 id="AddCourseBtn"
                 handleClick={this.handleAddCourse}/>
                 : null}
 
-                {this.state.mode === AppMode.STUDENTS_UPLOAD ? 
+                {this.props.mode === AppMode.STUDENTS_UPLOAD ? 
                 <UploadStudents
                 uploadStudents={this.uploadStudents}
-                changeMode={this.handleChangeMode} /> : null}
+                changeMode={this.props.changeMode} /> : null}
 
-                {this.state.mode === AppMode.STUDENTS ?
+                {this.props.mode === AppMode.STUDENTS ?
                 <button type="button"
-                onClick={ () => { this.handleChangeMode(AppMode.COURSES);} }
+                onClick={ () => { this.props.changeMode(AppMode.COURSES);} }
                 className="backbtn">
                     Back
                 </button> : null}

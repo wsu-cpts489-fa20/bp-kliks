@@ -18,6 +18,8 @@ modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
 modeTitle[AppMode.STUDENTS] = "Students";
+modeTitle[AppMode.STUDENTS_CREATE] = "Add a Student";
+modeTitle[AppMode.STUDENTS_UPLOAD] = "Students";
 
 const modeToPage = {};
 
@@ -37,8 +39,12 @@ modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
 
 /*  Course Pages */
 modeToPage[AppMode.COURSES] = CoursesPage;
-/* Students are accessed through courses page */
+modeToPage[AppMode.COURSES_CREATE] = CoursesPage;
+
+/* Students Pages, students are tied to courses */
 modeToPage[AppMode.STUDENTS] = CoursesPage;
+modeToPage[AppMode.STUDENTS_CREATE] = CoursesPage;
+modeToPage[AppMode.STUDENTS_UPLOAD] = CoursesPage;
 
 
 class App extends React.Component {

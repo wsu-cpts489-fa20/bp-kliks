@@ -27,12 +27,15 @@ class StudentsTable extends React.Component {
             <tr key={r}>
             <td>{this.props.students[r].userID}</td>
             <td>{this.props.students[r].studentDisplayName}</td>
-            <td><button onClick={this.props.menuOpen ? null : () => 
-                this.editStudent(this.props.students[r].userID)}>
-                    <span className="fa fa-pencil-square-o"></span></button></td>
-            <td><button onClick={this.props.menuOpen ? null : () => 
-                this.deleteStudent(this.props.students[r].userID)}>
-                    <span className="fa fa-trash-o"></span></button></td>
+            {this.props.userType === "Instructor" ? 
+                <div className="instructor-buttons">
+                    <td><button onClick={this.props.menuOpen ? null : () => 
+                        this.editStudent(this.props.students[r].userID)}>
+                            <span className="fa fa-pencil-square-o"></span></button></td>
+                    <td><button onClick={this.props.menuOpen ? null : () => 
+                        this.deleteStudent(this.props.students[r].userID)}>
+                            <span className="fa fa-trash-o"></span></button></td>
+                </div> : null}
             </tr> 
         );
         }
@@ -48,8 +51,11 @@ class StudentsTable extends React.Component {
                     <tr>
                         <th>Name</th>
                         <th>ID</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        {this.props.userType === "Instructor" ? 
+                        <div className="instructor-buttons">
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </div> : null}
                     </tr>
                     </thead>
                     <tbody>

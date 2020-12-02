@@ -16,6 +16,14 @@ class CoursesTable extends React.Component {
         this.props.changeMode(AppMode.STUDENTS);
     }
 
+    editCourse = (courseId) => {
+        console.log("Editing " + courseId);
+    }
+
+    deleteCourse = (courseId) => {
+        console.log("Deleting " + courseId);
+    }
+
     //renderTable -- render an HTML table displaying the rounds logged
     //by the current user and providing buttons to view/edit and delete each round.
     renderTable = () => {
@@ -32,6 +40,15 @@ class CoursesTable extends React.Component {
             <td><button onClick={this.props.menuOpen ? null : () => 
                 this.viewStudents(this.props.courses[r].courseID, this.props.courses[r].courseName)}>
                     <span className="fa fa-users"></span></button></td>
+            {this.props.userType === "Instructor" ? 
+                <div className="instructor-buttons">
+                    <td><button onClick={this.props.menuOpen ? null : () => 
+                        this.editCourse(this.props.courses[r].courseID)}>
+                            <span className="fa fa-pencil-square-o"></span></button></td>
+                    <td><button onClick={this.props.menuOpen ? null : () => 
+                        this.deleteCourse(this.props.courses[r].courseID)}>
+                            <span className="fa fa-trash-o"></span></button></td>
+                </div> : null}
             </tr> 
         );
         }
@@ -50,6 +67,12 @@ class CoursesTable extends React.Component {
                         <th>Semester</th>
                         <th>Instructor Name</th>
                         <th>View Students</th>
+                        {this.props.userType === "Instructor" ? 
+                        <div className="instructor-buttons">
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </div> : null}
+                        
                     </tr>
                     </thead>
                     <tbody>

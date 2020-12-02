@@ -55,29 +55,69 @@ renderModeMenuItems = () => {
       );
     break;
     case AppMode.COURSES:
+    case AppMode.COURSE_CREATE:
       if (this.props.userType === "Instructor"){
         return(
           <div>
-          <a className="sidemenu-item">
-              <span className="fa fa-folder-open"></span>&nbsp;View Courses</a>
-          <a className="sidemenu-item">
-              <span className="fa fa-plus"></span>&nbsp;Add a Course</a>
-          <a className="sidemenu-item">
-              <span className="fa fa-folder-open"></span>&nbsp;View Students</a>
-          <a className="sidemenu-item">
-              <span className="fa fa-plus"></span>&nbsp;Add a Student</a>
+          <a className="sidemenu-item" onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.COURSES);
+          }}>
+              <span className="fa fa-folder-open" id="viewCoursesLink"></span>&nbsp;View Courses</a>
+          <a className="sidemenu-item" onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.COURSE_CREATE);
+          }}>
+              <span className="fa fa-plus" id="addCourseLink"></span>&nbsp;Add a Course</a>
           </div>
         );
       } else {
         return(
           <div>
-          <a className="sidemenu-item">
-              <span className="fa fa-folder-open"></span>&nbsp;View Courses</a>
-          <a className="sidemenu-item">
-              <span className="fa fa-folder-open"></span>&nbsp;View Students</a>
+          <a className="sidemenu-item" onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.COURSES);
+          }}>
+              <span className="fa fa-folder-open" id="viewCoursesLink"></span>&nbsp;View Courses</a>
           </div>
         );
       }
+      break;
+      case AppMode.STUDENTS:
+      case AppMode.STUDENTS_CREATE:
+      case AppMode.STUDENTS_UPLOAD:
+        if (this.props.userType === "Instructor"){
+          return(
+            <div>
+            <a className="sidemenu-item" onClick={(e) => { 
+            e.preventDefault();
+            this.props.changeMode(AppMode.COURSES);
+            }}>
+                <span className="fa fa-folder-open" id="viewCoursesLink"></span>&nbsp;View Courses</a>
+            <a className="sidemenu-item" onClick={(e) => { 
+            e.preventDefault();
+            this.props.changeMode(AppMode.STUDENTS_CREATE);
+            }}>
+                <span className="fa fa-plus" id="addStudentLink"></span>&nbsp;Add a Student</a>
+            <a className="sidemenu-item" onClick={(e) => { 
+            e.preventDefault();
+            this.props.changeMode(AppMode.STUDENTS_UPLOAD);
+            }}>
+                <span className="fa fa-upload" id="uploadStudentsLink"></span>&nbsp;Upload Students</a>
+            </div>
+          );
+        } else {
+          return(
+            <div>
+            <a className="sidemenu-item" onClick={(e) => { 
+            e.preventDefault();
+            this.props.changeMode(AppMode.COURSES);
+            }}>
+                <span className="fa fa-folder-open" id="viewCoursesLink"></span>&nbsp;View Courses</a>
+            </div>
+          );
+        }
+      break;
     default:
         return null;
     }
