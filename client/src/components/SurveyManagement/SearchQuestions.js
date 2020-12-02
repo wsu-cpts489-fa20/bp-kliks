@@ -17,8 +17,14 @@ class SubmittedResponse extends React.Component {
     return(
     <div className="padded-page">
       <center>
-      <h1></h1>
-        
+
+      <h3>Question Filter (Active Only or All Questions): </h3>  
+      <label class="switch"><input type="checkbox" id="togBtn"/>
+        <div class="slider round">
+        <span class="on">Active</span><span class="off">All</span>
+        </div>
+      </label>
+
          <div className="input-group center-search" style={{justifyContent: "center", paddingBottom: "20px"}}>
             <SearchField
               classNames="search-width"
