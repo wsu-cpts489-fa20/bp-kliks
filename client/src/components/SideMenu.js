@@ -19,7 +19,7 @@ renderModeMenuItems = () => {
   // console.log(this.props.mode);
   const mode = this.setGeneralMode(this.props.mode);
   switch (mode) {
-    case AppMode.SURVEY_MANAGEMENT || AppMode.SURVEY_MANAGEMENT_CREATE || AppMode.SURVEY_MANAGEMENT_RESPONSES  || AppMode.SURVEY_MANAGEMENT_SEARCH:
+    case AppMode.SURVEY_MANAGEMENT || AppMode.SURVEY_MANAGEMENT_CREATE || AppMode.SURVEY_MANAGEMENT_RESPONSES  || AppMode.SURVEY_MANAGEMENT_SEARCH || AppMode.SURVEY_MANAGEMENT_CREATE_SURVEY:
       return(
         <div>
         <a className="sidemenu-item" id="surveyManagement-MainPage" onClick={(e) => { 
@@ -37,6 +37,11 @@ renderModeMenuItems = () => {
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_CREATE);
           }}>
             <span className="fa fa-plus"></span>&nbsp;Create Questions</a>
+            <a className="sidemenu-item " id="surveyManagement-createSurvey" onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_CREATE_SURVEY);
+          }}>
+            <span className="fa fa-plus"></span>&nbsp;Create Survey</a>
         <a className="sidemenu-item " id="surveyManagement-responses" onClick={(e) => { 
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_RESPONSES);

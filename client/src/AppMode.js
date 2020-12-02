@@ -6,6 +6,7 @@ const AppMode = {
     SURVEY_MANAGEMENT: "SurveyMode",
     SURVEY_MANAGEMENT_RESPONSES: "SurveyModeResponses",
     SURVEY_MANAGEMENT_CREATE: "SurveyModeCreate",
+    SURVEY_MANAGEMENT_CREATE_SURVEY : "SurveyModeCreateSurvey",
     SURVEY_MANAGEMENT_SEARCH: "SurveyModeSearch",
 
     ROUNDS: "RoundsMode",

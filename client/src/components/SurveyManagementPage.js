@@ -4,6 +4,7 @@ import ActiveQuestions from './SurveyManagement/ActiveQuestions.js'
 import SubmittedResponse from './SurveyManagement/SubmittedResponse.js'
 import AppMode from './../AppMode.js'
 import SearchQestions from './SurveyManagement/SearchQuestions.js'
+import CreateQuestion from './SurveyManagement/CreateQuestion.js';
 
 class SurveyManagementPage extends React.Component {
     constructor(props){
@@ -23,49 +24,60 @@ class SurveyManagementPage extends React.Component {
     */     
     getQuestions = async () => {
 
-        let response = await fetch("/responses/" + this.props.userObj.id+"/"+["cpts489Fall2020"]);
-        response = await response.json();
-        const obj = JSON.parse(response);    
-        console.log("GET /responses/"+ this.props.userObj.id);
-        console.log(obj);
-    
-        var getAllResponses = (questions) => {
-            if(questions.length == 0){
-              return [];
-            }
-        
-            var responses = [];
-            var newquestions = [];
-            questions.forEach((survey) => {
-              survey.questions.forEach((question) => {
-                newquestions.push({
-                    questionID: question.questionID,
-                    surveyID: survey.surveyID,
-                    responses: question.responses,
-                    survey: survey,
-                    question: question
-                  });
-                question.responses.forEach((response) => {
-                    responses.push({
-                      questionID: question.questionID,
-                      surveyID: survey.surveyID,
-                      response: response,
-                      survey: survey,
-                      question: question,
-                      responseType: response.students.length > 1 ? "Group" : "Individual"
-                    });
-                });
-              });
-            });
-            return [responses, newquestions];
-          }
-
-        var data = getAllResponses(obj);
-        this.setState({
-          surveys : obj,
-          questions : data[1],
-          responses : data[0]
+        var courses = [];
+        courses = this.props.userObj.courses.map((course) => {
+            return course.courseID;
         });
+
+        console.log("Courses:");
+        console.log(courses);
+
+        let response = await fetch("/responses/" + this.props.userObj.id+"/"+courses); //["cpts489Fall2020"]
+    
+        if (response.status == 200) {
+            response = await response.json();
+            const obj = JSON.parse(response);    
+            console.log("GET /responses/"+ this.props.userObj.id+"/"+courses);
+            console.log(obj);
+        
+            var getAllResponses = (questions) => {
+                if(questions.length == 0){
+                  return [];
+                }
+            
+                var responses = [];
+                var newquestions = [];
+                questions.forEach((survey) => {
+                  survey.questions.forEach((question) => {
+                    newquestions.push({
+                        questionID: question.questionID,
+                        surveyID: survey.surveyID,
+                        responses: question.responses,
+                        survey: survey,
+                        question: question
+                      });
+                    question.responses.forEach((response) => {
+                        responses.push({
+                          questionID: question.questionID,
+                          surveyID: survey.surveyID,
+                          response: response,
+                          survey: survey,
+                          question: question,
+                          responseType: response.students.length > 1 ? "Group" : "Individual"
+                        });
+                    });
+                  });
+                });
+                return [responses, newquestions];
+              }
+    
+            var data = getAllResponses(obj);
+            this.setState({
+              surveys : obj,
+              questions : data[1],
+              responses : data[0]
+            });
+        }
     }
 
     render() {
@@ -79,7 +91,19 @@ class SurveyManagementPage extends React.Component {
                 );
             case AppMode.SURVEY_MANAGEMENT_CREATE:
                 return (
-                    <CreateSurvey>
+                    <CreateQuestion 
+                    userObj={this.props.userObj}
+                    surveys={this.state.surveys}
+                    changeMode={this.props.changeMode}
+                    >
+                    </CreateQuestion>
+                );
+            case AppMode.SURVEY_MANAGEMENT_CREATE_SURVEY:
+                return (
+                    <CreateSurvey 
+                    userObj={this.props.userObj}
+                    surveys={this.state.surveys}
+                    >
                     </CreateSurvey>
                 );
             case AppMode.SURVEY_MANAGEMENT_SEARCH:
