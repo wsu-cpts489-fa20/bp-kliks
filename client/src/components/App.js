@@ -17,6 +17,7 @@ modeTitle[AppMode.ROUNDS] = "My Rounds";
 modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
+modeTitle[AppMode.STUDENTS] = "Students";
 
 const modeToPage = {};
 
@@ -36,6 +37,8 @@ modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
 
 /*  Course Pages */
 modeToPage[AppMode.COURSES] = CoursesPage;
+/* Students are accessed through courses page */
+modeToPage[AppMode.STUDENTS] = CoursesPage;
 
 
 class App extends React.Component {
@@ -170,7 +173,8 @@ class App extends React.Component {
             editAccount={this.showEditAccount}
             logOut={() => this.handleChangeMode(AppMode.LOGIN)}
             changeMode={this.handleChangeMode}
-            showAbout={() => {this.setState({showAboutDialog: true})}}/>
+            showAbout={() => {this.setState({showAboutDialog: true})}}
+            userType={this.state.userObj.userType}/>
           <ModeBar 
             mode={this.state.mode} 
             changeMode={this.handleChangeMode}

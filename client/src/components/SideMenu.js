@@ -5,18 +5,17 @@ import App from './App.js';
 class SideMenu extends React.Component {
 
   setGeneralMode = (mode) => {
-    if(AppMode.SURVEY_MANAGEMENT || AppMode.SURVEY_MANAGEMENT_CREATE || AppMode.SURVEY_MANAGEMENT_RESPONSES  || AppMode.SURVEY_MANAGEMENT_SEARCH){
+    if(AppMode.SURVEY_MANAGEMENT === mode|| AppMode.SURVEY_MANAGEMENT_CREATE === mode || AppMode.SURVEY_MANAGEMENT_RESPONSES === mode || AppMode.SURVEY_MANAGEMENT_SEARCH === mode){
       return AppMode.SURVEY_MANAGEMENT;
+    } else {
+      return mode;
     }
-    
-    return mode;
   }
   
 //renderModeItems -- Renders correct subset of mode menu items based on
 //current mode, which is stored in this.prop.mode. Uses switch statement to
 //determine mode.
 renderModeMenuItems = () => {
-  // console.log(this.props.mode);
   const mode = this.setGeneralMode(this.props.mode);
   switch (mode) {
     case AppMode.SURVEY_MANAGEMENT || AppMode.SURVEY_MANAGEMENT_CREATE || AppMode.SURVEY_MANAGEMENT_RESPONSES  || AppMode.SURVEY_MANAGEMENT_SEARCH:
@@ -56,14 +55,29 @@ renderModeMenuItems = () => {
       );
     break;
     case AppMode.COURSES:
-      return(
-        <div>
-        <a className="sidemenu-item">
-            <span className="fa fa-plus"></span>&nbsp;Add a Course</a>
-        <a className="sidemenu-item">
-            <span className="fa fa-search"></span>&nbsp;Search Courses</a>
-        </div>
-      );
+      if (this.props.userType === "Instructor"){
+        return(
+          <div>
+          <a className="sidemenu-item">
+              <span className="fa fa-folder-open"></span>&nbsp;View Courses</a>
+          <a className="sidemenu-item">
+              <span className="fa fa-plus"></span>&nbsp;Add a Course</a>
+          <a className="sidemenu-item">
+              <span className="fa fa-folder-open"></span>&nbsp;View Students</a>
+          <a className="sidemenu-item">
+              <span className="fa fa-plus"></span>&nbsp;Add a Student</a>
+          </div>
+        );
+      } else {
+        return(
+          <div>
+          <a className="sidemenu-item">
+              <span className="fa fa-folder-open"></span>&nbsp;View Courses</a>
+          <a className="sidemenu-item">
+              <span className="fa fa-folder-open"></span>&nbsp;View Students</a>
+          </div>
+        );
+      }
     default:
         return null;
     }
