@@ -54,7 +54,8 @@ class CreateQuestion extends React.Component {
             questionType: this.state.answerType,
             questionAnswers:this.state.answers,
             acceptableAnswerTypes: this.state.acceptableAnswerTypes,
-            questionActive: this.state.active
+            questionActive: this.state.active,
+            responses:  []
         }
 
         console.log(newQuestion);
