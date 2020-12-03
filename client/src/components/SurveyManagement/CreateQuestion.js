@@ -143,7 +143,7 @@ class CreateQuestion extends React.Component {
         const AnswerType = answerTypes[this.state.answerType];
         return(
             <form className="padded-page" onSubmit={this.handleSubmit}>
-                {/* {
+                {
                 this.state.numberOfSurveys == 0 ?
                 <center>
                     <p></p>
@@ -155,7 +155,7 @@ class CreateQuestion extends React.Component {
                     </button>
                 </center>
                 :
-                ( */}
+                (
                     <center>
                         <label
                         style={{fontSize: "20px"}}
@@ -232,8 +232,8 @@ class CreateQuestion extends React.Component {
                             <span className="fa fa-plus"/>&nbsp; Create Question
                         </button>
                     </center>
-                {/* ) */}
-                {/* } */}
+                )
+                }
           </form>
         );
     }
