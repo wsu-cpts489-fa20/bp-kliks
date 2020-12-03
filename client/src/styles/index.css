@@ -533,3 +533,10 @@ text-align: center;
   
     .slider.round:before {
       border-radius: 50%;}    
+    .instructor-buttons th {
+      width: 100%;
+    }
+
+    .instructor-buttons td {
+      width: 100%;
+    }
