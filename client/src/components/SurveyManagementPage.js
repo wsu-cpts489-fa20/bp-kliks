@@ -5,6 +5,7 @@ import SubmittedResponse from './SurveyManagement/SubmittedResponse.js'
 import AppMode from './../AppMode.js'
 import SearchQestions from './SurveyManagement/SearchQuestions.js'
 import CreateQuestion from './SurveyManagement/CreateQuestion.js';
+import SearchSurveys from './SurveyManagement/SearchSurveys.js';
 
 class SurveyManagementPage extends React.Component {
     constructor(props){
@@ -12,10 +13,58 @@ class SurveyManagementPage extends React.Component {
         this.state = {
             questions: [],
             responses: [],
-            surveys : []
+            surveys : [],
+            errorMsg : ""
         };
 
         this.getQuestions();
+    }
+
+    /*
+        Save a question to the mongoDB 
+    */
+    saveQuestion = async (surveyId, newQuestion) => {
+        const url = '/questions/' + surveyId;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'POST',
+            body: JSON.stringify(newQuestion)});
+        const msg = await res.text();
+        if (res.status != 200) {
+            this.setState({errorMsg: msg});
+            console.log("Question NOT Created!");
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        } else {
+            this.setState({errorMsg: ""});
+            console.log("Question Created!");
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        }
+    }
+
+    /*
+        Save a survey to the mongoDB 
+    */
+    saveSurvey = async (surveyID, newSurvey) => {
+        const url = '/surveys/' + surveyID;
+        console.log(url);
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'POST',
+            body: JSON.stringify(newSurvey)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            this.setState({errorMsg: msg});
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        } else {
+            this.setState({errorMsg: ""});
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        }
     }
 
     /* 
@@ -32,7 +81,11 @@ class SurveyManagementPage extends React.Component {
         console.log("Courses:");
         console.log(courses);
 
-        let response = await fetch("/responses/" + this.props.userObj.id+"/"+courses); //["cpts489Fall2020"]
+        if(courses.length == 0){
+            courses = [""]
+        }
+
+        let response = await fetch("/responses/" + this.props.userObj.id+"/"+JSON.stringify(courses)); //["cpts489Fall2020"]
     
         if (response.status == 200) {
             response = await response.json();
@@ -103,13 +156,20 @@ class SurveyManagementPage extends React.Component {
                     <CreateSurvey 
                     userObj={this.props.userObj}
                     surveys={this.state.surveys}
-                    >
+                    changeMode={this.props.changeMode}>
                     </CreateSurvey>
                 );
             case AppMode.SURVEY_MANAGEMENT_SEARCH:
                 return (
                     <SearchQestions>
                     </SearchQestions>
+                );
+            case AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS:
+                return (
+                    <SearchSurveys
+                    saveSurvey={this.saveSurvey}
+                    >
+                    </SearchSurveys>
                 );
             case AppMode.SURVEY_MANAGEMENT_RESPONSES:
                 return (

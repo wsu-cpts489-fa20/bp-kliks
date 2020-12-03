@@ -3,7 +3,8 @@ import FileUpload from './AnswerTypes/FileUpload';
 import FreeResponse from './AnswerTypes/FreeResponse';
 import MultipleChoice from './AnswerTypes/MultipleChoice';
 import CreateQuestion from './CreateQuestion';
-
+import AppMode from '../../AppMode';
+import { v4 as uuid } from 'uuid';
 
 const answerTypes = {};
 answerTypes["multipleChoice"] = MultipleChoice;
@@ -37,6 +38,19 @@ class CreateSurvey extends React.Component {
         event.preventDefault();
 
         console.log("Create Survey");
+
+        if(this.state.dropdownOfCourses.length == 0){
+          console.log("Do not have a course selected!");
+        }else{
+          var newSurvey = {
+            surveyTitle : this.state.surveyTitle,
+            surveyDate : this.state.date,
+            courseID : this.state.dropdownOfCourses
+          };
+
+          setTimeout(this.props.saveSurvey, 100, uuid(), newSurvey);
+          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        }
     }
 
 
@@ -67,6 +81,8 @@ class CreateSurvey extends React.Component {
                 Survey Title:
                 <input name="surveyTitle" className="form-control form-center"
                 value={this.state.surveyTitle}
+                onChange={this.handleChange}
+                minLength={1}
                   type="text"/>
               </label>
               <p></p>

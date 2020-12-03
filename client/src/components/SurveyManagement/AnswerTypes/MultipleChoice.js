@@ -5,16 +5,101 @@ class MultipleChoice extends React.Component {
     //Initialize a Rounds object based on local storage
     constructor(props) {
         super(props);
+        this.state = {
+          answers : [
+                    {
+                      placeholder: "",
+                      name: 0,
+                      value : "",
+                      id : 0
+                    }
+                  ]
+        };
     }
 
     onAddAnswer = (event) => {
       event.preventDefault();
+      var answers = this.state.answers;
+
+      answers.push(
+        {
+          placeholder: answers.length,
+          name: answers.length,
+          value : "",
+          id: answers.length
+        }
+      );
+
+      // answers.push(
+      //   <input placeholder="Input answer..." name={answers.length} id={answers.length} aria-label="Username" aria-describedby="basic-addon1" className="form-control"/>        
+      // );
+      
+      this.setState({
+        answers : answers
+      });
+      
       console.log("Adding another answer");
+      
+      console.log(answers);
+
+      let strAnswers = answers.map((element) => {
+        return element.value;
+      });      
+
+      this.props.setAnswer(strAnswers);
     }
 
     onRemoveAnswer = (event) => {
       event.preventDefault();
-      console.log("Remove another answer");
+      var answers = this.state.answers;
+
+      if(answers.length > 0)
+      {
+        answers.pop();
+  
+        this.setState({
+          answers : answers
+        });
+        console.log("Remove another answer");
+
+        console.log(answers);
+
+        let strAnswers = answers.map((element) => {
+          return element.value;
+        });
+
+        this.props.setAnswer(strAnswers);
+      }else{
+        this.props.setAnswer([""]);
+      }
+    }
+
+    getAnswers = () => {
+      var answers = [];
+
+      for(var index = 0; index < this.state.answers.length; index++){
+        answers.push(
+          <input placeholder="Input answer..." onChange={this.onAnswerTextChange} value={this.state.answers[index].value} name={this.state.answers[index].name} aria-label="Username" aria-describedby="basic-addon1" className="form-control"/>
+        );
+      }
+      return answers;
+    }
+
+    onAnswerTextChange = (event) => {
+      var answers = this.state.answers;
+
+      answers[Number(event.target.name)].value = event.target.value;
+
+      let strAnswers = answers.map((element) => {
+        return element.value;
+      });
+
+      this.props.setAnswer(strAnswers);
+
+      console.log("MC Answer Value changed: " + strAnswers.toString());
+      this.setState({
+        answers : answers
+      });
     }
     
     render(){
@@ -25,13 +110,12 @@ class MultipleChoice extends React.Component {
               <div className="input-group-prepend">
                 <span className="input-group-text" id="basic-addon1">Answer choice</span>
               </div>
-                <input placeholder="Input answer..." aria-label="Username" aria-describedby="basic-addon1" className="form-control"/>
+              <div id={"multiple-choice-option-answers"}>
+                {
+                  this.getAnswers()
+                }
+              </div>
             </div>
-              {/* <label>
-                Question Title:
-                <input name="title" className="form-control form-center" 
-                  type="text"/>
-              </label> */}
             <p></p>
             
             <div className="row justify-content-center">

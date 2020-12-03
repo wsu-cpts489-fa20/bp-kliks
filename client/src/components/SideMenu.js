@@ -32,6 +32,11 @@ renderModeMenuItems = () => {
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
           }}>
             <span className="fa fa-search"></span>&nbsp;Search Questions</a>
+          <a className="sidemenu-item " id="surveyManagement-searchSurvey" onClick={(e) => { 
+          e.preventDefault();
+          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+          }}>
+            <span className="fa fa-plus"></span>&nbsp;Search Surveys</a>
         <a className="sidemenu-item " id="surveyManagement-create" onClick={(e) => { 
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_CREATE);
