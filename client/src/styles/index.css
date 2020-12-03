@@ -451,3 +451,11 @@ text-align: center;
     text-align:center;
     box-shadow: 2px 2px 3px #999;
     }
+
+    .instructor-buttons th {
+      width: 100%;
+    }
+
+    .instructor-buttons td {
+      width: 100%;
+    }

@@ -17,6 +17,12 @@ modeTitle[AppMode.ROUNDS] = "My Rounds";
 modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
+modeTitle[AppMode.COURSES_CREATE] = "Add Course";
+modeTitle[AppMode.COURSES_DELETE] = "Delete Course";
+modeTitle[AppMode.COURSES_EDIT] = "Edit Course";
+modeTitle[AppMode.STUDENTS] = "Students";
+modeTitle[AppMode.STUDENTS_CREATE] = "Add a Student";
+modeTitle[AppMode.STUDENTS_UPLOAD] = "Students";
 
 const modeToPage = {};
 
@@ -36,6 +42,14 @@ modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
 
 /*  Course Pages */
 modeToPage[AppMode.COURSES] = CoursesPage;
+modeToPage[AppMode.COURSES_CREATE] = CoursesPage;
+modeToPage[AppMode.COURSES_DELETE] = CoursesPage;
+modeToPage[AppMode.COURSES_EDIT] = CoursesPage;
+
+/* Students Pages, students are tied to courses */
+modeToPage[AppMode.STUDENTS] = CoursesPage;
+modeToPage[AppMode.STUDENTS_CREATE] = CoursesPage;
+modeToPage[AppMode.STUDENTS_UPLOAD] = CoursesPage;
 
 
 class App extends React.Component {
@@ -170,7 +184,8 @@ class App extends React.Component {
             editAccount={this.showEditAccount}
             logOut={() => this.handleChangeMode(AppMode.LOGIN)}
             changeMode={this.handleChangeMode}
-            showAbout={() => {this.setState({showAboutDialog: true})}}/>
+            showAbout={() => {this.setState({showAboutDialog: true})}}
+            userType={this.state.userObj.userType}/>
           <ModeBar 
             mode={this.state.mode} 
             changeMode={this.handleChangeMode}
