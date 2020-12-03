@@ -7,6 +7,10 @@ class AddCourse extends React.Component {
     constructor(props) {
         super(props);
 
+        this.numberRef = React.createRef();
+        this.semesterRef = React.createRef();
+        this.yearRef = React.createRef();
+
         this.state = {
             name: "",
             number: "",
@@ -54,7 +58,7 @@ class AddCourse extends React.Component {
 
         // Update the courseID if number, semester, or year has changed
         if (name === "number" || name === "semester" || name === "year"){
-            let newCourseId = this.state.number + this.state.semester + this.state.year;
+            let newCourseId = this.numberRef.current.value + this.semesterRef.current.value + this.yearRef.current.value;
             this.setState({id : newCourseId});
         }
 
@@ -89,7 +93,7 @@ class AddCourse extends React.Component {
                             Course Number:
                             <br/>
                             <input name="number" className="form-control form-center" type="text"
-                                value={this.state.number} onChange={this.handleChange}
+                                value={this.state.number} onChange={this.handleChange} ref={this.numberRef}
                                 placeholder="Course number" size="50" maxLength="50" required={true}/>
                         </label>
                         <p></p>
@@ -97,7 +101,7 @@ class AddCourse extends React.Component {
                             Term:
                             <br/>
                             <input name="semester" className="form-control form-center" type="text"
-                                value={this.state.semester} onChange={this.handleChange}
+                                value={this.state.semester} onChange={this.handleChange} ref={this.semesterRef}
                                 placeholder="Current term" size="50" maxLength="50" required={true}/>
                         </label>
                         <p></p>
@@ -105,7 +109,7 @@ class AddCourse extends React.Component {
                             Year:
                             <br/>
                             <input name="year" className="form-control form-center" type="text"
-                                value={this.state.year} onChange={this.handleChange}
+                                value={this.state.year} onChange={this.handleChange} ref={this.yearRef}
                                 placeholder="Current year" size="50" maxLength="50" required={true}/>
                         </label>
                         <p></p>

@@ -105,6 +105,21 @@ class CoursesPage extends React.Component {
 
     addCourse = async (courseData) => {
         console.log("Creating a new course: " + courseData);
+
+        const url = '/courses/' + this.props.userObj.id;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'POST',
+            body: JSON.stringify(courseData)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            console.log("Successfully added course");
+        } else {
+            console.log("Error adding course");
+        }
     }
 
     render() {
