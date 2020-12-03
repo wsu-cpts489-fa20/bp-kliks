@@ -59,7 +59,7 @@ class CreateQuestion extends React.Component {
 
         console.log(newQuestion);
 
-        // setTimeout(this.props.saveQuestion, 100, newQuestion);
+        setTimeout(this.props.saveQuestion, 100, newQuestion);
         
         this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
     }

@@ -17,6 +17,10 @@ class CreateSurvey extends React.Component {
     constructor(props) {
         super(props);
 
+        this.courseSelectionRef = React.createRef();
+        this.surveyTitleRef = React.createRef();
+        this.surveyDateRef = React.createRef();
+
         //Create date object for today, taking time zone into consideration
         let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);        
         this.state = {
@@ -31,7 +35,7 @@ class CreateSurvey extends React.Component {
 
     handleChange = (event) => {
         const name = event.target.name; 
-        this.setState({[name]: event.target.value});
+        this.setState({[name]: event.target.value}, this.checkDataValidity);
     }
 
     handleSubmit = (event) => {
@@ -73,6 +77,35 @@ class CreateSurvey extends React.Component {
      return courses;
     }
 
+    checkDataValidity = () => {
+      console.log("CUSTOM VALIDITY");
+
+      if(this.state.surveyTitle.length == 0){
+          console.log("CUSTOM VALIDITY: surveyTitleRef");
+          this.surveyTitleRef.current.setCustomValidity("Survey title missing.");
+      }
+      else{
+          this.surveyTitleRef.current.setCustomValidity("");
+      }
+
+      if(this.state.dropdownOfCourses.length == 0){
+          console.log("CUSTOM VALIDITY: surveyDateRef");
+          this.courseSelectionRef.current.setCustomValidity("Course is missing for the survey.");
+      }
+      else{
+          this.courseSelectionRef.current.setCustomValidity("");
+      }
+
+      let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);
+      if(this.state.date < today.toISOString().substr(0,10)){
+          console.log("CUSTOM VALIDITY: surveyDate");
+          this.surveyDateRef.current.setCustomValidity("Cannot create a survey for day in the past.");
+      }
+      else{
+          this.surveyDateRef.current.setCustomValidity("");
+      }        
+  }    
+
     render(){
         return(
             <form className="padded-page" onSubmit={this.handleSubmit}>
@@ -83,18 +116,23 @@ class CreateSurvey extends React.Component {
                 value={this.state.surveyTitle}
                 onChange={this.handleChange}
                 minLength={1}
+                ref={this.surveyTitleRef}
                   type="text"/>
               </label>
               <p></p>
               <label>
                 Date:
                 <input name="date" className="form-control form-center" 
-                  type="date" value={this.state.date} onChange={this.handleChange} />
+                  type="date" value={this.state.date} onChange={this.handleChange} 
+                  ref={this.surveyDateRef}/>
               </label>
               <p></p>
             <p></p>
             <label>Course:
-            <select name="dropdownOfCourses" value={this.state.dropdownOfCourses} onChange={this.handleChange} 
+            <select name="dropdownOfCourses" value={this.state.dropdownOfCourses} 
+              onChange={this.handleChange}
+              required={true}
+              ref={this.courseSelectionRef}
               className="form-control form-center">
                 {this.getCourses()}
             </select> 
