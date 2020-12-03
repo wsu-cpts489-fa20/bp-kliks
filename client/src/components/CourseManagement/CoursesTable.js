@@ -3,6 +3,7 @@
 import React from 'react';
 import AppMode from "./../../AppMode.js";
 import DeleteCourse from './DeleteCourse.js';
+import EditCourse from './EditCourse.js';
 
 class CoursesTable extends React.Component {
     constructor(props) {
@@ -22,9 +23,15 @@ class CoursesTable extends React.Component {
         this.props.changeMode(AppMode.STUDENTS);
     }
 
-    handleEditCourse = (courseId) => {
-        console.log("Editing " + courseId);
-        this.setState({courseId: courseId});
+    handleEditCourse = (id, name) => {
+        console.log("Editing " + id);
+        
+        this.setState({
+            courseId: id,
+            courseName: name
+        });
+
+        this.props.changeMode(AppMode.COURSES_EDIT);
     }
 
     handleDeleteCourse = (id, name) => {
@@ -52,6 +59,26 @@ class CoursesTable extends React.Component {
         this.props.changeMode(AppMode.COURSES);
     }
 
+    editCourse = async (courseInfo) => {
+        console.log(courseInfo);
+
+        // update course using route
+        const url = '/courses/' + this.props.userId + '/' + this.state.courseId;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'PUT',
+            body: JSON.stringify(courseInfo)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            console.log("Course successfully updated");
+        } else {
+            console.log("Error occurred while updating course");
+        }
+    }
+
     //renderTable -- render an HTML table displaying the rounds logged
     //by the current user and providing buttons to view/edit and delete each round.
     renderTable = () => {
@@ -71,7 +98,7 @@ class CoursesTable extends React.Component {
             {this.props.userType === "Instructor" ? 
                 <div className="instructor-buttons">
                     <td><button onClick={this.props.menuOpen ? null : () => 
-                        this.handleEditCourse(this.props.courses[r].courseID)}>
+                        this.handleEditCourse(this.props.courses[r].courseID, this.props.courses[r].courseName)}>
                             <span className="fa fa-pencil-square-o"></span></button></td>
                     <td><button onClick={this.props.menuOpen ? null : () => 
                         this.handleDeleteCourse(this.props.courses[r].courseID, this.props.courses[r].courseName)}>
@@ -117,6 +144,15 @@ class CoursesTable extends React.Component {
                 deleteCourse={this.deleteCourse}
                 courseId={this.state.courseId}
                 courseName={this.state.courseName} />
+                : null}
+
+                {this.props.mode === AppMode.COURSES_EDIT ?
+                <EditCourse
+                changeMode={this.props.changeMode}
+                editCourse={this.editCourse}
+                courseName={this.state.courseName}
+                courseId={this.state.courseId}
+                userId={this.props.userId} />
                 : null}
             </div>
         )

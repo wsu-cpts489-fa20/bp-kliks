@@ -19,6 +19,7 @@ modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
 modeTitle[AppMode.COURSES_CREATE] = "Add Course";
 modeTitle[AppMode.COURSES_DELETE] = "Delete Course";
+modeTitle[AppMode.COURSES_EDIT] = "Edit Course";
 modeTitle[AppMode.STUDENTS] = "Students";
 modeTitle[AppMode.STUDENTS_CREATE] = "Add a Student";
 modeTitle[AppMode.STUDENTS_UPLOAD] = "Students";
@@ -43,6 +44,7 @@ modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
 modeToPage[AppMode.COURSES] = CoursesPage;
 modeToPage[AppMode.COURSES_CREATE] = CoursesPage;
 modeToPage[AppMode.COURSES_DELETE] = CoursesPage;
+modeToPage[AppMode.COURSES_EDIT] = CoursesPage;
 
 /* Students Pages, students are tied to courses */
 modeToPage[AppMode.STUDENTS] = CoursesPage;

@@ -15,6 +15,7 @@ const AppMode = {
     COURSES: "CoursesMode",
     COURSE_CREATE: "AddCourses",
     COURSES_DELETE: "DeleteCourses",
+    COURSES_EDIT: "DeleteCourses",
 
     STUDENTS: "StudentsMode",
     STUDENTS_UPLOAD: "UploadStudents",

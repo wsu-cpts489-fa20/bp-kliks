@@ -126,9 +126,9 @@ class CoursesPage extends React.Component {
         return (
             <div className="padded-page">
                 <center>
-                <h1>{this.props.mode === AppMode.COURSES || this.props.mode === AppMode.COURSES_DELETE ? "Courses" : "Students in " + this.state.courseName}</h1>
+                <h1>{this.props.mode === AppMode.COURSES || this.props.mode === AppMode.COURSES_DELETE || this.props.mode === AppMode.COURSES_EDIT || this.props.mode === AppMode.COURSES_CREATE ? "Courses" : "Students in " + this.state.courseName}</h1>
 
-                {this.props.mode === AppMode.COURSES || this.props.mode === AppMode.COURSES_DELETE ?
+                {this.props.mode === AppMode.COURSES || this.props.mode === AppMode.COURSES_DELETE || this.props.mode === AppMode.COURSES_EDIT || this.props.mode === AppMode.COURSES_CREATE ?
                     <CoursesTable 
                     courses={this.props.userObj.courses}
                     userType={this.props.userObj.userType}

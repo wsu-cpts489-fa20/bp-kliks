@@ -3,7 +3,7 @@
 import React from 'react';
 import AppMode from "./../../AppMode.js";
 
-class AddCourse extends React.Component {
+class EditCourse extends React.Component {
     constructor(props) {
         super(props);
 
@@ -20,8 +20,38 @@ class AddCourse extends React.Component {
             instructorFirstName: "",
             instructorLastName: "",
             enrollmentLimit: "",
+            currentlyEnrolled: "",
             notes: "",
         };
+        this.componentDidMount = this.componentDidMount.bind(this);
+    }
+
+    //componentDidMount -- grab the course data from the database and push them into the state.
+    async componentDidMount() {
+            //obtain current course data from database and push into state
+            const url = "/courses/" + this.props.userId;
+            const res = await fetch(url);
+            const json = await res.json();
+            const userData = JSON.parse(json);
+
+            let currCourse = userData.filter(function (course) {
+                return course.courseID === this.props.courseId;
+            }.bind(this))
+
+            currCourse = currCourse[0];
+
+            this.setState({
+                instructorFirstName: currCourse.courseInstructorFirstName,
+                instructorLastName: currCourse.courseInstructorLastName,
+                name: currCourse.courseName,
+                number: currCourse.courseNumber,
+                year: currCourse.courseYear,
+                semester: currCourse.courseSemester,
+                enrollmentLimit: currCourse.courseEnrollmentLimit,
+                currentlyEnrolled: currCourse.courseCurrentlyEnrolled,
+                id: currCourse.courseID,
+                notes: currCourse.courseNotes
+            });
     }
 
     // handles the modal closure
@@ -31,7 +61,7 @@ class AddCourse extends React.Component {
     }
 
     // handles create button click
-    handleCreateSubmit = (event) => {
+    handleEditSubmit = (event) => {
         event.preventDefault();
 
         const newCourse = {
@@ -43,12 +73,12 @@ class AddCourse extends React.Component {
             courseYear: this.state.year,
             courseSemester: this.state.semester,
             courseEnrollmentLimit: this.state.enrollmentLimit,
-            courseCurrentlyEnrolled: "0",
+            courseCurrentlyEnrolled: this.state.currentlyEnrolled,
             courseID: this.state.id,
             courseNotes: this.state.notes
         };
 
-        this.props.addCourse(newCourse);
+        this.props.editCourse(newCourse);
         this.props.changeMode(AppMode.COURSES);
     }
 
@@ -72,15 +102,13 @@ class AddCourse extends React.Component {
                 <div id="AddCourseModal" className="modal-content">
                     <div className="modal-header">
                     <center>
-                        <h3 className="modal-title"><b>Create a Course</b></h3>
+                        <h3 className="modal-title"><b>Edit {this.props.courseName}</b></h3>
                     </center>
                     <button id="modalClose" className="modal-close" onClick={this.handleCloseModal}>
                         &times;</button>
                     </div>
                     <div className="modal-body">
-                    <p>Create a new course to send surveys to. After you have created a course, you can add students to it.<br />
-                    </p>
-                    <form onSubmit={this.handleCreateSubmit}>
+                    <form onSubmit={this.handleEditSubmit}>
                         <label>
                             Course Name:
                             <br/>
@@ -146,7 +174,7 @@ class AddCourse extends React.Component {
                         <p></p>
                         <div className="modal-footer">
                             <button role="submit" className="btn btn-primary">
-                            Create</button>
+                            Edit</button>
                             <button className="btn btn-secondary" onClick={this.handleCloseModal}>
                             Cancel</button>
                         </div>
@@ -159,4 +187,4 @@ class AddCourse extends React.Component {
     }
 }
 
-export default AddCourse;
+export default EditCourse;
