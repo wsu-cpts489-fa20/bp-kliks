@@ -167,13 +167,6 @@ class CoursesPage extends React.Component {
                 uploadStudents={this.uploadStudents}
                 changeMode={this.props.changeMode} /> : null}
 
-                {this.props.mode === AppMode.STUDENTS ?
-                <button type="button"
-                onClick={ () => { this.props.changeMode(AppMode.COURSES);} }
-                className="backbtn">
-                    Back
-                </button> : null}
-
                 {this.props.mode === AppMode.COURSES_CREATE ?
                 <AddCourse
                 changeMode={this.props.changeMode}
