@@ -9,6 +9,7 @@ import StudentsTable from './StudentsTable.js';
 import CoursesTable from './CoursesTable';
 import FloatingButton from './../FloatingButton.js';
 import UploadStudents from './UploadStudents.js';
+import AddCourse from './AddCourse.js';
 
 class CoursesPage extends React.Component {
 
@@ -51,12 +52,13 @@ class CoursesPage extends React.Component {
 
     // handle click on the add course button
     handleAddCourse = async () => {
-        console.log("Adding a course for user: " + this.props.userObj.id);
+        this.props.changeMode(AppMode.COURSES_CREATE);
     }
 
     // handle click on the add students button
     handleAddStudent = () => {
         //this.handleChangeMode(AppMode.STUDENTS_CREATE);
+        console.log("Adding a student");
         this.props.changeMode(AppMode.STUDENTS_CREATE);
     }
 
@@ -99,6 +101,10 @@ class CoursesPage extends React.Component {
     // handle adding a student to the currently selected course
     addStudent = async (newStudent) => {
         console.log("Adding a student for course: " + this.state.courseId);
+    }
+
+    addCourse = async (courseData) => {
+        console.log("Creating a new course: " + courseData);
     }
 
     render() {
@@ -150,6 +156,13 @@ class CoursesPage extends React.Component {
                 className="backbtn">
                     Back
                 </button> : null}
+
+                {this.props.mode === AppMode.COURSES_CREATE ?
+                <AddCourse
+                changeMode={this.props.changeMode}
+                addCourse={this.addCourse}
+                instructorId={this.props.userObj.id} />
+                : null}
 
             </div>
         );

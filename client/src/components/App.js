@@ -17,6 +17,7 @@ modeTitle[AppMode.ROUNDS] = "My Rounds";
 modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
+modeTitle[AppMode.COURSES_CREATE] = "Courses";
 modeTitle[AppMode.STUDENTS] = "Students";
 modeTitle[AppMode.STUDENTS_CREATE] = "Add a Student";
 modeTitle[AppMode.STUDENTS_UPLOAD] = "Students";

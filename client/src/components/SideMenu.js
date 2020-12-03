@@ -55,7 +55,7 @@ renderModeMenuItems = () => {
       );
     break;
     case AppMode.COURSES:
-    case AppMode.COURSE_CREATE:
+    case AppMode.COURSES_CREATE:
       if (this.props.userType === "Instructor"){
         return(
           <div>
@@ -66,7 +66,7 @@ renderModeMenuItems = () => {
               <span className="fa fa-folder-open" id="viewCoursesLink"></span>&nbsp;View Courses</a>
           <a className="sidemenu-item" onClick={(e) => { 
           e.preventDefault();
-          this.props.changeMode(AppMode.COURSE_CREATE);
+          this.props.changeMode(AppMode.COURSES_CREATE);
           }}>
               <span className="fa fa-plus" id="addCourseLink"></span>&nbsp;Add a Course</a>
           </div>
