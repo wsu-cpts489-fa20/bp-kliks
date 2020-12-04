@@ -14,10 +14,24 @@ class SurveyManagementPage extends React.Component {
             questions: [],
             responses: [],
             surveys : [],
-            errorMsg : ""
+            errorMsg : "",
+            deleteId: "",
+            editId: ""
         };
 
         this.getQuestions();
+    }
+
+    //setDeleteId -- Capture in this.state.deleteId the unique id of the item
+    //the user is considering deleting.
+    setDeleteId = (val) => {
+        this.setState({deleteId: val});
+    }
+
+    //setEditId -- Capture in this.state.editId the unique id of the item
+    //the user is considering editing.
+    setEditId = (val) => {
+        this.setState({editId: val});
     }
 
     /*
@@ -64,6 +78,29 @@ class SurveyManagementPage extends React.Component {
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             console.log("Question Updated!");
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        }
+    }
+
+    //deleteQuestion -- Delete the current user's question uniquely identified by
+    //this.state.deleteId, delete from the database, and reset deleteId to empty.
+    deleteQuestion = async () => {
+        const url = '/questions/' + this.props.userObj.id + '/' + 
+            this.props.userObj.entries[this.state.deleteId]._id;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'DELETE'
+            //body: JSON.stringify()
+        }); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            alert("An error occurred when attempting to delete question in database: " 
+            + msg);
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        } else {
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
@@ -179,17 +216,19 @@ class SurveyManagementPage extends React.Component {
                     userObj={this.props.userObj}
                     surveys={this.state.surveys}
                     changeMode={this.props.changeMode}
-                    saveQuestion={this.CreateQuestion}
+                    saveQuestion={this.saveQuestion}
                     >
                     </CreateQuestion>
                 );
             case AppMode.SURVEY_MANAGEMENT_EDIT:
+                let thisEntry = {...this.props.userObj.questions[this.state.editId]}
+                thisEntry.date = thisEntry.date.substr(0,10);
                 return (
                     <CreateQuestion
-                    userObj={this.props.userObj}
+                    startData={thisEntry}
                     surveys={this.state.surveys}
                     changeMode={this.props.changeMode}
-                    saveQuestion={this.CreateQuestion}
+                    editQuestion={this.editQuestion}
                     >
                     </CreateQuestion>
                 );
@@ -205,7 +244,11 @@ class SurveyManagementPage extends React.Component {
                 );
             case AppMode.SURVEY_MANAGEMENT_SEARCH:
                 return (
-                    <SearchQestions>
+                    <SearchQestions
+                    setEditId={this.setEditId}
+                    setDeleteId={this.setDeleteId}
+                    deleteQuestion={this.deleteQuestion}
+                    >
                     </SearchQestions>
                 );
             case AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS:
