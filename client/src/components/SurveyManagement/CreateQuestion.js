@@ -4,7 +4,6 @@ import FreeResponse from './AnswerTypes/FreeResponse';
 import MultipleChoice from './AnswerTypes/MultipleChoice';
 import AppMode from '../../AppMode';
 import { v4 as uuid } from 'uuid';
-import Switch from 'react-input-switch';
 
 
 const answerTypes = {};

@@ -8,7 +8,7 @@ class SideMenu extends React.Component {
     if(AppMode.SURVEY_MANAGEMENT === mode|| AppMode.SURVEY_MANAGEMENT_CREATE === mode || 
       AppMode.SURVEY_MANAGEMENT_RESPONSES === mode 
       || AppMode.SURVEY_MANAGEMENT_SEARCH === mode
-      || AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS){
+      || AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS === mode){
       return AppMode.SURVEY_MANAGEMENT;
     } else {
       return mode;
