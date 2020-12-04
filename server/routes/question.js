@@ -31,7 +31,7 @@ router.post('/questions/:surveyID',  async (req, res, next) => {
           res.status(400).send("Unexpected error occurred when adding question to"+
             " database. question was not added.");
         } else {
-          return res.status(201).send("New Question for '" + 
+          return res.status(200).send("New Question for '" + 
           req.params.surveyID + "' successfully created.");
         }
     

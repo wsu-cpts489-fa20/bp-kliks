@@ -17,6 +17,7 @@ class MultipleChoice extends React.Component {
         };
     }
 
+    // Handles the event when the user clicks on addAnswer
     onAddAnswer = (event) => {
       event.preventDefault();
       var answers = this.state.answers;
@@ -30,17 +31,9 @@ class MultipleChoice extends React.Component {
         }
       );
 
-      // answers.push(
-      //   <input placeholder="Input answer..." name={answers.length} id={answers.length} aria-label="Username" aria-describedby="basic-addon1" className="form-control"/>        
-      // );
-      
       this.setState({
         answers : answers
       });
-      
-      console.log("Adding another answer");
-      
-      console.log(answers);
 
       let strAnswers = answers.map((element) => {
         return element.value;
@@ -49,6 +42,7 @@ class MultipleChoice extends React.Component {
       this.props.setAnswer(strAnswers);
     }
 
+    // Handles the event when the user clicks on removeAnswer
     onRemoveAnswer = (event) => {
       event.preventDefault();
       var answers = this.state.answers;
@@ -60,9 +54,6 @@ class MultipleChoice extends React.Component {
         this.setState({
           answers : answers
         });
-        console.log("Remove another answer");
-
-        console.log(answers);
 
         let strAnswers = answers.map((element) => {
           return element.value;
@@ -74,6 +65,7 @@ class MultipleChoice extends React.Component {
       }
     }
 
+    // Gets the answers and creates input elements for them
     getAnswers = () => {
       var answers = [];
 
@@ -85,6 +77,7 @@ class MultipleChoice extends React.Component {
       return answers;
     }
 
+    // Handles the text change of the input elements
     onAnswerTextChange = (event) => {
       var answers = this.state.answers;
 
@@ -95,8 +88,6 @@ class MultipleChoice extends React.Component {
       });
 
       this.props.setAnswer(strAnswers);
-
-      console.log("MC Answer Value changed: " + strAnswers.toString());
       this.setState({
         answers : answers
       });

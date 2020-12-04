@@ -11,15 +11,12 @@ class FileUpload extends React.Component {
           selectedOptions : []
         }
     }
-
-
-
     
+    // Handle the file changes
     onFileChange = (event) => {
 
       if(event.target.value.length == 0)
       {
-        console.log("this.state.file");
         this.props.setAnswer([this.result]);
         this.setState({file:  ""});
       }
@@ -31,14 +28,11 @@ class FileUpload extends React.Component {
         reader.readAsDataURL(this.fileRef.current.files[0]);
         reader.addEventListener("load",function() {
             self.props.setAnswer([this.result]);
-            console.log("SUCCESS");
-            console.log(this.result);
             self.setState({file:  this.result});
           });
         }
 
         this.props.setAcceptableAnswerTypes(this.state.selectedOptions);
-        console.log(this.state.file);
     }
 
     render(){

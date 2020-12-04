@@ -10,6 +10,7 @@ class FreeResponse extends React.Component {
         }
     }
 
+    // Handle the response change
     onResponseChange = (event) => {
         this.props.setAnswer([event.target.value]);
         this.setState({
