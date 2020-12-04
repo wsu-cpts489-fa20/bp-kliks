@@ -38,9 +38,6 @@ class SurveyManagementPage extends React.Component {
         Save a question to the mongoDB 
     */
     saveQuestion = async (surveyId, newQuestion) => {
-        console.log("SURVEYID and QuestionObj");
-        console.log(surveyId);
-        console.log(newQuestion);
         const url = '/questions/' + surveyId;
         const res = await fetch(url, {
             headers: {
@@ -52,11 +49,11 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            console.log("Question NOT Created!");
+            this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             this.setState({errorMsg: ""});
-            console.log("Question Created!");
+            this.getQuestions();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
@@ -112,11 +109,7 @@ class SurveyManagementPage extends React.Component {
         Save a survey to the mongoDB 
     */
     saveSurvey = async (surveyID, newSurvey) => {
-        console.log("SURVEYID and SurveyObj");
-        console.log(surveyID);
-        console.log(newSurvey);
         const url = '/surveys/' + surveyID;
-        console.log(url);
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -126,12 +119,12 @@ class SurveyManagementPage extends React.Component {
             body: JSON.stringify(newSurvey)}); 
         const msg = await res.text();
         if (res.status != 200) {
-            console.log("Survey Creation FAILED");
             this.setState({errorMsg: msg});
+            this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
-            console.log("Survey Creation SUCCESS");
             this.setState({errorMsg: ""});
+            this.getQuestions();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
@@ -147,9 +140,6 @@ class SurveyManagementPage extends React.Component {
             return course.courseID;
         });
 
-        console.log("Courses:");
-        console.log(courses);
-
         if(courses.length == 0){
             courses = [""]
         }
@@ -159,8 +149,6 @@ class SurveyManagementPage extends React.Component {
         if (response.status == 200) {
             response = await response.json();
             const obj = JSON.parse(response);    
-            console.log("GET /responses/"+ this.props.userObj.id+"/"+courses);
-            console.log(obj);
         
             var getAllResponses = (questions) => {
                 if(questions.length == 0){
@@ -194,8 +182,6 @@ class SurveyManagementPage extends React.Component {
               }
     
             var data = getAllResponses(obj);
-            console.log("FRESH DATA");
-            console.log(obj);
             this.setState({
               surveys : obj,
               questions : data[1],
@@ -233,7 +219,11 @@ class SurveyManagementPage extends React.Component {
                     surveys={this.state.surveys}
                     mode={this.props.mode}
                     changeMode={this.props.changeMode}
+<<<<<<< HEAD
                     saveQuestion={this.editQuestion}
+=======
+                    saveQuestion={this.saveQuestion}
+>>>>>>> 517103b4a570e8d2cdf15e4232089baaaa77e529
                     >
                     </CreateQuestion>
                 );

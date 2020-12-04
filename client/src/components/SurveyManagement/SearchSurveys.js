@@ -9,7 +9,7 @@ class SearchSurveys extends React.Component {
       };
     }
 
-    
+    // Renders the survey table with the surveys for the user.
     renderTable = (surveys) => {
         let table = [];
         for (let r = 0; r < this.props.surveys.length; r++) {
@@ -32,22 +32,27 @@ class SearchSurveys extends React.Component {
         return table;
     }
 
+    // Sorts the surveys by the courseID
     sortByCourseID = () => {
         console.log("sortByCourseID");
     }
 
+    // Sorts the surveys by the Date the survey was created
     sortByDate = () => {
         console.log("sortByDate");
     }
 
+    // Sorts the surveys by the surveyID
     sortBySurveyID = () => {
         console.log("sortBySurveyID");
     }
 
+    // Sorts the surveys by the number of questions the survey has
     sortByNumberOfQuestions = () => {
         console.log("sortByNumberOfQuestions");
     }
 
+    // Sorts the surveys by the the survey title
     sortBySurveyTitle = () => {
         console.log("sortBySurveyTitle");
     }

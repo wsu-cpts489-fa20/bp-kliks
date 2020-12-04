@@ -13,8 +13,7 @@ answerTypes["shortAnswer"] = FreeResponse;
 answerTypes["fileUpload"] = FileUpload;
 
 class CreateQuestion extends React.Component {
-
-    //Initialize a Rounds object based on local storage
+    //  constructor
     constructor(props) {
         super(props);
 
@@ -24,6 +23,7 @@ class CreateQuestion extends React.Component {
         this.surveySelectionRef = React.createRef();
         this.dateRef = React.createRef();
 
+<<<<<<< HEAD
         console.log(today);
         console.log(this.props.surveys.length)
         if (this.props.mode == AppMode.SURVEY_MANAGEMENT_CREATE)
@@ -48,17 +48,31 @@ class CreateQuestion extends React.Component {
             this.state.submitIcon = "fa fa-edit";
             this.state.submitLabel = "Update Question";
         }
+=======
+        this.state = {
+            dropdownOfSurveys : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
+            numberOfSurveys : this.props.surveys.length,
+            date: today.toISOString().substr(0,10),
+            answerType : "shortAnswer",
+            question: "",
+            title : "",
+            answers : [],
+            active : false,
+            acceptableAnswerTypes : [],
+            surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" 
+        }     
+>>>>>>> 517103b4a570e8d2cdf15e4232089baaaa77e529
     }
 
+    // On change handler for the form elements
     handleChange = (event) => {
         const name = event.target.name; 
         this.setState({[name]: event.target.value}, this.checkDataValidity);
     }
 
+    // Event handler for when the user clicks on Add Survey
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Create Question");
-
         var newQuestion = {
             questionID: uuid(),
             questionTitle: this.state.title,
@@ -70,56 +84,60 @@ class CreateQuestion extends React.Component {
             responses:  []
         }
 
-        console.log(newQuestion);
-
-        setTimeout(this.props.saveQuestion, 100, newQuestion);
-        
+        setTimeout(this.props.saveQuestion, 100, this.state.surveyID, newQuestion);
         this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
     }
 
+    // Handles when the user clicks on add survey [If there are no sureys]
     onAddSurvey = (event) => {
         event.preventDefault();
-
         this.props.changeMode(AppMode.SURVEY_MANAGEMENT_CREATE_SURVEY)
-        // this.setState({
-        //   addSurvey : !this.state.addSurvey
-        // });
     }
 
+    // Sets the acceptable types for the file type [if the answer has to be a file upload]
     setAcceptableAnswerTypes = (newTypes) => {
         this.setState({
             acceptableAnswerTypes: newTypes
         });
     }
 
+    // Creates the dropdown options [Surveys] 
     getSurveys = () => {
         var surveys = [];
   
         for(var index = 0; index < this.props.surveys.length; index++)
         {
-          surveys.push(<option id={this.props.surveys[index].surveyID} value={this.props.surveys[index].surveyTitle}>{this.props.surveys[index].surveyTitle}</option>);
+          surveys.push(<option name={this.props.surveys[index].surveyID} key={this.props.surveys[index].surveyID} id={this.props.surveys[index].surveyID} value={this.props.surveys[index].surveyID}>{this.props.surveys[index].surveyTitle}</option>);
         }
 
        return surveys;
     }
 
+    // sets the value of the answer
     setAnswer = (newAnswer) => {
         this.setState({
             answers : newAnswer
         });
     }
 
+    // Handles the change event for the switch button
     switchHandler = () => {
         this.setState({
             active : !this.state.active
         });
     }
 
-    checkDataValidity = () => {
-        console.log("CUSTOM VALIDITY");
+    // Handles the changes that occur to the dropdown menu 
+    handleDropdownChange = (event) => {
+        const name = event.target.name; 
+        this.setState({[name]: event.target.value,
+          surveyID : event.target.value
+        }, this.checkDataValidity);        
+    }
 
-        if(this.state.dropdownOfSurveys.length == 0){
-            console.log("CUSTOM VALIDITY: surveySelectionRef");
+    // data validator for the form elements
+    checkDataValidity = () => {
+        if(this.state.dropdownOfSurveys == ""){
             this.surveySelectionRef.current.setCustomValidity("No Survey selected.");
         }
         else{
@@ -127,7 +145,6 @@ class CreateQuestion extends React.Component {
         }
 
         if(this.state.question.length == 0){
-            console.log("CUSTOM VALIDITY: questionTextRef");
             this.questionTextRef.current.setCustomValidity("Question does not have a any text.");
         }
         else{
@@ -135,7 +152,6 @@ class CreateQuestion extends React.Component {
         }
 
         if(this.state.title.length == 0){
-            console.log("CUSTOM VALIDITY: questionTitleRef");
             this.questionTitleRef.current.setCustomValidity("Question does not have a title.");
         }
         else{
@@ -144,7 +160,6 @@ class CreateQuestion extends React.Component {
 
         let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);
         if(this.state.date < today.toISOString().substr(0,10)){
-            console.log("CUSTOM VALIDITY: dateRef");
             this.dateRef.current.setCustomValidity("Cannot create a question for the past.");
         }
         else{
@@ -204,10 +219,14 @@ class CreateQuestion extends React.Component {
                         <label
                             style={{fontSize: "20px"}}
                         >Survey:
-                        <select name="dropdownOfSurveys" value={this.state.dropdownOfSurveys} onChange={this.handleChange} 
-                        className="form-control form-center"
-                        ref={this.surveySelectionRef}
-                        required={true}
+                        <select name="dropdownOfSurveys"
+                            id={"dropdownOfSurveys"}
+                            value={this.state.dropdownOfSurveys}
+                            onChange={this.handleDropdownChange}
+                            onBlur={this.handleDropdownChange}
+                            className="form-control form-center"
+                            ref={this.surveySelectionRef}
+                            required={true}
                         >
                             {this.getSurveys()}
                         </select> 

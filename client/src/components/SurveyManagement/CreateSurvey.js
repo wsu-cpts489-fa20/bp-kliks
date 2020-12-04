@@ -36,32 +36,29 @@ class CreateSurvey extends React.Component {
         }     
     }
 
+    // Handles any change that has been made
     handleChange = (event) => {
         const name = event.target.name; 
         this.setState({[name]: event.target.value}, this.checkDataValidity);
     }
 
+    // Handles creation of the new Survey
     handleSubmit = (event) => {
         event.preventDefault();
-
-        console.log("Create Survey");
-
         if(this.state.dropdownOfCourses.length == 0){
-          console.log("Do not have a course selected!");
         }else{
           var newSurvey = {
             surveyTitle : this.state.surveyTitle,
             surveyDate : this.state.date,
-            courseID : this.state.courseID  // this.state.dropdownOfCourses
+            courseID : this.state.courseID
           };
 
-          console.log("Course ID = " + newSurvey.courseID);
           setTimeout(this.props.saveSurvey, 100, uuid(), newSurvey);
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
 
-
+    // Gets the courses for the dropdown
     getCourses = () => {
       var courses = [];
 
@@ -69,30 +66,23 @@ class CreateSurvey extends React.Component {
       {
         const id = this.props.userObj.courses[index].courseSemester + "-"  + this.props.userObj.courses[index].courseYear +
         ": " + this.props.userObj.courses[index].courseName + "  " + this.props.userObj.courses[index].courseNumber;
-        courses.push(<option id={this.props.userObj.courses[index].courseID} value={id}>{id}</option>);
+        courses.push(<option id={this.props.userObj.courses[index].courseID} value={this.props.userObj.courses[index].courseID}>{id}</option>);
       }
 
-      // let courses = this.props.userObj.courses.map((course) => {
-      //   return {
-      //     courseID : course.courseID,
-
-      //   };
-      // });
      return courses;
     }
 
+    // Handles the change for the dropdown option
     handleDropdownChange = (event) => {
       const name = event.target.name; 
       this.setState({[name]: event.target.value,
-        courseID : event.target.id
+        courseID : event.target.value
       }, this.checkDataValidity);
     }
 
+    // Checks that the data elements are filled and with the correct information.
     checkDataValidity = () => {
-      console.log("CUSTOM VALIDITY");
-
       if(this.state.surveyTitle.length == 0){
-          console.log("CUSTOM VALIDITY: surveyTitleRef");
           this.surveyTitleRef.current.setCustomValidity("Survey title missing.");
       }
       else{
@@ -100,8 +90,6 @@ class CreateSurvey extends React.Component {
       }
 
       if(this.state.dropdownOfCourses == ""){
-          console.log(this.state.dropdownOfCourses);
-          console.log("CUSTOM VALIDITY: surveyDateRef");
           this.courseSelectionRef.current.setCustomValidity("Course is missing for the survey.");
       }
       else{
@@ -110,7 +98,6 @@ class CreateSurvey extends React.Component {
 
       let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);
       if(this.state.date < today.toISOString().substr(0,10)){
-          console.log("CUSTOM VALIDITY: surveyDate");
           this.surveyDateRef.current.setCustomValidity("Cannot create a survey for day in the past.");
       }
       else{
