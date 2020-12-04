@@ -4,9 +4,11 @@ const AppMode = {
     LOGIN: "LoginMode",
 
     SURVEY_MANAGEMENT: "SurveyMode",
-    SURVEY_MANAGEMENT_RESPONSES: "SurveyModeResponses",
+    SURVEY_MANAGEMENT_RESPONSES: "SurveyModeResponses", //Searching Responses
     SURVEY_MANAGEMENT_CREATE: "SurveyModeCreate",
-    SURVEY_MANAGEMENT_SEARCH: "SurveyModeSearch",
+    SURVEY_MANAGEMENT_CREATE_SURVEY : "SurveyModeCreateSurvey",
+    SURVEY_MANAGEMENT_SEARCH: "SurveyModeSearch", //Searching Questions
+    SURVEY_MANAGEMENT_SEARCH_SURVEYS : "SurveyModeSurveysSearch", //Searching Surveys
 
     ROUNDS: "RoundsMode",
     ROUNDS_LOGROUND: "RoundsMode-LogRound",

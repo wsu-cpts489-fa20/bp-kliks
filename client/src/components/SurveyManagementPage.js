@@ -4,6 +4,8 @@ import ActiveQuestions from './SurveyManagement/ActiveQuestions.js'
 import SubmittedResponse from './SurveyManagement/SubmittedResponse.js'
 import AppMode from './../AppMode.js'
 import SearchQestions from './SurveyManagement/SearchQuestions.js'
+import CreateQuestion from './SurveyManagement/CreateQuestion.js';
+import SearchSurveys from './SurveyManagement/SearchSurveys.js';
 
 class SurveyManagementPage extends React.Component {
     constructor(props){
@@ -11,10 +13,66 @@ class SurveyManagementPage extends React.Component {
         this.state = {
             questions: [],
             responses: [],
-            surveys : []
+            surveys : [],
+            errorMsg : ""
         };
 
         this.getQuestions();
+    }
+
+    /*
+        Save a question to the mongoDB 
+    */
+    saveQuestion = async (surveyId, newQuestion) => {
+        console.log("SURVEYID and QuestionObj");
+        console.log(surveyId);
+        console.log(newQuestion);
+        const url = '/questions/' + surveyId;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'POST',
+            body: JSON.stringify(newQuestion)});
+        const msg = await res.text();
+        if (res.status != 200) {
+            this.setState({errorMsg: msg});
+            console.log("Question NOT Created!");
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        } else {
+            this.setState({errorMsg: ""});
+            console.log("Question Created!");
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        }
+    }
+
+    /*
+        Save a survey to the mongoDB 
+    */
+    saveSurvey = async (surveyID, newSurvey) => {
+        console.log("SURVEYID and SurveyObj");
+        console.log(surveyID);
+        console.log(newSurvey);
+        const url = '/surveys/' + surveyID;
+        console.log(url);
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'POST',
+            body: JSON.stringify(newSurvey)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            console.log("Survey Creation FAILED");
+            this.setState({errorMsg: msg});
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        } else {
+            console.log("Survey Creation SUCCESS");
+            this.setState({errorMsg: ""});
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        }
     }
 
     /* 
@@ -23,49 +81,66 @@ class SurveyManagementPage extends React.Component {
     */     
     getQuestions = async () => {
 
-        let response = await fetch("/responses/" + this.props.userObj.id+"/"+["cpts489Fall2020"]);
-        response = await response.json();
-        const obj = JSON.parse(response);    
-        console.log("GET /responses/"+ this.props.userObj.id);
-        console.log(obj);
-    
-        var getAllResponses = (questions) => {
-            if(questions.length == 0){
-              return [];
-            }
-        
-            var responses = [];
-            var newquestions = [];
-            questions.forEach((survey) => {
-              survey.questions.forEach((question) => {
-                newquestions.push({
-                    questionID: question.questionID,
-                    surveyID: survey.surveyID,
-                    responses: question.responses,
-                    survey: survey,
-                    question: question
-                  });
-                question.responses.forEach((response) => {
-                    responses.push({
-                      questionID: question.questionID,
-                      surveyID: survey.surveyID,
-                      response: response,
-                      survey: survey,
-                      question: question,
-                      responseType: response.students.length > 1 ? "Group" : "Individual"
-                    });
-                });
-              });
-            });
-            return [responses, newquestions];
-          }
-
-        var data = getAllResponses(obj);
-        this.setState({
-          surveys : obj,
-          questions : data[1],
-          responses : data[0]
+        var courses = [];
+        courses = this.props.userObj.courses.map((course) => {
+            return course.courseID;
         });
+
+        console.log("Courses:");
+        console.log(courses);
+
+        if(courses.length == 0){
+            courses = [""]
+        }
+
+        let response = await fetch("/responses/" + this.props.userObj.id+"/"+JSON.stringify(courses)); //["cpts489Fall2020"]
+    
+        if (response.status == 200) {
+            response = await response.json();
+            const obj = JSON.parse(response);    
+            console.log("GET /responses/"+ this.props.userObj.id+"/"+courses);
+            console.log(obj);
+        
+            var getAllResponses = (questions) => {
+                if(questions.length == 0){
+                  return [];
+                }
+            
+                var responses = [];
+                var newquestions = [];
+                questions.forEach((survey) => {
+                  survey.questions.forEach((question) => {
+                    newquestions.push({
+                        questionID: question.questionID,
+                        surveyID: survey.surveyID,
+                        responses: question.responses,
+                        survey: survey,
+                        question: question
+                      });
+                    question.responses.forEach((response) => {
+                        responses.push({
+                          questionID: question.questionID,
+                          surveyID: survey.surveyID,
+                          response: response,
+                          survey: survey,
+                          question: question,
+                          responseType: response.students.length > 1 ? "Group" : "Individual"
+                        });
+                    });
+                  });
+                });
+                return [responses, newquestions];
+              }
+    
+            var data = getAllResponses(obj);
+            console.log("FRESH DATA");
+            console.log(obj);
+            this.setState({
+              surveys : obj,
+              questions : data[1],
+              responses : data[0]
+            });
+        }
     }
 
     render() {
@@ -79,13 +154,37 @@ class SurveyManagementPage extends React.Component {
                 );
             case AppMode.SURVEY_MANAGEMENT_CREATE:
                 return (
-                    <CreateSurvey>
+                    <CreateQuestion
+                    userObj={this.props.userObj}
+                    surveys={this.state.surveys}
+                    changeMode={this.props.changeMode}
+                    saveQuestion={this.CreateQuestion}
+                    >
+                    </CreateQuestion>
+                );
+            case AppMode.SURVEY_MANAGEMENT_CREATE_SURVEY:
+                return (
+                    <CreateSurvey 
+                    userObj={this.props.userObj}
+                    surveys={this.state.surveys}
+                    changeMode={this.props.changeMode}
+                    saveSurvey={this.saveSurvey}
+                    >
                     </CreateSurvey>
                 );
             case AppMode.SURVEY_MANAGEMENT_SEARCH:
                 return (
                     <SearchQestions>
                     </SearchQestions>
+                );
+            case AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS:
+                return (
+                    <SearchSurveys
+                    surveys={this.state.surveys}
+                    getQuestions={this.getQuestions}
+                    menuOpen={this.props.menuOpen}
+                    >
+                    </SearchSurveys>
                 );
             case AppMode.SURVEY_MANAGEMENT_RESPONSES:
                 return (
@@ -94,6 +193,7 @@ class SurveyManagementPage extends React.Component {
                     getQuestions={this.getQuestions}
                     questions={this.state.questions}
                     responses={this.state.responses}
+                    menuOpen={this.props.menuOpen}
                     >
                     </SubmittedResponse>
                 );
