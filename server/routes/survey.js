@@ -51,7 +51,7 @@ router.get('/surveys/:surveyId', async(req, res, next) => {
           courseID: req.body.courseID,
           questions: []
         }).save();
-        return res.status(201).send("New survey for '" + 
+        return res.status(200).send("New survey for '" + 
           req.params.surveyID + "' successfully created.");
       }
     } catch (err) {

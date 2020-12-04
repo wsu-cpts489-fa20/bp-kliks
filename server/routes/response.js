@@ -8,9 +8,10 @@ var Survey = require('../schemas/survey');
 router.get('/responses/:userId/:courses', async(req, res, next) => {
     console.log("in /users route (GET) with userId = " + 
       JSON.stringify(req.params.userId) + "  and courses=" + JSON.stringify(req.params.courses));
-
+    var courses = JSON.parse(req.params.courses);
+    console.log(req.params.courses);
     try{
-        let thisSurvey = await Survey.find({courseID: { $in: req.params.courses }});
+        let thisSurvey = await Survey.find({courseID: { $in: courses }});
 
         if(thisSurvey){
             console.log(thisSurvey);
