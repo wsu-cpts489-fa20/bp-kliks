@@ -94,7 +94,7 @@ class CoursesTable extends React.Component {
             </td>
             <td><button onClick={this.props.menuOpen ? null : () => 
                 this.viewStudents(this.props.courses[r].courseID, this.props.courses[r].courseName)}>
-                    <span className="fa fa-users"></span></button></td>
+                    <span id="studentView" className="fa fa-users"></span></button></td>
             {this.props.userType === "Instructor" ? 
                 <div className="instructor-buttons">
                     <td><button onClick={this.props.menuOpen ? null : () => 

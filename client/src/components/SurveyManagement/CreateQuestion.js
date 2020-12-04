@@ -38,9 +38,9 @@ class CreateQuestion extends React.Component {
                 answers : [],
                 active : false,
                 acceptableAnswerTypes : [],
-                submitIcon = "fa fa-save",
-                submitLabel = "Save Question"
-            }    
+            }   
+            this.state.submitIcon = "fa fa-save";
+            this.state.submitLabel = "Save Question" ;
         } 
         else
         {
