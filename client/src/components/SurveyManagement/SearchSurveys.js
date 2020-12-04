@@ -12,7 +12,7 @@ class SearchSurveys extends React.Component {
     // Renders the survey table with the surveys for the user.
     renderTable = (surveys) => {
         let table = [];
-        for (let r = 0; r < this.props.surveys.length; r++) {
+        for (let r = 0; r < surveys.length; r++) {
             table.push(
                 <tr key={surveys[r].surveyID+"-"+r}>
                 <td>{surveys[r].surveyID}</td>

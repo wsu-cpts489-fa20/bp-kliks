@@ -35,11 +35,11 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            this.getQuestions();
+            await this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             this.setState({errorMsg: ""});
-            this.getQuestions();
+            await this.getQuestions();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
@@ -59,11 +59,11 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            this.getQuestions();
+            await this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
             this.setState({errorMsg: ""});
-            this.getQuestions();
+            await this.getQuestions();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }

@@ -53,7 +53,7 @@ class CreateSurvey extends React.Component {
             courseID : this.state.courseID
           };
 
-          setTimeout(this.props.saveSurvey, 100, uuid(), newSurvey);
+          setTimeout(this.props.saveSurvey, 1000, uuid(), newSurvey);
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
