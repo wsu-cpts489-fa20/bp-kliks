@@ -22,14 +22,11 @@ class CreateQuestion extends React.Component {
         this.questionTitleRef = React.createRef();
         this.surveySelectionRef = React.createRef();
         this.dateRef = React.createRef();
-
-<<<<<<< HEAD
-        console.log(today);
-        console.log(this.props.surveys.length)
+        
         if (this.props.mode == AppMode.SURVEY_MANAGEMENT_CREATE)
         {
             this.state = {
-                dropdownOfSurveys : "",
+                dropdownOfSurveys : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
                 numberOfSurveys : this.props.surveys.length,
                 date: today.toISOString().substr(0,10),
                 answerType : "shortAnswer",
@@ -38,31 +35,22 @@ class CreateQuestion extends React.Component {
                 answers : [],
                 active : false,
                 acceptableAnswerTypes : [],
+                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" ,
                 submitIcon = "fa fa-save",
                 submitLabel = "Save Question"
             }    
         } 
         else
         {
+            this.state.dropdownOfSurveys = this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
+            this.state.numberOfSurveys = this.props.surveys.length,
             this.state = this.props.startData;
+            this.state.surveyID = this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" ,
             this.state.submitIcon = "fa fa-edit";
             this.state.submitLabel = "Update Question";
         }
-=======
-        this.state = {
-            dropdownOfSurveys : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
-            numberOfSurveys : this.props.surveys.length,
-            date: today.toISOString().substr(0,10),
-            answerType : "shortAnswer",
-            question: "",
-            title : "",
-            answers : [],
-            active : false,
-            acceptableAnswerTypes : [],
-            surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" 
-        }     
->>>>>>> 517103b4a570e8d2cdf15e4232089baaaa77e529
     }
+
 
     // On change handler for the form elements
     handleChange = (event) => {

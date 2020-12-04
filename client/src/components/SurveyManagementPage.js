@@ -63,7 +63,7 @@ class SurveyManagementPage extends React.Component {
     */
     editQuestion = async (surveyId, updatedQuestion) => {
         const url = '/questions/' + surveyId + '/' + 
-            this.props.userObj.questions[this.state.editId]._id;
+            this.questions[this.state.editId]._id;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -86,7 +86,7 @@ class SurveyManagementPage extends React.Component {
     //this.state.deleteId, delete from the database, and reset deleteId to empty.
     deleteQuestion = async () => {
         const url = '/questions/' + this.props.userObj.id + '/' + 
-            this.props.userObj.entries[this.state.deleteId]._id;
+            this.questions[this.state.deleteId]._id;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -211,7 +211,7 @@ class SurveyManagementPage extends React.Component {
                     </CreateQuestion>
                 );
             case AppMode.SURVEY_MANAGEMENT_EDIT:
-                let thisEntry = {...this.props.userObj.questions[this.state.editId]}
+                let thisEntry = {...this.questions[this.state.editId]}
                 thisEntry.date = thisEntry.date.substr(0,10);
                 return (
                     <CreateQuestion
@@ -219,11 +219,7 @@ class SurveyManagementPage extends React.Component {
                     surveys={this.state.surveys}
                     mode={this.props.mode}
                     changeMode={this.props.changeMode}
-<<<<<<< HEAD
                     saveQuestion={this.editQuestion}
-=======
-                    saveQuestion={this.saveQuestion}
->>>>>>> 517103b4a570e8d2cdf15e4232089baaaa77e529
                     >
                     </CreateQuestion>
                 );
