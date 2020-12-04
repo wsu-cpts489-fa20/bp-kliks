@@ -47,6 +47,27 @@ class SurveyManagementPage extends React.Component {
         }
     }
 
+    editQuestion = async (surveyId, updatedQuestion) => {
+        const url = '/questions/' + surveyId + '/' + 
+            this.props.userObj.questions[this.state.editId]._id;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'PUT',
+            body: JSON.stringify(updatedQuestion)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            alert("An error occurred when attempting to update the question to database: " 
+            + msg);
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        } else {
+            console.log("Question Updated!");
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        }
+    }
+
     /*
         Save a survey to the mongoDB 
     */
@@ -153,6 +174,16 @@ class SurveyManagementPage extends React.Component {
                     </>
                 );
             case AppMode.SURVEY_MANAGEMENT_CREATE:
+                return (
+                    <CreateQuestion
+                    userObj={this.props.userObj}
+                    surveys={this.state.surveys}
+                    changeMode={this.props.changeMode}
+                    saveQuestion={this.CreateQuestion}
+                    >
+                    </CreateQuestion>
+                );
+            case AppMode.SURVEY_MANAGEMENT_EDIT:
                 return (
                     <CreateQuestion
                     userObj={this.props.userObj}
