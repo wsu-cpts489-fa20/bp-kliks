@@ -107,7 +107,7 @@ features for the Kliks application are below:
 # Demo Videos
 **Milestone 1** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EYJFRvVwQB1Ei845_Z_hgXYBFDZqn2fp3BTiS6R-f82o5A?e=lfTQXZ).\
 **Milestone 2** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EZQWneBwPQlOoSml5YvrWKsBhytCH0yv_a1eoKIin89UFg?e=B161j1).\
-**Milestone 3** demo video located [here]().\
+**Milestone 3** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EUnBud1mBoBKoCTawpHX7a4BI_U_xZn1SlEScKeXlOO9rQ?e=Drp26a).\
 **Milestone 4** demo video located [here]().
 
 # BP Kliks Tests
