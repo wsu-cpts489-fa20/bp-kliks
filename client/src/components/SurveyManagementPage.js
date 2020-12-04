@@ -61,6 +61,9 @@ class SurveyManagementPage extends React.Component {
         }
     }
 
+    /*
+        Edit a question to the mongoDB 
+    */
     editQuestion = async (surveyId, updatedQuestion) => {
         const url = '/questions/' + surveyId + '/' + 
             this.props.userObj.questions[this.state.editId]._id;
@@ -228,7 +231,7 @@ class SurveyManagementPage extends React.Component {
                     startData={thisEntry}
                     surveys={this.state.surveys}
                     changeMode={this.props.changeMode}
-                    editQuestion={this.editQuestion}
+                    saveQuestion={this.editQuestion}
                     >
                     </CreateQuestion>
                 );
