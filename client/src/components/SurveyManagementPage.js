@@ -218,6 +218,7 @@ class SurveyManagementPage extends React.Component {
                     <CreateQuestion
                     userObj={this.props.userObj}
                     surveys={this.state.surveys}
+                    mode={this.props.mode}
                     changeMode={this.props.changeMode}
                     saveQuestion={this.saveQuestion}
                     >
@@ -230,6 +231,7 @@ class SurveyManagementPage extends React.Component {
                     <CreateQuestion
                     startData={thisEntry}
                     surveys={this.state.surveys}
+                    mode={this.props.mode}
                     changeMode={this.props.changeMode}
                     saveQuestion={this.editQuestion}
                     >

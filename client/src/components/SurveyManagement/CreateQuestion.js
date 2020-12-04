@@ -26,17 +26,28 @@ class CreateQuestion extends React.Component {
 
         console.log(today);
         console.log(this.props.surveys.length)
-        this.state = {
-            dropdownOfSurveys : "",
-            numberOfSurveys : this.props.surveys.length,
-            date: today.toISOString().substr(0,10),
-            answerType : "shortAnswer",
-            question: "",
-            title : "",
-            answers : [],
-            active : false,
-            acceptableAnswerTypes : []
-        }     
+        if (this.props.mode == AppMode.SURVEY_MANAGEMENT_CREATE)
+        {
+            this.state = {
+                dropdownOfSurveys : "",
+                numberOfSurveys : this.props.surveys.length,
+                date: today.toISOString().substr(0,10),
+                answerType : "shortAnswer",
+                question: "",
+                title : "",
+                answers : [],
+                active : false,
+                acceptableAnswerTypes : [],
+                submitIcon = "fa fa-save",
+                submitLabel = "Save Question"
+            }    
+        } 
+        else
+        {
+            this.state = this.props.startData;
+            this.state.submitIcon = "fa fa-edit";
+            this.state.submitLabel = "Update Question";
+        }
     }
 
     handleChange = (event) => {
@@ -231,7 +242,7 @@ class CreateQuestion extends React.Component {
                         <p></p>
                         <button type="submit" style={{width: "70%",fontSize: "36px"}} 
                         className="btn btn-primary btn-color-theme">
-                            <span className="fa fa-plus"/>&nbsp; Create Question
+                            <span className={this.state.submitIcon}/>&nbsp; {this.state.submitLabel}
                         </button>
                     </center>
                 )
