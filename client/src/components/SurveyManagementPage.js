@@ -24,6 +24,9 @@ class SurveyManagementPage extends React.Component {
         Save a question to the mongoDB 
     */
     saveQuestion = async (surveyId, newQuestion) => {
+        console.log("SURVEYID and QuestionObj");
+        console.log(surveyId);
+        console.log(newQuestion);
         const url = '/questions/' + surveyId;
         const res = await fetch(url, {
             headers: {
@@ -48,6 +51,9 @@ class SurveyManagementPage extends React.Component {
         Save a survey to the mongoDB 
     */
     saveSurvey = async (surveyID, newSurvey) => {
+        console.log("SURVEYID and SurveyObj");
+        console.log(surveyID);
+        console.log(newSurvey);
         const url = '/surveys/' + surveyID;
         console.log(url);
         const res = await fetch(url, {
@@ -59,9 +65,11 @@ class SurveyManagementPage extends React.Component {
             body: JSON.stringify(newSurvey)}); 
         const msg = await res.text();
         if (res.status != 200) {
+            console.log("Survey Creation FAILED");
             this.setState({errorMsg: msg});
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
+            console.log("Survey Creation SUCCESS");
             this.setState({errorMsg: ""});
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
@@ -125,6 +133,8 @@ class SurveyManagementPage extends React.Component {
               }
     
             var data = getAllResponses(obj);
+            console.log("FRESH DATA");
+            console.log(obj);
             this.setState({
               surveys : obj,
               questions : data[1],
@@ -144,10 +154,11 @@ class SurveyManagementPage extends React.Component {
                 );
             case AppMode.SURVEY_MANAGEMENT_CREATE:
                 return (
-                    <CreateQuestion 
+                    <CreateQuestion
                     userObj={this.props.userObj}
                     surveys={this.state.surveys}
                     changeMode={this.props.changeMode}
+                    saveQuestion={this.CreateQuestion}
                     >
                     </CreateQuestion>
                 );
@@ -156,7 +167,9 @@ class SurveyManagementPage extends React.Component {
                     <CreateSurvey 
                     userObj={this.props.userObj}
                     surveys={this.state.surveys}
-                    changeMode={this.props.changeMode}>
+                    changeMode={this.props.changeMode}
+                    saveSurvey={this.saveSurvey}
+                    >
                     </CreateSurvey>
                 );
             case AppMode.SURVEY_MANAGEMENT_SEARCH:
@@ -167,7 +180,9 @@ class SurveyManagementPage extends React.Component {
             case AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS:
                 return (
                     <SearchSurveys
-                    saveSurvey={this.saveSurvey}
+                    surveys={this.state.surveys}
+                    getQuestions={this.getQuestions}
+                    menuOpen={this.props.menuOpen}
                     >
                     </SearchSurveys>
                 );
@@ -178,6 +193,7 @@ class SurveyManagementPage extends React.Component {
                     getQuestions={this.getQuestions}
                     questions={this.state.questions}
                     responses={this.state.responses}
+                    menuOpen={this.props.menuOpen}
                     >
                     </SubmittedResponse>
                 );

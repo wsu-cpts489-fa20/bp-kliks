@@ -22,14 +22,17 @@ class CreateSurvey extends React.Component {
         this.surveyDateRef = React.createRef();
 
         //Create date object for today, taking time zone into consideration
-        let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);        
+        let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);
+
         this.state = {
             answerType : "shortAnswer",
             question: "",
             addSurvey: false,
             surveyTitle : "",
             date: today.toISOString().substr(0,10),
-            dropdownOfCourses : ""
+            dropdownOfCourses : this.props.userObj.courses.length > 0 ? (this.props.userObj.courses[0].courseSemester + "-"  + this.props.userObj.courses[0].courseYear +
+            ": " + this.props.userObj.courses[0].courseName + "  " + this.props.userObj.courses[0].courseNumber) : "",
+            courseID: this.props.userObj.courses.length > 0 ? this.props.userObj.courses[0].courseID : "" 
         }     
     }
 
@@ -49,9 +52,10 @@ class CreateSurvey extends React.Component {
           var newSurvey = {
             surveyTitle : this.state.surveyTitle,
             surveyDate : this.state.date,
-            courseID : this.state.dropdownOfCourses
+            courseID : this.state.courseID  // this.state.dropdownOfCourses
           };
 
+          console.log("Course ID = " + newSurvey.courseID);
           setTimeout(this.props.saveSurvey, 100, uuid(), newSurvey);
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
@@ -65,7 +69,7 @@ class CreateSurvey extends React.Component {
       {
         const id = this.props.userObj.courses[index].courseSemester + "-"  + this.props.userObj.courses[index].courseYear +
         ": " + this.props.userObj.courses[index].courseName + "  " + this.props.userObj.courses[index].courseNumber;
-        courses.push(<option id={id} value={id}>{id}</option>);
+        courses.push(<option id={this.props.userObj.courses[index].courseID} value={id}>{id}</option>);
       }
 
       // let courses = this.props.userObj.courses.map((course) => {
@@ -75,6 +79,13 @@ class CreateSurvey extends React.Component {
       //   };
       // });
      return courses;
+    }
+
+    handleDropdownChange = (event) => {
+      const name = event.target.name; 
+      this.setState({[name]: event.target.value,
+        courseID : event.target.id
+      }, this.checkDataValidity);
     }
 
     checkDataValidity = () => {
@@ -88,7 +99,8 @@ class CreateSurvey extends React.Component {
           this.surveyTitleRef.current.setCustomValidity("");
       }
 
-      if(this.state.dropdownOfCourses.length == 0){
+      if(this.state.dropdownOfCourses == ""){
+          console.log(this.state.dropdownOfCourses);
           console.log("CUSTOM VALIDITY: surveyDateRef");
           this.courseSelectionRef.current.setCustomValidity("Course is missing for the survey.");
       }
@@ -130,7 +142,10 @@ class CreateSurvey extends React.Component {
             <p></p>
             <label>Course:
             <select name="dropdownOfCourses" value={this.state.dropdownOfCourses} 
-              onChange={this.handleChange}
+              onChange={this.handleDropdownChange}
+              onBlur={this.handleDropdownChange}
+              id={this.state.courseID}
+              defaultValue={this.state.dropdownOfCourses}
               required={true}
               ref={this.courseSelectionRef}
               className="form-control form-center">

@@ -25,6 +25,7 @@ class CreateQuestion extends React.Component {
         this.dateRef = React.createRef();
 
         console.log(today);
+        console.log(this.props.surveys.length)
         this.state = {
             dropdownOfSurveys : "",
             numberOfSurveys : this.props.surveys.length,
@@ -85,7 +86,7 @@ class CreateQuestion extends React.Component {
   
         for(var index = 0; index < this.props.surveys.length; index++)
         {
-          surveys.push(<option id={this.props.surveys.surveyId} value={this.props.surveys.surveyTitle}>{this.props.surveys.surveyTitle}</option>);
+          surveys.push(<option id={this.props.surveys[index].surveyID} value={this.props.surveys[index].surveyTitle}>{this.props.surveys[index].surveyTitle}</option>);
         }
 
        return surveys;
@@ -145,7 +146,7 @@ class CreateQuestion extends React.Component {
         return(
             <form className="padded-page" onSubmit={this.handleSubmit}>
                 {
-                this.state.numberOfSurveys == 0 ?
+                this.props.surveys.length == 0 ?
                 <center>
                     <p></p>
                     <p>There are no surveys, please create surveys in order to create questions </p>

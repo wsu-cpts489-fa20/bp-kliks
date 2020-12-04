@@ -3,12 +3,56 @@ import React from 'react';
 class SearchSurveys extends React.Component {
     constructor(props) {
       super(props);
-  
+        
       this.state = {
+          surveys : this.props.surveys
       };
     }
+
+    
+    renderTable = (surveys) => {
+        let table = [];
+        for (let r = 0; r < this.props.surveys.length; r++) {
+            table.push(
+                <tr key={surveys[r].surveyID+"-"+r}>
+                <td>{surveys[r].surveyID}</td>
+                <td>{surveys[r].surveyTitle}</td>
+                <td>{surveys[r].surveyDate}</td>
+                <td>{surveys[r].courseID}</td>
+                <td>{surveys[r].questions.length}</td>
+                {/* <td><button id={response.surveyID+"-"+index+"-"+"view"} onClick={this.props.menuOpen ? null : () => 
+                this.viewResponse(response.surveyID+"-"+index)}>
+                    <span className="fa fa-eye"></span></button></td> */}
+                <td><button id={surveys[r].surveyID+"-"+r+"-"+"delete"} onClick={this.props.menuOpen ? null : 
+                () => this.confirmDeleteResponse(surveys[r].surveyID+"-"+r)}>
+                    <span className="fa fa-trash"></span></button></td>
+            </tr>
+            );
+        }
+        return table;
+    }
+
+    sortByCourseID = () => {
+        console.log("sortByCourseID");
+    }
+
+    sortByDate = () => {
+        console.log("sortByDate");
+    }
+
+    sortBySurveyID = () => {
+        console.log("sortBySurveyID");
+    }
+
+    sortByNumberOfQuestions = () => {
+        console.log("sortByNumberOfQuestions");
+    }
+
+    sortBySurveyTitle = () => {
+        console.log("sortBySurveyTitle");
+    }
   
-    //render--render the entire responses table with header, displaying a "No
+    //render--render the entire surveys table with header, displaying a "No
     //Responses made" message in case the table is empty.
     render() {
       return(
@@ -25,17 +69,21 @@ class SearchSurveys extends React.Component {
         <table className="table table-hover">
           <thead className="thead-light">
           <tr>
-            <th><span id="responseSortQuestionType" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByResponseType}></span>&nbsp;Survey ID </th>
-            <th><span id="responseSortQuestion" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByQuestion}></span>&nbsp;Survey Title</th>
-            <th><span id="responseSortDate" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByDate}></span>&nbsp;Survey Creation Date</th>
-            <th><span id="responseSortResponse" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByResponse}></span>&nbsp;Course ID</th>
-            <th><span id="responseSortResponse" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByResponse}></span>&nbsp;Number of Questions</th>
+            <th><span id="surveySearch-SurveyID" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortBySurveyID}></span>&nbsp;Survey ID </th>
+            <th><span id="surveySearch-SurveyTitle" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortBySurveyTitle}></span>&nbsp;Survey Title</th>
+            <th><span id="surveySearch-Date" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByDate}></span>&nbsp;Survey Creation Date</th>
+            <th><span id="surveySearch-CourseID" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByCourseID}></span>&nbsp;Course ID</th>
+            <th><span id="surveySearch-NumberOfQuestions" style={{cursor:"pointer"}} className="fa fa-sort" onClick={this.sortByNumberOfQuestions}></span>&nbsp;Number of Questions</th>
             {/* <th>View</th> */}
             <th>Delete</th>
           </tr>
           </thead>
           <tbody id="searchSurveyTableBody">
+            {Object.keys(this.props.surveys).length === 0 ? 
+            <tr>
             <td colSpan="5" style={{fontStyle: "italic"}}>No surveys created</td>
+            </tr> : this.renderTable(this.state.surveys)
+            }              
           </tbody>
         </table>
       </div>
