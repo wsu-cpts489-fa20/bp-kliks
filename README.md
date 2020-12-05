@@ -116,10 +116,10 @@ and the ability to broadcast questions to students that are online. -->
 **Milestone 3** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EUnBud1mBoBKoCTawpHX7a4BI_U_xZn1SlEScKeXlOO9rQ?e=Drp26a).\
 **Milestone 4** demo video located [here]().
 
-# BP Kliks Tests
-The [tests](https://github.com/wsu-cpts489-fa20/bp-kliks/tree/tests) for the kliks application are located in the tests branch.
+<!-- # BP Kliks Tests
+The [tests](https://github.com/wsu-cpts489-fa20/bp-kliks/tree/tests) for the kliks application are located in the tests branch. -->
 
-Tests for the Kliks application are ran when new tests are made and a push to the test branch is made.
+Tests for the Kliks application are ran when new tests are made or changes are made to the tests directory and a push to the master branch is made.
 
 In order to run the tests the following commands have to be ran:
 *npm install testcafe*  -- React selectors 
