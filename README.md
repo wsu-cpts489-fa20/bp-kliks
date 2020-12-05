@@ -26,9 +26,9 @@ features for the Kliks application are below:
 *Course route file that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/server/routes/course.js).
 
 **Milestone 3:**\
-*\
-*\
-*
+*CreateQuestion.js file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagement/CreateQuestion.js).\
+*Course Page file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/CourseManagement/CoursesPage.js).\
+*Create Survey page is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagement/CreateSurvey.js).
 
 **Milestone 4:**\
 *\
@@ -102,6 +102,12 @@ features for the Kliks application are below:
             *   Delete questions route.
 
 **Milestone 3 Changes:**\
+The changes that were made in milestone dealt mainly on frontend work. One of the main things that we did was add some UI for the student side of the application.\
+Unlike before, now we STUDENTs are able to view the courses that they are taking and the students in that course. On the Instructor side, instructors are now able to\
+add courses, view all created courses, create questions, create surveys, and view surveys. We also worked on updating the sideMenu content.\
+<!-- Below are tasks that we also added the dashboard pages for the instructor page. In addition, we also added the ability to edit questions, view saved questions and active questions\
+and the ability to broadcast questions to students that are online. -->
+
 **Milestone 4 Changes:**
 
 # Demo Videos
