@@ -84,7 +84,7 @@ class AddCourse extends React.Component {
                         <label>
                             Course Name:
                             <br/>
-                            <input name="name" className="form-control form-center" type="text"
+                            <input name="name" id="courseName" className="form-control form-center" type="text"
                                 value={this.state.name} onChange={this.handleChange}
                                 placeholder="Course name" size="50" maxLength="50" required={true}/>
                         </label>
@@ -92,7 +92,7 @@ class AddCourse extends React.Component {
                         <label>
                             Course Number:
                             <br/>
-                            <input name="number" className="form-control form-center" type="text"
+                            <input name="number" id="courseNumber" className="form-control form-center" type="text"
                                 value={this.state.number} onChange={this.handleChange} ref={this.numberRef}
                                 placeholder="Course number" size="50" maxLength="50" required={true}/>
                         </label>
@@ -100,7 +100,7 @@ class AddCourse extends React.Component {
                         <label>
                             Term:
                             <br/>
-                            <input name="semester" className="form-control form-center" type="text"
+                            <input name="semester" id="courseSemester" className="form-control form-center" type="text"
                                 value={this.state.semester} onChange={this.handleChange} ref={this.semesterRef}
                                 placeholder="Current term" size="50" maxLength="50" required={true}/>
                         </label>
@@ -108,7 +108,7 @@ class AddCourse extends React.Component {
                         <label>
                             Year:
                             <br/>
-                            <input name="year" className="form-control form-center" type="text"
+                            <input name="year" id="courseYear" className="form-control form-center" type="text"
                                 value={this.state.year} onChange={this.handleChange} ref={this.yearRef}
                                 placeholder="Current year" size="50" maxLength="50" required={true}/>
                         </label>
@@ -116,7 +116,7 @@ class AddCourse extends React.Component {
                         <label>
                             Instructor First Name:
                             <br/>
-                            <input name="instructorFirstName" className="form-control form-center" type="text"
+                            <input name="instructorFirstName" id="courseFirstName" className="form-control form-center" type="text"
                                 value={this.state.instructorFirstName} onChange={this.handleChange}
                                 placeholder="First name" size="50" maxLength="50" required={true}/>
                         </label>
@@ -124,7 +124,7 @@ class AddCourse extends React.Component {
                         <label>
                             Instructor Last Name:
                             <br/>
-                            <input name="instructorLastName" className="form-control form-center" type="text"
+                            <input name="instructorLastName" id="courseLastName" className="form-control form-center" type="text"
                                 value={this.state.instructorLastName} onChange={this.handleChange}
                                 placeholder="Last name" size="50" maxLength="50" required={true}/>
                         </label>
@@ -132,22 +132,22 @@ class AddCourse extends React.Component {
                         <label>
                             Enrollment Limit:
                             <br/>
-                            <input name="enrollmentLimit" className="form-control form-center" type="text"
+                            <input name="enrollmentLimit" id="courseEnrollmentLimit" className="form-control form-center" type="text"
                                 value={this.state.enrollmentLimit} onChange={this.handleChange}
                                 placeholder="Enrollment limit" size="50" maxLength="50" required={true}/>
                         </label>
                         <p></p>
                         <label>Notes:
-                            <textarea name="notes" className="form-control" rows="6" cols="75" 
+                            <textarea name="notes" id="courseNotes"className="form-control" rows="6" cols="75" 
                                 placeholder="Enter course notes" value={this.state.notes} 
                                 onChange={this.handleChange} />
                         </label>
                         <p></p>
                         <p></p>
                         <div className="modal-footer">
-                            <button role="submit" className="btn btn-primary">
+                            <button role="submit" id="saveCourse" className="btn btn-primary">
                             Create</button>
-                            <button className="btn btn-secondary" onClick={this.handleCloseModal}>
+                            <button id="cancelCourse" className="btn btn-secondary" onClick={this.handleCloseModal}>
                             Cancel</button>
                         </div>
                         <br />

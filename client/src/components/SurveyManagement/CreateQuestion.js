@@ -22,18 +22,29 @@ class CreateQuestion extends React.Component {
         this.surveySelectionRef = React.createRef();
         this.dateRef = React.createRef();
 
-        this.state = {
-            dropdownOfSurveys : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
-            numberOfSurveys : this.props.surveys.length,
-            date: today.toISOString().substr(0,10),
-            answerType : "shortAnswer",
-            question: "",
-            title : "",
-            answers : [],
-            active : false,
-            acceptableAnswerTypes : [],
-            surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" 
-        }     
+        if (this.props.mode == AppMode.SURVEY_MANAGEMENT_CREATE)
+        {
+            this.state = {
+                dropdownOfSurveys : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
+                numberOfSurveys : this.props.surveys.length,
+                date: today.toISOString().substr(0,10),
+                answerType : "shortAnswer",
+                question: "",
+                title : "",
+                answers : [],
+                active : false,
+                acceptableAnswerTypes : [],
+                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" 
+            }   
+            this.state.submitIcon = "fa fa-save";
+            this.state.submitLabel = "Save Question" ;
+        } 
+        else
+        {
+            this.state = this.props.startData;
+            this.state.submitIcon = "fa fa-edit";
+            this.state.submitLabel = "Update Question";
+        }
     }
 
     // On change handler for the form elements
@@ -243,12 +254,13 @@ class CreateQuestion extends React.Component {
                         id={"createQuestion-createQuestionBtn"}
                         type="submit" style={{width: "70%",fontSize: "36px"}} 
                         className="btn btn-primary btn-color-theme">
-                            <span className="fa fa-plus"/>&nbsp; Create Question
+                            <span className={this.state.submitIcon}/>&nbsp; {this.state.submitLabel}
                         </button>
                     </center>
                 )
                 }
           </form>
+
         );
     }
 }  

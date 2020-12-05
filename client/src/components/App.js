@@ -33,6 +33,7 @@ modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.SURVEY_MANAGEMENT] = SurveyManagementPage;
 modeToPage[AppMode.SURVEY_MANAGEMENT_RESPONSES] = SurveyManagementPage;
 modeToPage[AppMode.SURVEY_MANAGEMENT_CREATE] = SurveyManagementPage;
+modeToPage[AppMode.SURVEY_MANAGEMENT_EDIT] = SurveyManagementPage;
 modeToPage[AppMode.SURVEY_MANAGEMENT_CREATE_SURVEY] = SurveyManagementPage;
 modeToPage[AppMode.SURVEY_MANAGEMENT_SEARCH] = SurveyManagementPage;
 modeToPage[AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS] = SurveyManagementPage;
