@@ -70,6 +70,7 @@ class FileUpload extends React.Component {
             <p></p>
             <label>Acceptable File Types:
             <select name="answerType" multiple={true} value={this.state.selectedOptions} onChange={this.handleChange} 
+              id={"createQuestion-file-fileTypes"}
               className="form-control form-center">
               <option value=".pdf">pdf</option>
               <option value=".docx">docx</option>
@@ -83,6 +84,7 @@ class FileUpload extends React.Component {
               <label>
                 File:
                 <input name="file" className="form-control form-center" 
+                id={"createQuestion-file-upload"}
                 onChange={this.onFileChange}
                 ref={this.fileRef}
                 value={this.state.fileObj}

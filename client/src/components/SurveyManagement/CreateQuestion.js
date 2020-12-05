@@ -142,14 +142,14 @@ class CreateQuestion extends React.Component {
     render(){
         const AnswerType = answerTypes[this.state.answerType];
         return(
-            <form className="padded-page" onSubmit={this.handleSubmit}>
+            <form className="padded-page" id={"createQuestionMode"} onSubmit={this.handleSubmit}>
                 {
                 this.props.surveys.length == 0 ?
                 <center>
                     <p></p>
                     <p>There are no surveys, please create surveys in order to create questions </p>
                     <p></p>
-                    <button type="button" style={{width: "50%",fontSize: "36px"}} onClick={this.onAddSurvey}
+                    <button type="button" style={{width: "50%",fontSize: "36px"}} id={"createQuestion-createSurveyBtn"} onClick={this.onAddSurvey}
                     className="btn btn-primary btn-color-theme">
                         <span className="fa fa-plus"/>&nbsp; Add a survey
                     </button>
@@ -161,7 +161,9 @@ class CreateQuestion extends React.Component {
                         style={{fontSize: "20px"}}
                         >
                             Question Title:
-                            <input name="title" className="form-control form-center" value={this.state.title} onChange={this.handleChange}
+                            <input name="title"
+                            id={"createQuestion-title"}
+                            className="form-control form-center" value={this.state.title} onChange={this.handleChange}
                             ref={this.questionTitleRef}
                             minLength={1}
                             type="text"/>
@@ -171,7 +173,9 @@ class CreateQuestion extends React.Component {
                                 style={{fontSize: "20px"}}
                             >Question:
                                 <textarea name="question" className="form-control" rows="6" cols="75" 
-                                placeholder="Enter Question here" value={this.state.question}
+                                placeholder="Enter Question here"
+                                id={"createQuestion-question"}
+                                value={this.state.question}
                                 ref={this.questionTextRef}
                                 minLength={1}
                                 onChange={this.handleChange}
@@ -183,7 +187,9 @@ class CreateQuestion extends React.Component {
                         >
                             Date:
                             <input name="date" className="form-control form-center" 
-                            type="date" value={this.state.date} onChange={this.handleChange}
+                            type="date" 
+                            id={"createQuestion-date"}
+                            value={this.state.date} onChange={this.handleChange}
                             ref={this.dateRef}
                             />
                         </label>
@@ -207,7 +213,7 @@ class CreateQuestion extends React.Component {
                         <label style={{fontSize: "20px"}}>
                             Activate Question after Creation:
                             <p></p>
-                            <label className="switch"><input type={"checkbox"} id={"togBtn"} onClick={this.switchHandler}/>
+                            <label className="switch"><input type={"checkbox"} id={"createQuestion-togBtn"} onClick={this.switchHandler}/>
                                 <div className="slider round">
                                 <span className="on" style={{textAlign:"left"}}>YES</span><span className="off"  style={{textAlign:"right"}}>NO</span>
                                 </div>
@@ -217,7 +223,9 @@ class CreateQuestion extends React.Component {
                         <label
                             style={{fontSize: "20px"}}
                         >Answer Type:
-                        <select name="answerType" value={this.state.answerType} onChange={this.handleChange} 
+                        <select name="answerType" 
+                        id={"createQuestion-answerTypeDropdown"}
+                        value={this.state.answerType} onChange={this.handleChange} 
                         className="form-control form-center">
                         <option value="shortAnswer">Short Answer</option>
                         <option value="multipleChoice">Multiple Choice</option>
@@ -231,7 +239,9 @@ class CreateQuestion extends React.Component {
                         >
                         </AnswerType>
                         <p></p>
-                        <button type="submit" style={{width: "70%",fontSize: "36px"}} 
+                        <button 
+                        id={"createQuestion-createQuestionBtn"}
+                        type="submit" style={{width: "70%",fontSize: "36px"}} 
                         className="btn btn-primary btn-color-theme">
                             <span className="fa fa-plus"/>&nbsp; Create Question
                         </button>
