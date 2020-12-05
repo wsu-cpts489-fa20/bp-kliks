@@ -1,2 +1,2 @@
-testcafe chrome ./client/src/tests/SurveyManagementTests.js
-# testcafe chrome ./client/src/tests/*.js
+# testcafe chrome ./client/src/tests/SurveyManagementTests.js
+testcafe chrome ./client/src/tests/*.js
