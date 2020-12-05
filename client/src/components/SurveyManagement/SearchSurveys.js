@@ -19,7 +19,7 @@ class SearchSurveys extends React.Component {
                 <td>{surveys[r].surveyTitle}</td>
                 <td>{surveys[r].surveyDate}</td>
                 <td>{surveys[r].courseID}</td>
-                <td>{surveys[r].questions.length}</td>
+                <td id={surveys[r].surveyID+"-"+"questionsLength"}>{surveys[r].questions.length}</td>
                 {/* <td><button id={response.surveyID+"-"+index+"-"+"view"} onClick={this.props.menuOpen ? null : () => 
                 this.viewResponse(response.surveyID+"-"+index)}>
                     <span className="fa fa-eye"></span></button></td> */}

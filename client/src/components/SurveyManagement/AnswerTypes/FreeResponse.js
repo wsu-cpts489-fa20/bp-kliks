@@ -24,6 +24,7 @@ class FreeResponse extends React.Component {
             <center>
             <label>Answer:
                 <textarea name="answer" className="form-control" rows="6" cols="75" 
+                id={"createQuestion-freeResponse"}
                 placeholder="Enter answer here" value={this.state.answer} 
                 onChange={this.onResponseChange}
                 />

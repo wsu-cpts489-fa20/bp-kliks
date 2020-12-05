@@ -17,4 +17,6 @@ var accounts = {
     },
 }
 
-export { accounts };
+var isLocalTesting = false;
+
+export { accounts, isLocalTesting };

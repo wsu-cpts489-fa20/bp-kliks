@@ -71,7 +71,7 @@ class MultipleChoice extends React.Component {
 
       for(var index = 0; index < this.state.answers.length; index++){
         answers.push(
-          <input placeholder="Input answer..." onChange={this.onAnswerTextChange} value={this.state.answers[index].value} name={this.state.answers[index].name} aria-label="Username" aria-describedby="basic-addon1" className="form-control"/>
+          <input id={index+"-mcOption"} placeholder="Input answer..." onChange={this.onAnswerTextChange} value={this.state.answers[index].value} name={this.state.answers[index].name} aria-label="Username" aria-describedby="basic-addon1" className="form-control"/>
         );
       }
       return answers;
@@ -111,13 +111,17 @@ class MultipleChoice extends React.Component {
             
             <div className="row justify-content-center">
                 <div className="col-md-3" style={{width: "40%"}}>
-                  <button type="button" style={{fontSize: "28px"}} onClick={this.onAddAnswer} 
+                  <button type="button" style={{fontSize: "28px"}} 
+                  id={"createQuestion-mc-addAnswerBtn"}
+                  onClick={this.onAddAnswer} 
                     className="btn btn-primary btn-color-theme">
                       <span className="fa fa-plus"/>&nbsp;Add Answer
                   </button>
                 </div>
                 <div className="col-md-3" style={{width: "40%"}}>
-                  <button  type="button" style={{fontSize: "28px"}} onClick={this.onRemoveAnswer} 
+                  <button  type="button" style={{fontSize: "28px"}} 
+                  id={"createQuestion-mc-removeAnswerBtn"}
+                  onClick={this.onRemoveAnswer} 
                     className="btn btn-primary btn-color-theme">
                       <span className="fa fa-plus"/>&nbsp;Remove Answer
                   </button>

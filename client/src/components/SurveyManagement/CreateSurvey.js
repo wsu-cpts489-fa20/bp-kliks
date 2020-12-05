@@ -107,11 +107,13 @@ class CreateSurvey extends React.Component {
 
     render(){
         return(
-            <form className="padded-page" onSubmit={this.handleSubmit}>
+            <form className="padded-page" id={"createSurvey-page"} onSubmit={this.handleSubmit}>
             <center>
               <label>
                 Survey Title:
-                <input name="surveyTitle" className="form-control form-center"
+                <input name="surveyTitle" 
+                id={"createSurvey-title"}
+                className="form-control form-center"
                 value={this.state.surveyTitle}
                 onChange={this.handleChange}
                 minLength={1}
@@ -121,7 +123,9 @@ class CreateSurvey extends React.Component {
               <p></p>
               <label>
                 Date:
-                <input name="date" className="form-control form-center" 
+                <input name="date" 
+                  id={"createSurvey-date"}
+                  className="form-control form-center" 
                   type="date" value={this.state.date} onChange={this.handleChange} 
                   ref={this.surveyDateRef}/>
               </label>
@@ -140,8 +144,10 @@ class CreateSurvey extends React.Component {
             </select> 
             </label>
             <p></p>
-            <button type="submit" style={{width: "50%",fontSize: "36px"}}
-            className="btn btn-primary btn-color-theme">
+            <button type="submit" 
+              id={"createSurvey-creatBtn"}
+              style={{width: "50%",fontSize: "36px"}}
+              className="btn btn-primary btn-color-theme">
               <span className="fa fa-plus"/>&nbsp; Create survey
             </button>
             </center>
