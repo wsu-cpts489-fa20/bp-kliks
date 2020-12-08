@@ -1,4 +1,6 @@
 var express = require('express');
+var ObjectID = require("bson-objectid"); // Source: https://www.npmjs.com/package/bson-objectid
+const courseSchema = require('../schemas/course');
 var router = express.Router();
 const User = require('./../schemas/user');
 
@@ -30,6 +32,9 @@ router.post('/courses/:userId', async (req, res, next) => {
       "Body must contain all 11 required fields: courseInstructorFirstName, courseInstructorLastName, courseInstructorID, courseName, courseNumber, courseYear, courseSemester, courseEnrollmentLimit, courseCurrentlyEnrolled, , courseID, courseNotes");
   }
   try {
+    req.body["_id"] = ObjectID();
+    req.body.courseID = req.body._id.str;
+
     let status = await User.updateOne(
     {id: req.params.userId},
     {$push: {courses: req.body}});
@@ -59,7 +64,7 @@ router.get('/courses/:userId', async(req, res) => {
       return res.status(200).json(JSON.stringify(thisUser.courses));
     }
   } catch (err) {
-    console.log()
+    console.log(err);
     return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
   }
 });
@@ -137,7 +142,7 @@ router.delete('/courses/:userId/:courseId', async (req, res, next) => {
         return res.status(200).json(JSON.stringify(thisUser.courses));
       }
     } catch (err) {
-      console.log()
+      console.log(err);
       return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
     }
   });

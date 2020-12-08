@@ -3,7 +3,6 @@ import FileUpload from './AnswerTypes/FileUpload';
 import FreeResponse from './AnswerTypes/FreeResponse';
 import MultipleChoice from './AnswerTypes/MultipleChoice';
 import AppMode from '../../AppMode';
-import { v4 as uuid } from 'uuid';
 
 
 const answerTypes = {};
@@ -57,7 +56,7 @@ class CreateQuestion extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
         var newQuestion = {
-            questionID: uuid(),
+            questionID: "32534t" /* Random string, is changed in the route. */,
             questionTitle: this.state.title,
             questionText: this.state.question,
             questionType: this.state.answerType,

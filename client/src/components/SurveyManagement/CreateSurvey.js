@@ -4,7 +4,6 @@ import FreeResponse from './AnswerTypes/FreeResponse';
 import MultipleChoice from './AnswerTypes/MultipleChoice';
 import CreateQuestion from './CreateQuestion';
 import AppMode from '../../AppMode';
-import { v4 as uuid } from 'uuid';
 
 const answerTypes = {};
 answerTypes["multipleChoice"] = MultipleChoice;
@@ -53,7 +52,7 @@ class CreateSurvey extends React.Component {
             courseID : this.state.courseID
           };
 
-          setTimeout(this.props.saveSurvey, 1000, uuid(), newSurvey);
+          setTimeout(this.props.saveSurvey, 1000, "efr423f" /* Random string, is changed in the route. */, newSurvey);
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
