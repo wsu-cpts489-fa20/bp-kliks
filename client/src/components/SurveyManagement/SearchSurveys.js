@@ -1,11 +1,12 @@
 import React from 'react';
-
+import ConfirmDeleteSurvey from './ConfirmDeleteSurvey.js';
 class SearchSurveys extends React.Component {
     constructor(props) {
       super(props);
         
       this.state = {
-          surveys : this.props.surveys
+          surveys : this.props.surveys,
+          showConfirmDelete: false
       };
     }
 
@@ -23,13 +24,23 @@ class SearchSurveys extends React.Component {
                 {/* <td><button id={response.surveyID+"-"+index+"-"+"view"} onClick={this.props.menuOpen ? null : () => 
                 this.viewResponse(response.surveyID+"-"+index)}>
                     <span className="fa fa-eye"></span></button></td> */}
-                <td><button id={surveys[r].surveyID+"-"+r+"-"+"delete"} onClick={this.props.menuOpen ? null : 
-                () => this.confirmDeleteResponse(surveys[r].surveyID+"-"+r)}>
+                <td><button id={surveys[r].surveyID+"-"+"delete"} onClick={this.props.menuOpen ? null : 
+                () => this.confirmDelete(surveys[r])}>
                     <span className="fa fa-trash"></span></button></td>
             </tr>
             );
         }
         return table;
+    }
+
+    deleteSurvey = () => {
+      this.props.deleteSurvey();
+      this.setState({showConfirmDelete: false});      
+    }
+
+    confirmDelete = (survey) => {
+      this.props.setSurveyDelete(survey);
+      this.setState({showConfirmDelete: true});      
     }
 
     // Sorts the surveys by the courseID
@@ -91,6 +102,13 @@ class SearchSurveys extends React.Component {
             }              
           </tbody>
         </table>
+        {this.state.showConfirmDelete ?
+          <ConfirmDeleteSurvey
+            closeModal={() => this.setState({showConfirmDelete: false})} 
+            deleteSurvey={this.deleteSurvey}
+          />
+          : null
+        }        
       </div>
       );
     }

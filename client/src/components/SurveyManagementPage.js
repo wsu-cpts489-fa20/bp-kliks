@@ -16,7 +16,8 @@ class SurveyManagementPage extends React.Component {
             surveys : [],
             errorMsg : "",
             deleteId: "",
-            editId: ""
+            editId: "",
+            surveyToDelete : {}
         };
 
         this.getQuestions();
@@ -190,6 +191,33 @@ class SurveyManagementPage extends React.Component {
         }
     }
 
+    setSurveyDelete = (survey) => {
+        this.setState({
+            surveyToDelete : survey
+        });
+    }
+
+    deleteSurvey = async () => {
+        console.log("Delete Survey");
+        if(this.state.surveyToDelete == {}){
+            console.log("There is no survey to delete.");
+            return;
+        }
+
+        const url = '/surveys/' + this.state.surveyToDelete.surveyID;
+        const res = await fetch(url, {method: 'DELETE'}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            this.setState({errorMsg: "An error occurred when attempting to delete survey from MongoDB: " 
+            + msg});
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        } else {
+            console.log("Success deleting survey.");
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        }        
+
+    }
+
     render() {
         switch(this.props.mode) {
             case AppMode.SURVEY_MANAGEMENT:
@@ -249,6 +277,8 @@ class SurveyManagementPage extends React.Component {
                     surveys={this.state.surveys}
                     getQuestions={this.getQuestions}
                     menuOpen={this.props.menuOpen}
+                    setSurveyDelete={this.setSurveyDelete}
+                    deleteSurvey={this.deleteSurvey}
                     >
                     </SearchSurveys>
                 );
