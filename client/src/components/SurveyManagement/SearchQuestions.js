@@ -15,7 +15,7 @@ class SubmittedResponse extends React.Component {
   //Rounds Logged" message in case the table is empty.
   render() {
     return(
-    <div className="padded-page">
+    <div className="padded-page" id={"searchQuestionsMode"}>
       <center>
       <h1></h1>
         

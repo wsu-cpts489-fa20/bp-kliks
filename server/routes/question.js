@@ -1,3 +1,4 @@
+const { default: ObjectID } = require('bson-objectid');
 var express = require('express');
 var router = express.Router();
 var Survey = require('./../schemas/survey');
@@ -24,6 +25,8 @@ router.post('/questions/:surveyID',  async (req, res, next) => {
         "Body must contain all 6 required fields, questionID, quiestionTitle, questionText, questionType, acceptableAnswerTypes, questionAnswers, questionActive");
     }
   try {
+      req.body["_id"] = ObjectID();
+      req.body.questionID = req.body._id.str;
       thisSurvey = await Survey.updateOne(
         {surveyID: req.params.surveyID},
         {$push: {questions: req.body}});
@@ -32,7 +35,7 @@ router.post('/questions/:surveyID',  async (req, res, next) => {
           res.status(400).send("Unexpected error occurred when adding question to"+
             " database. question was not added.");
         } else {
-          return res.status(201).send("New Question for '" + 
+          return res.status(200).send("New Question for '" + 
           req.params.surveyID + "' successfully created.");
         }
     
@@ -111,7 +114,7 @@ router.get('/questions/:surveyId', async(req, res) => {
       return res.status(200).json(JSON.stringify(thisSurvey.questions));
     }
   } catch (err) {
-    console.log()
+    console.log(err);
     return res.status(400).message("Unexpected error occurred when looking up question in database: " + err);
   }
 });

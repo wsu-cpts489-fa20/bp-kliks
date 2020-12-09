@@ -3,22 +3,21 @@ var router = express.Router();
 var Response = require('../schemas/response');
 var User = require('../schemas/user');
 var Survey = require('../schemas/survey');
+const { default: ObjectID } = require('bson-objectid');
 
 //READ user route: Retrieves the user with the specified userId from users collection (GET)
 router.get('/responses/:userId/:courses', async(req, res, next) => {
     console.log("in /users route (GET) with userId = " + 
       JSON.stringify(req.params.userId) + "  and courses=" + JSON.stringify(req.params.courses));
-
+    var courses = JSON.parse(req.params.courses);
     try{
-        let thisSurvey = await Survey.find({courseID: { $in: req.params.courses }});
+        let thisSurvey = await Survey.find({courseID: { $in: courses }});
 
         if(thisSurvey){
-            console.log(thisSurvey);
             return res.status(200).json(JSON.stringify(thisSurvey));
         }
 
     }catch(err){
-        console.log()
         return res.status(400).send("Unexpected error occurred when getting all responses for the user with id " +
           req.params.userId + " in database: " + err);
     }
@@ -45,22 +44,15 @@ router.get('/responses/:userId/:courses', async(req, res, next) => {
       if(!thisSurvey){
         res.status(404).send("No survey with the id: " + req.body.surveyID + " and courseID: "+ req.body.courseID + " " + " and questionID: "+ req.body.questionID + " " + "'.");
       }else{
-          console.log(thisSurvey);
           try{
-                console.log("RESPONSE IN BODY IS:");
-                console.log(req.body.response);
-
-                console.log("FOUND one");
-                console.log(thisSurvey);
             var questions = thisSurvey.questions;
             questions.forEach((question) => {
                 if(question.questionID == req.body.questionID){
+                    req.body.response["_id"] = ObjectID();
+                    req.body.response.responseId = req.body.reponse._id.str;
                     question.responses.push(req.body.response);
                 }
             });
-
-            console.log(thisSurvey);
-            console.log(thisSurvey.questions[0].responses);
 
             let pushResponse = thisSurvey.save();
 
@@ -120,7 +112,6 @@ router.delete('/responses/',  async (req, res, next) => {
             if(!results){
                 return res.status(400).send("Unexpected error occurred when saving after deleting a response. " + err);
             }else{
-                console.log("Successfully deleted the Response");
                 return res.status(200).send("Response successfully deleted in database.");
             }
 
@@ -162,7 +153,6 @@ router.delete('/responses/all',  async (req, res, next) => {
             if(!results){
                 return res.status(400).send("Unexpected error occurred when saving after deleting ALL responses. " + err);
             }else{
-                console.log("Successfully deleted ALL Responses from database");
                 return res.status(200).send("Responses successfully deleted in database.");
             }
 
