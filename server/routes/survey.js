@@ -8,6 +8,29 @@ const Survey = require('./../schemas/survey');
 ////////////////////////////////
 
 
+//READ Survey route: Retrieves all the Surveys with the specified surveyID from surveys collection (GET)
+router.get('/all/surveys/:courses', async(req, res, next) => {
+  console.log("in /all/surveys route (GET) with courses = " + 
+    JSON.stringify(req.params.courses));
+    var courses = JSON.parse(req.params.courses);
+  try {
+    let thisSurvey = await Survey.find({courseID:  { $in: courses }});
+
+    if(thisSurvey){
+      return res.status(200).json(JSON.stringify(thisSurvey));
+    }
+    else{
+      return res.status(404).send("No surveys with courses " +
+        req.params.courses + " was found in database.");
+    }
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when looking up Surveys with course ids " +
+      req.params.courses + " in database: " + err);
+  }
+});
+
 //READ Survey route: Retrieves the Survey with the specified surveyID from surveys collection (GET)
 router.get('/surveys/:surveyId', async(req, res, next) => {
     console.log("in /surveys route (GET) with surveyID = " + 

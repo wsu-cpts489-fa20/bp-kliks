@@ -20,7 +20,15 @@ class SurveyManagementPage extends React.Component {
             surveyToDelete : {}
         };
 
-        this.getQuestions();
+        // this.getQuestions();
+    }
+
+    //componentDidMount
+    componentDidMount() {
+
+        this.updateSurveys().then((value)=>{
+            console.log("Success.");
+        });
     }
 
     //setDeleteId -- Capture in this.state.deleteId the unique id of the item
@@ -50,11 +58,12 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            await this.getQuestions();
+            // await this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             this.setState({errorMsg: ""});
-            await this.getQuestions();
+            await this.updateSurveys();
+            // await this.getQuestions();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
@@ -121,75 +130,152 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            await this.getQuestions();
+            // await this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
             this.setState({errorMsg: ""});
-            await this.getQuestions();
+            await this.updateSurveys();
+            // await this.getQuestions();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
+    }
+
+    updateSurveys = async () => {
+        var courses = [];
+        courses = this.props.userObj.courses.map((course) => {
+            return course.courseID;
+        });
+    
+        if(courses.length == 0){
+            courses = [""]
+        }
+        
+        let response = await fetch("/all/surveys/" + JSON.stringify(courses), {method: 'GET'});
+        if (response.status != 200) {
+          let msg = await response.text();
+          console.log("There was an error refreshing the user: " + msg);
+          return;
+        } 
+        let surveys = await response.json();
+        surveys = JSON.parse(surveys);
+        console.log("refreshed Surveys");
+
+        if(surveys.length == 0){
+            this.setState({
+                surveys: [],
+                questions: [],
+                responses: []
+            });
+            return;
+        }
+
+        var questions = this.seperateQuestions(surveys);
+        var responses = this.seperateResponses(surveys);
+
+        this.setState({
+            surveys: surveys,
+            questions: questions,
+            responses : responses
+        });
+    }
+
+    seperateQuestions = (surveys) => {
+        var questions = [];
+        surveys.forEach((survey)=>{
+            survey.questions.forEach((question)=> {
+                questions.push(
+                    {
+                        questionID: question.questionID,
+                        surveyID: survey.surveyID,
+                        responses: question.responses,
+                        survey: survey,
+                        question: question,
+                    });
+            });
+        });
+
+        return questions;
+    }
+
+    seperateResponses = (surveys) => {
+        var responses = [];
+        surveys.forEach((survey)=>{
+            survey.questions.forEach((question)=> {
+                question.responses.forEach((response) => {
+                    responses.push({
+                            questionID: question.questionID,
+                            surveyID: survey.surveyID,
+                            response: response,
+                            survey: survey,
+                            question: question,
+                            responseType: response.students.length > 1 ? "Group" : "Individual"
+                        });
+                    });
+                });
+            });
+        return responses;        
     }
 
     /* 
         Name: getQuestions
         Purpose: Gets all of the questions, surveys, and responses for the particular instructor.
     */     
-    getQuestions = async () => {
+    // getQuestions = async () => {
 
-        var courses = [];
-        courses = this.props.userObj.courses.map((course) => {
-            return course.courseID;
-        });
+    //     var courses = [];
+    //     courses = this.props.userObj.courses.map((course) => {
+    //         return course.courseID;
+    //     });
 
-        if(courses.length == 0){
-            courses = [""]
-        }
+    //     if(courses.length == 0){
+    //         courses = [""]
+    //     }
 
-        let response = await fetch("/responses/" + this.props.userObj.id+"/"+JSON.stringify(courses)); //["cpts489Fall2020"]
+    //     let response = await fetch("/responses/" + this.props.userObj.id+"/"+JSON.stringify(courses)); //["cpts489Fall2020"]
     
-        if (response.status == 200) {
-            response = await response.json();
-            const obj = JSON.parse(response);    
+    //     if (response.status == 200) {
+    //         response = await response.json();
+    //         const obj = JSON.parse(response);    
         
-            var getAllResponses = (questions) => {
-                if(questions.length == 0){
-                  return [];
-                }
+    //         var getAllResponses = (questions) => {
+    //             if(questions.length == 0){
+    //               return [];
+    //             }
             
-                var responses = [];
-                var newquestions = [];
-                questions.forEach((survey) => {
-                  survey.questions.forEach((question) => {
-                    newquestions.push({
-                        questionID: question.questionID,
-                        surveyID: survey.surveyID,
-                        responses: question.responses,
-                        survey: survey,
-                        question: question
-                      });
-                    question.responses.forEach((response) => {
-                        responses.push({
-                          questionID: question.questionID,
-                          surveyID: survey.surveyID,
-                          response: response,
-                          survey: survey,
-                          question: question,
-                          responseType: response.students.length > 1 ? "Group" : "Individual"
-                        });
-                    });
-                  });
-                });
-                return [responses, newquestions];
-              }
+    //             var responses = [];
+    //             var newquestions = [];
+    //             questions.forEach((survey) => {
+    //               survey.questions.forEach((question) => {
+    //                 newquestions.push({
+    //                     questionID: question.questionID,
+    //                     surveyID: survey.surveyID,
+    //                     responses: question.responses,
+    //                     survey: survey,
+    //                     question: question
+    //                   });
+    //                 question.responses.forEach((response) => {
+    //                     responses.push({
+    //                       questionID: question.questionID,
+    //                       surveyID: survey.surveyID,
+    //                       response: response,
+    //                       survey: survey,
+    //                       question: question,
+    //                       responseType: response.students.length > 1 ? "Group" : "Individual"
+    //                     });
+    //                 });
+    //               });
+    //             });
+    //             return [responses, newquestions];
+    //           }
     
-            var data = getAllResponses(obj);
-            this.setState({
-              surveys : obj,
-              questions : data[1],
-              responses : data[0]
-            });
-        }
-    }
+    //         var data = getAllResponses(obj);
+    //         this.setState({
+    //           surveys : obj,
+    //           questions : data[1],
+    //           responses : data[0]
+    //         });
+    //     }
+    // }
 
     setSurveyDelete = (survey) => {
         this.setState({
@@ -213,6 +299,7 @@ class SurveyManagementPage extends React.Component {
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
             console.log("Success deleting survey.");
+            await this.updateSurveys();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }        
 
@@ -275,7 +362,9 @@ class SurveyManagementPage extends React.Component {
                 return (
                     <SearchSurveys
                     surveys={this.state.surveys}
-                    getQuestions={this.getQuestions}
+                    userObj={this.props.userObj}
+                    updateSurveys={this.updateSurveys}
+                    // getQuestions={this.getQuestions}
                     menuOpen={this.props.menuOpen}
                     setSurveyDelete={this.setSurveyDelete}
                     deleteSurvey={this.deleteSurvey}
@@ -286,7 +375,8 @@ class SurveyManagementPage extends React.Component {
                 return (
                     <SubmittedResponse
                     userObj={this.props.userObj}
-                    getQuestions={this.getQuestions}
+                    updateResponses={this.updateSurveys}
+                    // getQuestions={this.getQuestions}
                     questions={this.state.questions}
                     responses={this.state.responses}
                     menuOpen={this.props.menuOpen}
@@ -298,68 +388,3 @@ class SurveyManagementPage extends React.Component {
 }
 
 export default SurveyManagementPage;
-
-
-/*
-    CODE TO HOW HOW TO CALL THE METHODS FOR RESPONSE
-
-BELOW IS HOW YOU CAN CALL THE GET METHOD FOR responses
-        const url = '/responses/' + this.props.userObj.id;
-        const res = await fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-                },
-            method: 'GET',
-            body: JSON.stringify({"courses": ["cpts489Fall2020"]})}); 
-        const msg = await res.text();
-        if (res.status == 200) {
-          console.log("getQuestions: SUCCESS");
-          console.log(res);
-          console.log(msg);
-        } else {
-          console.log(res);
-          console.log(msg);
-          console.log("getQuestions: ERROR");
-        }
-
-    
-BELOW IS HOW YOU CAN CALL THE CREATE METHOD FOR responses
-    var newResponse = {
-    "students": [
-        {
-        "userID": "marco.arceo@wsu.edu",
-        "studentDisplayName": "marco.arceo@wsu.edu"
-        }],
-    "responseId": "rID55",
-    "responseDateTime": "Wed Nov 12 2020 14:19:12 GMT-0800",
-    "surveyResponse": "Choice 5"
-    }
-
-    var newData = {
-    "response" : newResponse,
-    "questionID": "questionID1",
-    "courseID": "cpts489Fall2020",
-    "surveyID": "testID",
-    }
-    
-    
-    const url = '/responses/';// + this.props.userObj.id;
-    const res = await fetch(url, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
-        method: 'POST',
-        body: JSON.stringify(newData)}); 
-    const msg = await res.text();
-    if (res.status == 200) {
-        console.log("getQuestions: SUCCESS");
-        console.log(res);
-        console.log(msg);
-    } else {
-        console.log(res);
-        console.log(msg);
-        console.log("getQuestions: ERROR");
-    }
-*/

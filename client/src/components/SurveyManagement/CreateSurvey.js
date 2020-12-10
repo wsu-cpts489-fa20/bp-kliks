@@ -53,7 +53,7 @@ class CreateSurvey extends React.Component {
           };
 
           setTimeout(this.props.saveSurvey, 1000, "efr423f" /* Random string, is changed in the route. */, newSurvey);
-          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+          // this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
 

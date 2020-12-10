@@ -5,7 +5,7 @@ class SearchSurveys extends React.Component {
       super(props);
         
       this.state = {
-          surveys : this.props.surveys,
+          // surveys : this.props.surveys,
           showConfirmDelete: false
       };
     }
@@ -98,7 +98,7 @@ class SearchSurveys extends React.Component {
             {Object.keys(this.props.surveys).length === 0 ? 
             <tr>
             <td colSpan="5" style={{fontStyle: "italic"}}>No surveys created</td>
-            </tr> : this.renderTable(this.state.surveys)
+            </tr> : this.renderTable(this.props.surveys)
             }              
           </tbody>
         </table>
