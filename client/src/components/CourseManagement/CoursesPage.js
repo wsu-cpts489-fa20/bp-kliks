@@ -120,6 +120,8 @@ class CoursesPage extends React.Component {
         } else {
             console.log("Error adding course");
         }
+
+        this.props.updateUser();
     }
 
     render() {
@@ -136,7 +138,8 @@ class CoursesPage extends React.Component {
                     changeMode={this.props.changeMode}
                     mode={this.props.mode}
                     userId={this.props.userObj.id}
-                    changeCourse={this.handleChangeCourse}/> :
+                    changeCourse={this.handleChangeCourse}
+                    updateUser={this.props.updateUser}/> :
                     <StudentsTable 
                     students={this.state.students}
                     userType={this.props.userObj.userType}
