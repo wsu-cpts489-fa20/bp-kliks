@@ -10,6 +10,7 @@ import CoursesTable from './CoursesTable';
 import FloatingButton from './../FloatingButton.js';
 import UploadStudents from './UploadStudents.js';
 import AddCourse from './AddCourse.js';
+import AddStudent from './AddStudent';
 
 class CoursesPage extends React.Component {
 
@@ -57,8 +58,7 @@ class CoursesPage extends React.Component {
 
     // handle click on the add students button
     handleAddStudent = () => {
-        //this.handleChangeMode(AppMode.STUDENTS_CREATE);
-        console.log("Adding a student");
+        
         this.props.changeMode(AppMode.STUDENTS_CREATE);
     }
 
@@ -100,11 +100,29 @@ class CoursesPage extends React.Component {
 
     // handle adding a student to the currently selected course
     addStudent = async (newStudent) => {
+        console.log(newStudent);
         console.log("Adding a student for course: " + this.state.courseId);
+
+        const url = '/students/' + this.state.courseId;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'POST',
+            body: JSON.stringify(newStudent)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            console.log("Successfully added student");
+        } else {
+            console.log("Error adding student");
+        }
+
+        // refetch the students list
+        this.handleChangeCourse(this.state.courseId, this.state.courseName);
     }
 
     addCourse = async (courseData) => {
-        console.log("Creating a new course: " + courseData);
 
         const url = '/courses/' + this.props.userObj.id;
         const res = await fetch(url, {
@@ -148,7 +166,7 @@ class CoursesPage extends React.Component {
                 }
                 </center>
 
-                {this.props.userObj.userType === "Instructor" &&  this.props.mode === AppMode.STUDENTS ?
+                {this.props.userObj.userType === "Instructor" &&  (this.props.mode === AppMode.STUDENTS || this.props.mode === AppMode.STUDENTS_CREATE) ?
                 <div className="floatingbtn-container">
                 <FloatingButton
                 id={"AddStudentBtn"}
@@ -175,6 +193,13 @@ class CoursesPage extends React.Component {
                 changeMode={this.props.changeMode}
                 addCourse={this.addCourse}
                 instructorId={this.props.userObj.id} />
+                : null}
+
+                {this.props.mode === AppMode.STUDENTS_CREATE ?
+                <AddStudent
+                changeMode={this.props.changeMode}
+                addStudent={this.addStudent}
+                courseName={this.state.courseName} />
                 : null}
 
             </div>
