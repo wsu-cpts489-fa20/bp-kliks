@@ -63,7 +63,7 @@ class SurveyManagementPage extends React.Component {
     */
     editQuestion = async (surveyId, updatedQuestion) => {
         const url = '/questions/' + surveyId + '/' + 
-            this.questions[this.state.editId]._id;
+            this.questions[this.state.editId].questionID;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -86,7 +86,7 @@ class SurveyManagementPage extends React.Component {
     //this.state.deleteId, delete from the database, and reset deleteId to empty.
     deleteQuestion = async () => {
         const url = '/questions/' + this.props.userObj.id + '/' + 
-            this.questions[this.state.deleteId]._id;
+            this.questions[this.state.deleteId].questionID;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
