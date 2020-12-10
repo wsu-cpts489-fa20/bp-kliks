@@ -37,21 +37,24 @@ router.post('/students/:courseId', async (req, res, next) => {
   });
 
 
-//READ course route: Returns all students associated 
+//READ student route: Returns all students associated 
 //with a given course in the users collection (GET)
 router.get('/students/:courseId', async(req, res) => {
   console.log("in /students route (GET) with courseId = " + 
-                JSON.stringify(req.params.course));
+                JSON.stringify(req.params.courseId));
   try {
     let thisUser = await User.findOne({"courses.courseID": req.params.courseId});
     if (!thisUser) {
-      return res.status(400).message("No user account with specified userId was found in database.");
+      return res.status(400).message("No course with specified id was found in database.");
     } else {
-      return res.status(200).json(JSON.stringify(thisUser.courses[0].students));
+      let students = thisUser.courses.filter(function (course) {
+        return course.courseID === req.params.courseId;
+      });
+      students = students[0].students;
+      return res.status(200).json(JSON.stringify(students));
     }
   } catch (err) {
-    console.log()
-    return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
+    console.log("Unexpected error occurred when looking up student in database: " + err)
   }
 });
 
