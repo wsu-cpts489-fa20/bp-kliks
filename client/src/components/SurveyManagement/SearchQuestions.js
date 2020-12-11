@@ -86,7 +86,7 @@ class SubmittedResponse extends React.Component {
     }
 
   switchHandler = () => {
-    console.log(this.state.ActiveFilter);
+    // console.log(this.state.ActiveFilter);
     if (this.state.ActiveFilter == false)
     {
       this.setState({ActiveFilter: true});
