@@ -17,6 +17,6 @@ var accounts = {
     },
 }
 
-var isLocalTesting = true;
+var isLocalTesting = false;
 
 export { accounts, isLocalTesting };
