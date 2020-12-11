@@ -1,3 +1,6 @@
+// SearchSurvey page that allows the instructor to search for surveys that they have made.
+// In addition to searching, an instuctor can remove and soort surveys.
+
 import React from 'react';
 import ConfirmDeleteSurvey from './ConfirmDeleteSurvey.js';
 import { SortSurvey } from './SortTypes.js'
@@ -35,18 +38,12 @@ class SearchSurveys extends React.Component {
     }
 
     handleSurveys = (surveys) => {
-      console.log(this.props.surveys);
-      console.log(this.state.surveys);
       let sortedSurveys = this.props.surveys;//surveys;
       let isSearch = this.state.isSearch;
       let isSort = this.state.isSort;
 
-      console.log("isSort=", isSort);
-      console.log("isSearch=", isSearch);
-
+      // First check if we need to perform any searches
       if(this.state.isSearch){
-        console.log("Searching for Surveys.");
-
         var searchedSurveys = [];
         sortedSurveys.forEach((survey) => {
           var rowString = "";
@@ -55,8 +52,6 @@ class SearchSurveys extends React.Component {
           rowString += survey.surveyDate + " ";
           rowString += survey.courseID + " ";
           rowString += survey.questions.length + " ";
-
-          console.log(rowString);
 
           if(rowString.toUpperCase().indexOf(this.state.searchKey.toUpperCase()) > -1){
             searchedSurveys.push(survey);
@@ -67,11 +62,11 @@ class SearchSurveys extends React.Component {
         isSearch = false;
       }
 
+      // Check if we need to sort
       if(isSort){
-        console.log("Sorting Surveys.");
-        console.log("Sorting: ", this.state.sortType);
         if(this.state.sortType == SortSurvey.questions){
           sortedSurveys.sort((surveyA, surveyB) => {
+            // Check against the lengths
             if(surveyA.questions.length < surveyB.questions.length){
               return this.state.sortNumberOfQuestionsAscending ? 1 : -1;
             }
@@ -82,24 +77,21 @@ class SearchSurveys extends React.Component {
           });
         }
         else if(this.state.sortType == SortSurvey.surveyDate){
-          // Date.parse('2013/08/26')
           sortedSurveys.sort((surveyA, surveyB) => {
+            // Turn the date options into Date types so that they are easier to compare.
             let dateA = Date.parse(surveyA[this.state.sortType]);
             let dateB = Date.parse(surveyB[this.state.sortType]);
-            console.log(dateA);
-            console.log(dateB);
             if(dateA < dateB){
-              console.log("LESS");
               return this.state.sortDateAscending ? 1 : -1;
             }
             if(dateA > dateB){
-              console.log("MORE");
               return this.state.sortDateAscending ? -1 : 1;
             }
             return 0;
           });          
         }
         else{
+          // Sort the rest the same way
             sortedSurveys.sort((surveyA, surveyB) => {
               if(surveyA[this.state.sortType] < surveyB[this.state.sortType]){
                   if(this.state.sortType == "courseID"){
@@ -129,51 +121,37 @@ class SearchSurveys extends React.Component {
 
         isSort = false;
       }
-      
-      console.log(sortedSurveys);
 
+      // Update the state variables
       this.setState({
         isSort : isSort,
         isSearch: isSearch,
         surveys : sortedSurveys
-      }, () => {
-      console.log("Updated isSort and Sort");
       });
-      // return sortedSurveys;
     }
 
   /* 
-    Name: SearchResponseTable
-    Purpose: Given a search query, it searches for responses/questions that contain that search query.
+    Name: onSearchTable
+    Purpose: Given a search query, it searches for surveys that contain that search query.
   */
   onSearchTable = (event) => {
     if(event.keyCode === 13){
       event.preventDefault();
-
-      console.log("Enter KEY is hit and we are Searching");
-      this.setState({isSearch: true}, () => {this.populateSurveys();});
-      // this.populateSurveys();
-      
-      // // Do some reduction to only display the elements that match that searchKey -- Surveys.
-      // if(this.state.searchKey.length > 0){
-      //   this.setState({isSearch: false, searchKey: ""});
-      // }
-      // else{
-      //   console.log("Other than keyCode 13");
-      //   this.setState({isSearch: false});
-      // }
+      this.setState({isSearch: true}, () => {this.populateSurveys();}); //Set the state of isSearch and populate the survey state array. 
     }
   }
 
+  // Deletes a survey from MonogDB
   deleteSurvey = () => {
-    this.props.deleteSurvey();
-    this.props.updateSurveys();
-    this.setState({showConfirmDelete: false});      
+    this.props.deleteSurvey(); // Call parent component to make the route call 
+    this.props.updateSurveys(); // Update the surveys 
+    this.setState({showConfirmDelete: false});
   }
 
+  // ConfirmDelete: confirms that the user wants to delete the survey that they selected.
   confirmDelete = (survey) => {
     this.props.setSurveyDelete(survey);
-    this.setState({showConfirmDelete: true});      
+    this.setState({showConfirmDelete: true}); //Set the confirm delete state
   }
 
   /* 
@@ -181,97 +159,89 @@ class SearchSurveys extends React.Component {
     Purpose: Updates the searchTerm when it changes
   */
   onSearchKeyChange = (event) => {
-    console.log(event.target.value);
     this.setState({searchKey : event.target.value});
   }
 
+  // Calls the handle surveys method.
   populateSurveys = () => {
     this.handleSurveys(this.props.surveys);
-    // this.setState({surveys: result});
   }
 
+  // Updates the Survey array with the correct content that is going to be rendered.
   updateSurveys = () => {
-    console.log("this.updateSurveys");
-    console.log(this.props.surveys);
-    console.log(this.state.surveys);
     var stateSurveys = this.state.surveys;
     var propSurveys = this.props.surveys.map((value) => {return value.surveyID;});
     var surveysToRemove = [];
+
+    // Here we are finding the surveys that are different between the newState (this.props.surveys) and the current state of survey
     stateSurveys.forEach((survey)=>{
-      var result = propSurveys.includes(survey.surveyID);// this.props.surveys.filter(data => (data.surveyID != survey.surveyID));
+      var result = propSurveys.includes(survey.surveyID);
       if(result == false){
         surveysToRemove.push(survey.surveyID);
       }
     });
 
+    // Here we remove the elements that have been removed in the this.props.surveys array. 
     let final_surveys = stateSurveys.filter((survey) => !surveysToRemove.includes(survey.surveyID));
-    console.log(surveysToRemove);
-
     if(final_surveys.length == 0){
       final_surveys = this.state.surveys;
     }
-
-    console.log(final_surveys);
     return final_surveys;
   }
 
     // Renders the survey table with the surveys for the user.
-    renderTable = (surveys) => {
-      console.log("Render Table fired");
-      
-      // var surveys = this
+    renderTable = (surveys) => 
+    {      
       surveys = this.updateSurveys();
-        // surveys = this.handleSurveys(surveys);
-        console.log("Render Table fired AFTER");
-        let table = [];
-        for (let r = 0; r < surveys.length; r++) {
-            table.push(
-                <tr key={surveys[r].surveyID+"-"+r}>
-                <td>{surveys[r].surveyID}</td>
-                <td>{surveys[r].surveyTitle}</td>
-                <td>{surveys[r].surveyDate}</td>
-                <td>{surveys[r].courseID}</td>
-                <td id={surveys[r].surveyID+"-"+"questionsLength"}>{surveys[r].questions.length}</td>
-                {/* <td><button id={response.surveyID+"-"+index+"-"+"view"} onClick={this.props.menuOpen ? null : () => 
-                this.viewResponse(response.surveyID+"-"+index)}>
-                    <span className="fa fa-eye"></span></button></td> */}
-                <td><button id={surveys[r].surveyID+"-"+"delete"} onClick={this.props.menuOpen ? null : 
-                () => this.confirmDelete(surveys[r])}>
-                    <span className="fa fa-trash"></span></button></td>
-            </tr>
-            );
-        }
-        return table;
+      let table = [];
+      for (let r = 0; r < surveys.length; r++) {
+          table.push(
+              <tr key={surveys[r].surveyID+"-"+r}>
+              <td>{surveys[r].surveyID}</td>
+              <td>{surveys[r].surveyTitle}</td>
+              <td>{surveys[r].surveyDate}</td>
+              <td>{surveys[r].courseID}</td>
+              <td id={surveys[r].surveyID+"-"+"questionsLength"}>{surveys[r].questions.length}</td>
+              {/* <td><button id={response.surveyID+"-"+index+"-"+"view"} onClick={this.props.menuOpen ? null : () => 
+              this.viewResponse(response.surveyID+"-"+index)}>
+                  <span className="fa fa-eye"></span></button></td> */}
+              <td><button id={surveys[r].surveyID+"-"+"delete"} onClick={this.props.menuOpen ? null : 
+              () => this.confirmDelete(surveys[r])}>
+                  <span className="fa fa-trash"></span></button></td>
+          </tr>
+          );
+      }
+      return table;
     }
 
+    // Sets the state variables that pertain to sorting by the surveyid
     onSortBySurveyID = () => {
-      console.log("Sort by: "+ SortSurvey.surveyID); 
       this.setState({sortType: SortSurvey.surveyID, onSortBySurveyID: !this.state.sortSurveyIDAscending, isSort: true}, 
       () => {this.populateSurveys();});
     }
 
+      // Sets the state variables that pertain to sorting by the course id
     onSortByCourseID = () => {
-      console.log("Sort by: "+ SortSurvey.courseID);
       this.setState({sortType: SortSurvey.courseID, sortCourseIDAscending: !this.state.sortCourseIDAscending, isSort: true},
         () => {this.populateSurveys();});
 
     }
 
+    // Sets the state variables that pertain to sorting by the number of questions in a survey
     onSortByNumberOfQuestions = () => {
-      console.log("Sort by: "+ SortSurvey.questions);
       this.setState({sortType: SortSurvey.questions, sortNumberOfQuestionsAscending: !this.state.sortNumberOfQuestionsAscending, isSort: true},
         () => {this.populateSurveys();});
 
     }
 
+    // Sets the state variables that pertain to sorting by the title    
     onSortBySurveyTitle = () => {
-      console.log("Sort by: "+ SortSurvey.surveyTitle);
       this.setState({sortType: SortSurvey.surveyTitle, sortSurveyTitleAscending: !this.state.sortSurveyTitleAscending, isSort: true}, 
         () => {this.populateSurveys();});
     }
 
+    // Sets the state variables that pertain to sorting by the date
     onSortByDate = () => {
-      console.log("Sort by: "+ SortSurvey.surveyDate);
       this.setState({sortType: SortSurvey.surveyDate, sortDateAscending: !this.state.sortDateAscending, isSort: true},
         () => {this.populateSurveys();});
     }

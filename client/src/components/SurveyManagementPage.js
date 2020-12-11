@@ -1,3 +1,7 @@
+// Main manage surveyManagement page
+// From here an instructor can CreateQuestions, CreateSurveys, SearchSurveys, View Active questions, search for questions, and view all
+// of the responses that students made.
+
 import React from 'react';
 import CreateSurvey from './SurveyManagement/CreateSurvey.js';
 import ActiveQuestions from './SurveyManagement/ActiveQuestions.js'
@@ -8,6 +12,8 @@ import CreateQuestion from './SurveyManagement/CreateQuestion.js';
 import SearchSurveys from './SurveyManagement/SearchSurveys.js';
 
 class SurveyManagementPage extends React.Component {
+
+    // Constructor for the component that takes in the props and sets the state of the component.
     constructor(props){
         super(props);
         this.state = {
@@ -19,16 +25,11 @@ class SurveyManagementPage extends React.Component {
             editId: "",
             surveyToDelete : {}
         };
-
-        // this.getQuestions();
     }
 
     //componentDidMount
     componentDidMount() {
-
-        this.updateSurveys().then((value)=>{
-            console.log("Success.");
-        });
+        this.updateSurveys();
     }
 
     //setDeleteId -- Capture in this.state.deleteId the unique id of the item
@@ -44,7 +45,7 @@ class SurveyManagementPage extends React.Component {
     }
 
     /*
-        Save a question to the mongoDB 
+        Save a question to the mongoDB by calling the POST route for questions
     */
     saveQuestion = async (surveyId, newQuestion) => {
         const url = '/questions/' + surveyId;
@@ -58,18 +59,16 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            // await this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             this.setState({errorMsg: ""});
             await this.updateSurveys();
-            // await this.getQuestions();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
 
     /*
-        Edit a question to the mongoDB 
+        Edit a question to the mongoDB by calling the PUT route for questions
     */
     editQuestion = async (surveyId, updatedQuestion) => {
         const url = '/questions/' + surveyId + '/' + 
@@ -88,6 +87,7 @@ class SurveyManagementPage extends React.Component {
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             console.log("Question Updated!");
+            await this.updateSurveys();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
@@ -95,6 +95,7 @@ class SurveyManagementPage extends React.Component {
     //deleteQuestion -- Delete the current user's question uniquely identified by
     //this.state.deleteId, delete from the database, and reset deleteId to empty.
     deleteQuestion = async () => {
+        // Make a request to the questions DELETE route to remove the question.
         const url = '/questions/' + this.props.userObj.id + '/' + 
             this.props.userObj.entries[this.state.deleteId]._id;
         const res = await fetch(url, {
@@ -103,7 +104,6 @@ class SurveyManagementPage extends React.Component {
                 'Content-Type': 'application/json'
                 },
             method: 'DELETE'
-            //body: JSON.stringify()
         }); 
         const msg = await res.text();
         if (res.status != 200) {
@@ -119,6 +119,7 @@ class SurveyManagementPage extends React.Component {
         Save a survey to the mongoDB 
     */
     saveSurvey = async (surveyID, newSurvey) => {
+        // Make a request to the surveys POST route to add the survey.        
         const url = '/surveys/' + surveyID;
         const res = await fetch(url, {
             headers: {
@@ -130,26 +131,27 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            // await this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
             this.setState({errorMsg: ""});
-            await this.updateSurveys();
-            // await this.getQuestions();
+            await this.updateSurveys(); //call update to update the array state variables.
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
 
+    // Updates surveys like the updateUser except for Surveys
     updateSurveys = async () => {
         var courses = [];
         courses = this.props.userObj.courses.map((course) => {
             return course.courseID;
         });
     
+        // Checks if there are courses, if there are no courses send we just send an array with an empty string.
         if(courses.length == 0){
             courses = [""]
         }
         
+        // Make a request to get the surveys
         let response = await fetch("/all/surveys/" + JSON.stringify(courses), {method: 'GET'});
         if (response.status != 200) {
           let msg = await response.text();
@@ -158,8 +160,8 @@ class SurveyManagementPage extends React.Component {
         } 
         let surveys = await response.json();
         surveys = JSON.parse(surveys);
-        console.log("refreshed Surveys");
 
+        // If we get back nothing then we can set the state to empty arrays
         if(surveys.length == 0){
             this.setState({
                 surveys: [],
@@ -169,9 +171,10 @@ class SurveyManagementPage extends React.Component {
             return;
         }
 
-        var questions = this.seperateQuestions(surveys);
-        var responses = this.seperateResponses(surveys);
+        var questions = this.seperateQuestions(surveys); // Get all of the questions.
+        var responses = this.seperateResponses(surveys); // Get all of the responses.
 
+        // Udpate the surveys, questions, and responses.
         this.setState({
             surveys: surveys,
             questions: questions,
@@ -179,6 +182,7 @@ class SurveyManagementPage extends React.Component {
         });
     }
 
+    // Gets the questions from the surveys that were just retrieved 
     seperateQuestions = (surveys) => {
         var questions = [];
         surveys.forEach((survey)=>{
@@ -197,8 +201,10 @@ class SurveyManagementPage extends React.Component {
         return questions;
     }
 
+    // Gets the responses from the surveys that were just retrieved 
     seperateResponses = (surveys) => {
         var responses = [];
+        // Run through all of the surveys and questions then the responses and begin to push them into the responses object.
         surveys.forEach((survey)=>{
             survey.questions.forEach((question)=> {
                 question.responses.forEach((response) => {
@@ -216,77 +222,17 @@ class SurveyManagementPage extends React.Component {
         return responses;        
     }
 
-    /* 
-        Name: getQuestions
-        Purpose: Gets all of the questions, surveys, and responses for the particular instructor.
-    */     
-    // getQuestions = async () => {
-
-    //     var courses = [];
-    //     courses = this.props.userObj.courses.map((course) => {
-    //         return course.courseID;
-    //     });
-
-    //     if(courses.length == 0){
-    //         courses = [""]
-    //     }
-
-    //     let response = await fetch("/responses/" + this.props.userObj.id+"/"+JSON.stringify(courses)); //["cpts489Fall2020"]
-    
-    //     if (response.status == 200) {
-    //         response = await response.json();
-    //         const obj = JSON.parse(response);    
-        
-    //         var getAllResponses = (questions) => {
-    //             if(questions.length == 0){
-    //               return [];
-    //             }
-            
-    //             var responses = [];
-    //             var newquestions = [];
-    //             questions.forEach((survey) => {
-    //               survey.questions.forEach((question) => {
-    //                 newquestions.push({
-    //                     questionID: question.questionID,
-    //                     surveyID: survey.surveyID,
-    //                     responses: question.responses,
-    //                     survey: survey,
-    //                     question: question
-    //                   });
-    //                 question.responses.forEach((response) => {
-    //                     responses.push({
-    //                       questionID: question.questionID,
-    //                       surveyID: survey.surveyID,
-    //                       response: response,
-    //                       survey: survey,
-    //                       question: question,
-    //                       responseType: response.students.length > 1 ? "Group" : "Individual"
-    //                     });
-    //                 });
-    //               });
-    //             });
-    //             return [responses, newquestions];
-    //           }
-    
-    //         var data = getAllResponses(obj);
-    //         this.setState({
-    //           surveys : obj,
-    //           questions : data[1],
-    //           responses : data[0]
-    //         });
-    //     }
-    // }
-
+    // Sets the survey that is going to be delete.
     setSurveyDelete = (survey) => {
+        // Setting the unique identifier that will be delete [The survey itself.]
         this.setState({
             surveyToDelete : survey
         });
     }
 
+    // Delete Surveys by calling the DELETE route for SURVEYS
     deleteSurvey = async () => {
-        console.log("Delete Survey");
         if(this.state.surveyToDelete == {}){
-            console.log("There is no survey to delete.");
             return;
         }
 
@@ -298,8 +244,7 @@ class SurveyManagementPage extends React.Component {
             + msg});
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
-            console.log("Success deleting survey.");
-            await this.updateSurveys();
+            await this.updateSurveys(); // here, we want to update the surveys after this call.
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
@@ -363,7 +308,6 @@ class SurveyManagementPage extends React.Component {
                     surveys={this.state.surveys}
                     userObj={this.props.userObj}
                     updateSurveys={this.updateSurveys}
-                    // getQuestions={this.getQuestions}
                     menuOpen={this.props.menuOpen}
                     setSurveyDelete={this.setSurveyDelete}
                     deleteSurvey={this.deleteSurvey}
@@ -375,7 +319,6 @@ class SurveyManagementPage extends React.Component {
                     <SubmittedResponse
                     userObj={this.props.userObj}
                     updateResponses={this.updateSurveys}
-                    // getQuestions={this.getQuestions}
                     questions={this.state.questions}
                     responses={this.state.responses}
                     menuOpen={this.props.menuOpen}
