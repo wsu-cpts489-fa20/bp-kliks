@@ -53,15 +53,15 @@ class StudentsTable extends React.Component {
         let table = [];
         for (const r in this.props.students) {
         table.push(
-            <tr key={r}>
-            <td>{this.props.students[r].studentDisplayName}</td>
+            <tr key={r} className="student-row">
+            <td className="student-name-value">{this.props.students[r].studentDisplayName}</td>
             <td>{this.props.students[r].userID}</td>
             {this.props.userType === "Instructor" ? 
                 <div className="instructor-buttons">
-                    <td><button onClick={this.props.menuOpen ? null : () => 
+                    <td><button className="edit-student-btn" onClick={this.props.menuOpen ? null : () => 
                         this.handleEditStudent(this.props.students[r].userID, this.props.students[r].studentDisplayName)}>
                             <span className="fa fa-pencil-square-o"></span></button></td>
-                    <td><button onClick={this.props.menuOpen ? null : () => 
+                    <td><button className="delete-student-btn" onClick={this.props.menuOpen ? null : () => 
                         this.handleDeleteStudent(this.props.students[r].userID, this.props.students[r].studentDisplayName)}>
                             <span className="fa fa-trash-o"></span></button></td>
                 </div> : null}

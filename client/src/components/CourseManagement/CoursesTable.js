@@ -83,8 +83,8 @@ class CoursesTable extends React.Component {
         let table = [];
         for (const r in this.props.courses) {
         table.push(
-            <tr key={r}>
-            <td>{this.props.courses[r].courseName}</td>
+            <tr key={r} className="course-row">
+            <td class="course-name-value">{this.props.courses[r].courseName}</td>
             <td>{this.props.courses[r].courseYear}</td>
             <td>{this.props.courses[r].courseSemester}</td>
             <td>{"" + this.props.courses[r].courseInstructorFirstName + " " + 
@@ -95,10 +95,10 @@ class CoursesTable extends React.Component {
                     <span id="studentView" className="fa fa-users"></span></button></td>
             {this.props.userType === "Instructor" ? 
                 <div className="instructor-buttons">
-                    <td><button onClick={this.props.menuOpen ? null : () => 
+                    <td><button className="edit-course-btn" onClick={this.props.menuOpen ? null : () => 
                         this.handleEditCourse(this.props.courses[r].courseID, this.props.courses[r].courseName)}>
                             <span className="fa fa-pencil-square-o"></span></button></td>
-                    <td><button onClick={this.props.menuOpen ? null : () => 
+                    <td><button className="delete-course-btn" onClick={this.props.menuOpen ? null : () => 
                         this.handleDeleteCourse(this.props.courses[r].courseID, this.props.courses[r].courseName)}>
                             <span className="fa fa-trash-o"></span></button></td>
                 </div> : null}
