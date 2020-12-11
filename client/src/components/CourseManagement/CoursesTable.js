@@ -57,6 +57,7 @@ class CoursesTable extends React.Component {
         }
 
         this.props.changeMode(AppMode.COURSES);
+        this.props.updateUser();
     }
 
     editCourse = async (courseInfo) => {
@@ -77,6 +78,7 @@ class CoursesTable extends React.Component {
         } else {
             console.log("Error occurred while updating course");
         }
+        this.props.updateUser();
     }
 
     //renderTable -- render an HTML table displaying the rounds logged

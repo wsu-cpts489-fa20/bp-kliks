@@ -1,3 +1,5 @@
+// CreateSurvey: Allows an instructor to create a survey and save it the database.
+
 import React from 'react';
 import FileUpload from './AnswerTypes/FileUpload';
 import FreeResponse from './AnswerTypes/FreeResponse';
@@ -52,8 +54,8 @@ class CreateSurvey extends React.Component {
             courseID : this.state.courseID
           };
 
+          // Make a call to the saveSurvey to save the survey to MongoDB
           setTimeout(this.props.saveSurvey, 1000, "efr423f" /* Random string, is changed in the route. */, newSurvey);
-          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
 
@@ -61,6 +63,7 @@ class CreateSurvey extends React.Component {
     getCourses = () => {
       var courses = [];
 
+      // Go through all of the courses and create the dropdown option.
       for(var index = 0; index < this.props.userObj.courses.length; index++)
       {
         const id = this.props.userObj.courses[index].courseSemester + "-"  + this.props.userObj.courses[index].courseYear +
