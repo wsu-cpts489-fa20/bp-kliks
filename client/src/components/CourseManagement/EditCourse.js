@@ -99,7 +99,7 @@ class EditCourse extends React.Component {
     render() {
         return (
             <div id="aboutModal" className="modal" role="dialog">
-                <div id="AddCourseModal" className="modal-content">
+                <div id="EditCourseModal" className="modal-content">
                     <div className="modal-header">
                     <center>
                         <h3 className="modal-title"><b>Edit {this.props.courseName}</b></h3>
@@ -112,7 +112,7 @@ class EditCourse extends React.Component {
                         <label>
                             Course Name:
                             <br/>
-                            <input name="name" className="form-control form-center" type="text"
+                            <input id="name" name="name" className="form-control form-center" type="text"
                                 value={this.state.name} onChange={this.handleChange}
                                 placeholder="Course name" size="50" maxLength="50" required={true}/>
                         </label>
@@ -120,7 +120,7 @@ class EditCourse extends React.Component {
                         <label>
                             Course Number:
                             <br/>
-                            <input name="number" className="form-control form-center" type="text"
+                            <input id="number" name="number" className="form-control form-center" type="text"
                                 value={this.state.number} onChange={this.handleChange} ref={this.numberRef}
                                 placeholder="Course number" size="50" maxLength="50" required={true}/>
                         </label>
@@ -128,7 +128,7 @@ class EditCourse extends React.Component {
                         <label>
                             Term:
                             <br/>
-                            <input name="semester" className="form-control form-center" type="text"
+                            <input id="semester" name="semester" className="form-control form-center" type="text"
                                 value={this.state.semester} onChange={this.handleChange} ref={this.semesterRef}
                                 placeholder="Current term" size="50" maxLength="50" required={true}/>
                         </label>
@@ -136,7 +136,7 @@ class EditCourse extends React.Component {
                         <label>
                             Year:
                             <br/>
-                            <input name="year" className="form-control form-center" type="text"
+                            <input id="year" name="year" className="form-control form-center" type="text"
                                 value={this.state.year} onChange={this.handleChange} ref={this.yearRef}
                                 placeholder="Current year" size="50" maxLength="50" required={true}/>
                         </label>
@@ -144,7 +144,7 @@ class EditCourse extends React.Component {
                         <label>
                             Instructor First Name:
                             <br/>
-                            <input name="instructorFirstName" className="form-control form-center" type="text"
+                            <input id="instructorFirstName" name="instructorFirstName" className="form-control form-center" type="text"
                                 value={this.state.instructorFirstName} onChange={this.handleChange}
                                 placeholder="First name" size="50" maxLength="50" required={true}/>
                         </label>
@@ -152,7 +152,7 @@ class EditCourse extends React.Component {
                         <label>
                             Instructor Last Name:
                             <br/>
-                            <input name="instructorLastName" className="form-control form-center" type="text"
+                            <input id="instructorLastName" name="instructorLastName" className="form-control form-center" type="text"
                                 value={this.state.instructorLastName} onChange={this.handleChange}
                                 placeholder="Last name" size="50" maxLength="50" required={true}/>
                         </label>
@@ -160,22 +160,22 @@ class EditCourse extends React.Component {
                         <label>
                             Enrollment Limit:
                             <br/>
-                            <input name="enrollmentLimit" className="form-control form-center" type="text"
+                            <input id="enrollmentLimit" name="enrollmentLimit" className="form-control form-center" type="text"
                                 value={this.state.enrollmentLimit} onChange={this.handleChange}
                                 placeholder="Enrollment limit" size="50" maxLength="50" required={true}/>
                         </label>
                         <p></p>
                         <label>Notes:
-                            <textarea name="notes" className="form-control" rows="6" cols="75" 
+                            <textarea id="notes" name="notes" className="form-control" rows="6" cols="75" 
                                 placeholder="Enter course notes" value={this.state.notes} 
                                 onChange={this.handleChange} />
                         </label>
                         <p></p>
                         <p></p>
                         <div className="modal-footer">
-                            <button role="submit" className="btn btn-primary">
+                            <button role="submit" className="btn btn-primary edit-course">
                             Edit</button>
-                            <button className="btn btn-secondary" onClick={this.handleCloseModal}>
+                            <button className="btn btn-secondary cancel-edit-course" onClick={this.handleCloseModal}>
                             Cancel</button>
                         </div>
                         <br />
