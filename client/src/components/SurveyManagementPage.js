@@ -301,8 +301,7 @@ class SurveyManagementPage extends React.Component {
             console.log("Success deleting survey.");
             await this.updateSurveys();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
-        }        
-
+        }
     }
 
     render() {
