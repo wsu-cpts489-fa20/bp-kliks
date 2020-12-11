@@ -126,7 +126,7 @@ class SubmittedResponse extends React.Component {
             <td>{questions[r].question.questionTitle}</td>
             <td>{questions[r].question.questionText}</td>
             <td>{questions[r].question.questionAnswers}</td>
-            <td>{questions[r].question.questionActive}</td>
+            <td>{questions[r].question.questionActive == false ? "No" : "Yes"}</td>
             <td><button onClick={this.props.menuOpen ? null : null}>
                   <span className="fa fa-eye"></span></button></td>
             <td><button onClick={this.props.menuOpen ? null : 
