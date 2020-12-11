@@ -96,8 +96,9 @@ router.delete('/students/:courseId/:userId', async (req, res, next) => {
                 JSON.stringify(req.params)); 
   try {
     let status = await User.updateMany(
-      {"courses.courseID": req.params.courseId},
-      {$pull: {'courses.0.students': {"userID" : req.params.userId}}});
+      {"courses.courseID": req.params.courseId,
+          'courses.students.userID': req.params.userId},
+      {$pull: {'courses.$.students': {"userID" : req.params.userId}}});
       if (status.nModified != 1) { //Should never happen!
         res.status(400).send("Unexpected error occurred when deleting student from a course from database. Student was not deleted.");
       } else {

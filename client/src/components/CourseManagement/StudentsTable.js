@@ -3,6 +3,7 @@
 import React from 'react';
 import AppMode from "./../../AppMode.js";
 import EditStudent from "./EditStudent.js";
+import DeleteStudent from "./DeleteStudent.js";
 
 class StudentsTable extends React.Component {
     constructor(props) {
@@ -42,6 +43,12 @@ class StudentsTable extends React.Component {
         console.log(studentInfo);
 
         this.props.editStudent(studentInfo, originalId);
+    }
+
+    deleteStudent = async () => {
+        console.log(this.state.id);
+
+        this.props.deleteStudent(this.state.id);
     }
 
     //renderTable -- render an HTML table displaying the rounds logged
@@ -93,12 +100,20 @@ class StudentsTable extends React.Component {
                         }
                     </tbody>
                 </table>
+
                 {this.props.mode === AppMode.STUDENTS_EDIT ?
                 <EditStudent
                 changeMode={this.props.changeMode}
                 editStudent={this.editStudent}
                 displayName={this.state.displayName}
                 id={this.state.id} />
+                : null}
+
+                {this.props.mode === AppMode.STUDENTS_DELETE ?
+                <DeleteStudent
+                changeMode={this.props.changeMode}
+                deleteStudent={this.deleteStudent}
+                studentName={this.state.displayName}/>
                 : null}
             </div>
         )

@@ -123,8 +123,6 @@ class CoursesPage extends React.Component {
     }
 
     editStudent = async (studentInfo, originalId) => {
-        console.log("In Courses Page editStudent!!!");
-        console.log(studentInfo);
 
         // update course using route
         const url = '/students/' + this.state.courseId + '/' + originalId;
@@ -141,6 +139,25 @@ class CoursesPage extends React.Component {
         } else {
             console.log("Error occurred while updating student");
         }
+        // refetch the students list
+        this.handleChangeCourse(this.state.courseId, this.state.courseName);
+    }
+
+    deleteStudent = async (studentId) => {
+        console.log("In Courses Page deleteStudent!!!");
+        console.log(studentId);
+
+       // delete using route
+       const url = '/students/' + this.state.courseId + '/' + studentId;
+       const res = await fetch(url, 
+                    {method: 'DELETE'}); 
+        if (res.status == 200) {
+            console.log("Successfully deleted student")
+        } else {
+            const resText = await res.text();
+            console.log("Student deletion failed with error: " + resText);
+        }
+
         // refetch the students list
         this.handleChangeCourse(this.state.courseId, this.state.courseName);
     }
@@ -188,7 +205,8 @@ class CoursesPage extends React.Component {
                     changeMode={this.props.changeMode}
                     courseId={this.state.courseId}
                     mode={this.props.mode}
-                    editStudent={this.editStudent}/>
+                    editStudent={this.editStudent}
+                    deleteStudent={this.deleteStudent}/>
                 }
                 </center>
 
