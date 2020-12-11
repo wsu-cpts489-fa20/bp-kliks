@@ -64,6 +64,7 @@ router.put('/students/:courseId/:userId', async (req, res, next) => {
     console.log("in /students (PUT) route with params = " + 
                 JSON.stringify(req.params) + " and body = " + 
                 JSON.stringify(req.body));
+
     if (!req.body.hasOwnProperty("userID") ||
         !req.body.hasOwnProperty("studentDisplayName")) {
         //Body does not contain correct properties
@@ -74,10 +75,8 @@ router.put('/students/:courseId/:userId', async (req, res, next) => {
       let status = await User.updateMany(
         {"courses.courseID": req.params.courseId,
           'courses.students.userID': req.params.userId},
-        {$set: { 'courses.$.students' : req.body}},
-        function (val){
-            console.log(val);
-        }
+        {$set: { 'courses.$[].students.$[student].studentDisplayName' : req.body.studentDisplayName, 'courses.$[].students.$[student].userID' : req.body.userID}},
+        {arrayFilters: [{"student.userID": req.params.userId}]},
       );
       if (status.nModified != 1) {
         res.status(400).send("Unexpected error occurred when updating student in database. Student was not updated.");

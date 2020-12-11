@@ -51,8 +51,8 @@ class StudentsTable extends React.Component {
         for (const r in this.props.students) {
         table.push(
             <tr key={r}>
-            <td>{this.props.students[r].userID}</td>
             <td>{this.props.students[r].studentDisplayName}</td>
+            <td>{this.props.students[r].userID}</td>
             {this.props.userType === "Instructor" ? 
                 <div className="instructor-buttons">
                     <td><button onClick={this.props.menuOpen ? null : () => 
