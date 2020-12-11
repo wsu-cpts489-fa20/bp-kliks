@@ -61,9 +61,10 @@ router.get('/students/:courseId', async(req, res) => {
 //UPDATE student route: Updates a specific student 
 //for a given course in the users collection (PUT)
 router.put('/students/:courseId/:userId', async (req, res, next) => {
-    console.log("in /courses (PUT) route with params = " + 
+    console.log("in /students (PUT) route with params = " + 
                 JSON.stringify(req.params) + " and body = " + 
                 JSON.stringify(req.body));
+
     if (!req.body.hasOwnProperty("userID") ||
         !req.body.hasOwnProperty("studentDisplayName")) {
         //Body does not contain correct properties
@@ -73,11 +74,9 @@ router.put('/students/:courseId/:userId', async (req, res, next) => {
     try {
       let status = await User.updateMany(
         {"courses.courseID": req.params.courseId,
-          'courses.0.students': {"userID" : req.params.userId}},
-        {$set: { 'courses.0.students' : req.body}},
-        function (val){
-            console.log(val);
-        }
+          'courses.students.userID': req.params.userId},
+        {$set: { 'courses.$[].students.$[student].studentDisplayName' : req.body.studentDisplayName, 'courses.$[].students.$[student].userID' : req.body.userID}},
+        {arrayFilters: [{"student.userID": req.params.userId}]},
       );
       if (status.nModified != 1) {
         res.status(400).send("Unexpected error occurred when updating student in database. Student was not updated.");
@@ -97,8 +96,9 @@ router.delete('/students/:courseId/:userId', async (req, res, next) => {
                 JSON.stringify(req.params)); 
   try {
     let status = await User.updateMany(
-      {"courses.courseID": req.params.courseId},
-      {$pull: {'courses.0.students': {"userID" : req.params.userId}}});
+      {"courses.courseID": req.params.courseId,
+          'courses.students.userID': req.params.userId},
+      {$pull: {'courses.$.students': {"userID" : req.params.userId}}});
       if (status.nModified != 1) { //Should never happen!
         res.status(400).send("Unexpected error occurred when deleting student from a course from database. Student was not deleted.");
       } else {

@@ -22,7 +22,9 @@ const AppMode = {
 
     STUDENTS: "StudentsMode",
     STUDENTS_UPLOAD: "UploadStudents",
-    STUDENTS_CREATE: "AddStudents"
+    STUDENTS_CREATE: "AddStudents",
+    STUDENTS_EDIT: "EditStudents",
+    STUDENTS_DELETE: "DeleteStudents",
 };
 
 Object.freeze(AppMode); //This ensures that the object is immutable.
