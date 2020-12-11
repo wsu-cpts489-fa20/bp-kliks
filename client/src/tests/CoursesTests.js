@@ -402,3 +402,49 @@ test('Courses: Test Instructor Delete Student', async t => {
         .click('.delete-student')
         .expect(Selector('#ConfirmCourseDeleteModal').visible).eql(false)
 });
+
+test('Courses: Test Instructor Students Upload', async t => {
+    await t
+        .typeText('#emailInput', accounts.coursesInstructor.username)
+        .typeText('#passwordInput', accounts.coursesInstructor.password)
+        .expect(Selector('#LoginMode').visible).eql(true)
+        .click('#loginButton').wait(5000)
+
+        .expect(Selector('#CoursesMode').visible).eql(true)
+        .click('#CoursesMode')
+
+        .expect(Selector('.fa-users').visible).eql(true)
+        .click('.fa-users')
+
+        .expect(Selector('#StudentsTable').visible).eql(true)
+
+        .expect(Selector('.floatbtn-upload').visible).eql(true)
+        .click('.floatbtn-upload')
+
+        // try uploading without creating a file
+        .click('.submit-upload')
+
+        .click('.floatbtn-upload')
+
+        // close modal both ways
+        .setFilesToUpload('.file-input', [
+            './uploads/test_upload.csv'
+        ])
+        .click('.cancel-upload')
+
+        .click('.floatbtn-upload')
+
+        // close modal both ways
+        .setFilesToUpload('.file-input', [
+            './uploads/test_upload.csv'
+        ])
+        .click('#modalClose')
+
+        .click('.floatbtn-upload')
+
+        // submit upload
+        .setFilesToUpload('.file-input', [
+            './uploads/test_upload.csv'
+        ])
+        .click('.submit-upload')
+});
