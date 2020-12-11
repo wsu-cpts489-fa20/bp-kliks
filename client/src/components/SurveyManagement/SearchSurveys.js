@@ -205,7 +205,7 @@ class SearchSurveys extends React.Component {
               {/* <td><button id={response.surveyID+"-"+index+"-"+"view"} onClick={this.props.menuOpen ? null : () => 
               this.viewResponse(response.surveyID+"-"+index)}>
                   <span className="fa fa-eye"></span></button></td> */}
-              <td><button id={surveys[r].surveyID+"-"+"delete"} onClick={this.props.menuOpen ? null : 
+              <td><button id={r+"delete"} onClick={this.props.menuOpen ? null : 
               () => this.confirmDelete(surveys[r])}>
                   <span className="fa fa-trash"></span></button></td>
           </tr>
