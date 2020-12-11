@@ -59,13 +59,13 @@ router.get('/courses/:userId', async(req, res) => {
   try {
     let thisUser = await User.findOne({id: req.params.userId});
     if (!thisUser) {
-      return res.status(400).message("No user account with specified userId was found in database.");
+      return res.status(400).send("No user account with specified userId was found in database.");
     } else {
       return res.status(200).json(JSON.stringify(thisUser.courses));
     }
   } catch (err) {
     console.log(err);
-    return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
+    return res.status(400).send("Unexpected error occurred when looking up user in database: " + err);
   }
 });
 
@@ -93,7 +93,7 @@ router.put('/courses/:userId/:courseId', async (req, res, next) => {
   try {
     let status = await User.updateOne(
       {"id": req.params.userId,
-       "courses._id": mongoose.Types.ObjectId(req.params.courseId)}
+       "courses.courseID": req.params.courseId}
       ,{"$set" : bodyObj}
     );
     if (status.nModified != 1) {
@@ -115,19 +115,17 @@ router.delete('/courses/:userId/:courseId', async (req, res, next) => {
   try {
     let status = await User.updateOne(
       {id: req.params.userId},
-      {$push: {rounds: req.body}});
-      if (status.nModified != 1) { //Should never happen!
-        res.status(400).send("Unexpected error occurred when adding round to"+
-          " database. Course was not added.");
-      } else {
-        res.status(200).send("Course successfully added to database.");
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(400).send("Unexpected error occurred when adding course" +
-       " to database: " + err);
-    } 
-  });
+      {$pull: {courses: {courseID: req.params.courseId}}});
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when deleting course from database. Course was not deleted.");
+    } else {
+      res.status(200).send("Course successfully deleted from database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when deleting course from database: " + err);
+  } 
+});
   
   //READ course route: Returns all courses associated 
   //with a given user in the users collection (GET)
@@ -145,64 +143,6 @@ router.delete('/courses/:userId/:courseId', async (req, res, next) => {
       console.log(err);
       return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
     }
-  });
-  
-  //UPDATE course route: Updates a specific course 
-  //for a given user in the users collection (PUT)
-  router.put('/courses/:userId/:courseId', async (req, res, next) => {
-    console.log("in /courses (PUT) route with params = " + 
-                JSON.stringify(req.params) + " and body = " + 
-                JSON.stringify(req.body));
-    const validProps = ['courseInstructorFirstName', 'courseInstructorLastName','courseInstructorID', 'courseName', 'courseNumber', 'courseYear',
-      'courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'];
-    let bodyObj = {...req.body};
-    delete bodyObj._id; //Not needed for update
-    delete bodyObj.SGS; //We'll compute this below in seconds.
-    for (const bodyProp in bodyObj) {
-      if (!validProps.includes(bodyProp)) {
-        return res.status(400).send("courses/ PUT request formulated incorrectly." +
-          "It includes " + bodyProp + ". However, only the following props are allowed: " +
-          "'courseInstructorFirstName', 'courseInstructorLastName', 'courseInstructorID', 'courseName', 'courseNumber', 'courseYear','courseSemester', 'courseEnrollmentLimit', 'courseCurrentlyEnrolled', 'courseNotes'");
-      } else {
-        bodyObj["courses.$." + bodyProp] = bodyObj[bodyProp];
-        delete bodyObj[bodyProp];
-      }
-    }
-    try {
-      let status = await User.updateOne(
-        {"id": req.params.userId,
-         "courses._id": mongoose.Types.ObjectId(req.params.courseId)}
-        ,{"$set" : bodyObj}
-      );
-      if (status.nModified != 1) {
-        res.status(400).send("Unexpected error occurred when updating round in database. Round was not updated.");
-      } else {
-        res.status(200).send("Round successfully updated in database.");
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(400).send("Unexpected error occurred when updating round in database: " + err);
-    } 
-  });
-  
-  //DELETE course route: Deletes a specific course 
-  //for a given user in the users collection (DELETE)
-  router.delete('/courses/:userId/:courseId', async (req, res, next) => {
-    console.log("in /rounds (DELETE) route with params = " + 
-                JSON.stringify(req.params)); 
-    try {
-      let status = await User.updateOne(
-        {id: req.params.userId},
-        {$pull: {courses: {_id: mongoose.Types.ObjectId(req.params.courseId)}}});
-      if (status.nModified != 1) { //Should never happen!
-        res.status(400).send("Unexpected error occurred when deleting round from database. Round was not deleted.");
-      } else {
-        res.status(200).send("Round successfully deleted from database.");
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(400).send("Unexpected error occurred when deleting round from database: " + err);
-    } 
   });
 
   module.exports = router;

@@ -1,9 +1,10 @@
+// CreateQuestion: Allows an instructor to create a question and save it the database.
+
 import React from 'react';
 import FileUpload from './AnswerTypes/FileUpload';
 import FreeResponse from './AnswerTypes/FreeResponse';
 import MultipleChoice from './AnswerTypes/MultipleChoice';
 import AppMode from '../../AppMode';
-
 
 const answerTypes = {};
 answerTypes["multipleChoice"] = MultipleChoice;
@@ -21,6 +22,7 @@ class CreateQuestion extends React.Component {
         this.surveySelectionRef = React.createRef();
         this.dateRef = React.createRef();
 
+        // Set the correct content based on whether we are editing or creating a question.
         if (this.props.mode == AppMode.SURVEY_MANAGEMENT_CREATE)
         {
             this.state = {
@@ -66,6 +68,7 @@ class CreateQuestion extends React.Component {
             responses:  []
         }
 
+        // Make a call to saveQuestion in the parent component to save the question to MongoDB.
         setTimeout(this.props.saveQuestion, 100, this.state.surveyID, newQuestion);
         this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
     }
@@ -87,6 +90,7 @@ class CreateQuestion extends React.Component {
     getSurveys = () => {
         var surveys = [];
   
+        // Go through the surveys and create the survey dropdown options 
         for(var index = 0; index < this.props.surveys.length; index++)
         {
           surveys.push(<option name={this.props.surveys[index].surveyID} key={this.props.surveys[index].surveyID} id={this.props.surveys[index].surveyID} value={this.props.surveys[index].surveyID}>{this.props.surveys[index].surveyTitle}</option>);
@@ -112,13 +116,15 @@ class CreateQuestion extends React.Component {
     // Handles the changes that occur to the dropdown menu 
     handleDropdownChange = (event) => {
         const name = event.target.name; 
-        this.setState({[name]: event.target.value,
+        // Set the state.
+        this.setState({[name]: event.target.value, 
           surveyID : event.target.value
         }, this.checkDataValidity);        
     }
 
     // data validator for the form elements
     checkDataValidity = () => {
+        // Check whether the dropdown of surveys contains anything that is selected.
         if(this.state.dropdownOfSurveys == ""){
             this.surveySelectionRef.current.setCustomValidity("No Survey selected.");
         }
@@ -126,6 +132,7 @@ class CreateQuestion extends React.Component {
             this.surveySelectionRef.current.setCustomValidity("");
         }
 
+        // Must have a question
         if(this.state.question.length == 0){
             this.questionTextRef.current.setCustomValidity("Question does not have a any text.");
         }
@@ -133,6 +140,7 @@ class CreateQuestion extends React.Component {
             this.questionTextRef.current.setCustomValidity("");
         }
 
+        // Must have a title
         if(this.state.title.length == 0){
             this.questionTitleRef.current.setCustomValidity("Question does not have a title.");
         }
@@ -140,6 +148,7 @@ class CreateQuestion extends React.Component {
             this.questionTitleRef.current.setCustomValidity("");
         }
 
+        // Make sure that the date that is chosen is not a past date.
         let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);
         if(this.state.date < today.toISOString().substr(0,10)){
             this.dateRef.current.setCustomValidity("Cannot create a question for the past.");

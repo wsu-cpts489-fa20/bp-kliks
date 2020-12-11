@@ -4,7 +4,7 @@
 import React from 'react';
 import AppMode from "./../../AppMode.js";
 
-class AddStudent extends React.Component {
+class EditStudent extends React.Component {
     constructor(props) {
         super(props);
 
@@ -12,10 +12,21 @@ class AddStudent extends React.Component {
         this.displayNameRef = React.createRef();
 
         this.state = {
+            originalId: "",
             id: "",
             displayName: "",
         };
     }
+
+    //componentDidMount -- grab the course data from the database and push them into the state.
+    async componentDidMount() {
+
+        this.setState({
+            originalId: this.props.id,
+            id: this.props.id,
+            displayName: this.props.displayName
+        });
+}
 
     // handles the modal closure
     handleCloseModal = (event) => {
@@ -24,7 +35,7 @@ class AddStudent extends React.Component {
     }
 
     // handles create button click
-    handleCreateSubmit = (event) => {
+    handleEditSubmit = (event) => {
         event.preventDefault();
 
         const newStudent = {
@@ -32,7 +43,7 @@ class AddStudent extends React.Component {
             studentDisplayName: this.state.displayName,
         };
 
-        this.props.addStudent(newStudent);
+        this.props.editStudent(newStudent, this.state.originalId);
         this.props.changeMode(AppMode.STUDENTS);
     }
 
@@ -46,16 +57,16 @@ class AddStudent extends React.Component {
     render() {
         return (
             <div id="aboutModal" className="modal" role="dialog">
-                <div id="AddStudentModal" className="modal-content">
+                <div id="EditStudentModal" className="modal-content">
                     <div className="modal-header">
                     <center>
-                        <h3 className="modal-title"><b>Add a student to {this.props.courseName} </b></h3>
+                        <h3 className="modal-title"><b>Edit {this.props.id} </b></h3>
                     </center>
                     <button id="modalClose" className="modal-close" onClick={this.handleCloseModal}>
                         &times;</button>
                     </div>
                     <div className="modal-body">
-                    <form onSubmit={this.handleCreateSubmit}>
+                    <form onSubmit={this.handleEditSubmit}>
                         <label>
                             Student ID:
                             <br/>
@@ -75,7 +86,7 @@ class AddStudent extends React.Component {
                         <p></p>
                         <div className="modal-footer">
                             <button role="submit" id="saveStudent" className="btn btn-primary">
-                            Create</button>
+                            Edit</button>
                             <button id="cancelStudent" className="btn btn-secondary" onClick={this.handleCloseModal}>
                             Cancel</button>
                         </div>
@@ -88,4 +99,4 @@ class AddStudent extends React.Component {
     }
 }
 
-export default AddStudent;
+export default EditStudent;
