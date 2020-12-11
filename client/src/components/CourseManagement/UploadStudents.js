@@ -93,7 +93,7 @@ class UploadStudents extends React.Component {
                             Select a Roster File:
                             <br/>
                             <input
-                            className="form-control form-text form-center"
+                            className="form-control form-text form-center file-input"
                             name="roster"
                             type="file"
                             accept=".csv"
@@ -104,9 +104,9 @@ class UploadStudents extends React.Component {
                             />
                         </label>
                         <div className="modal-footer">
-                            <button role="submit" className="btn btn-primary">
+                            <button role="submit" className="btn btn-primary submit-upload">
                             Upload</button>
-                            <button className="btn btn-secondary" onClick={this.handleCloseModal}>
+                            <button className="btn btn-secondary cancel-upload" onClick={this.handleCloseModal}>
                             Cancel</button>
                         </div>
                         <br />

@@ -32,9 +32,9 @@ class DeleteCourse extends React.Component {
                     </div>
                     <div className="modal-body">
                     <form onSubmit={this.handleDelete}>
-                        <button role="submit" className="btn btn-primary">
+                        <button role="submit" className="btn btn-primary delete-course">
                             Confirm</button>
-                            <button className="btn btn-secondary" onClick={this.handleCloseModal}>
+                            <button className="btn btn-secondary cancel-delete-course" onClick={this.handleCloseModal}>
                             Cancel</button>
                         <br />
                     </form>
