@@ -72,7 +72,7 @@ class SurveyManagementPage extends React.Component {
     */
     editQuestion = async (surveyId, updatedQuestion) => {
         const url = '/questions/' + surveyId + '/' + 
-            this.props.userObj.questions[this.state.editId]._id;
+            this.questions[this.state.editId].questionID;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -97,7 +97,7 @@ class SurveyManagementPage extends React.Component {
     deleteQuestion = async () => {
         // Make a request to the questions DELETE route to remove the question.
         const url = '/questions/' + this.props.userObj.id + '/' + 
-            this.props.userObj.entries[this.state.deleteId]._id;
+            this.questions[this.state.deleteId].questionID;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -270,7 +270,7 @@ class SurveyManagementPage extends React.Component {
                     </CreateQuestion>
                 );
             case AppMode.SURVEY_MANAGEMENT_EDIT:
-                let thisEntry = {...this.props.userObj.questions[this.state.editId]}
+                let thisEntry = {...this.questions[this.state.editId]}
                 thisEntry.date = thisEntry.date.substr(0,10);
                 return (
                     <CreateQuestion
@@ -296,9 +296,11 @@ class SurveyManagementPage extends React.Component {
             case AppMode.SURVEY_MANAGEMENT_SEARCH:
                 return (
                     <SearchQestions
+                    menuOpen={this.props.menuOpen}
                     setEditId={this.setEditId}
                     setDeleteId={this.setDeleteId}
                     deleteQuestion={this.deleteQuestion}
+                    questions={this.state.questions}
                     >
                     </SearchQestions>
                 );

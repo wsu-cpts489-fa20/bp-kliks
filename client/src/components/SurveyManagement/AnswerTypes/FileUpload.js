@@ -58,10 +58,10 @@ class FileUpload extends React.Component {
         else{
           selectedOptions.splice(selectedOptions.indexOf(newSelectedOptions), 1);
         }
-      }
 
       this.setState({ selectedOptions: selectedOptions }, ()=> { console.log("String representation:"); console.log(this.state.selectedOptions.toString()); console.log(this.state.selectedOptions);});
     }
+  }
 
     render(){
         return(

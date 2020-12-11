@@ -35,18 +35,24 @@ class CreateQuestion extends React.Component {
                 answers : [],
                 active : false,
                 acceptableAnswerTypes : [],
-                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" 
+                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "", 
+                submitIcon : "fa fa-save",
+                submitLabel : "Save Question"
             }   
-            this.state.submitIcon = "fa fa-save";
-            this.state.submitLabel = "Save Question" ;
         } 
         else
         {
-            this.state = this.props.startData;
-            this.state.submitIcon = "fa fa-edit";
-            this.state.submitLabel = "Update Question";
+            this.state = {
+                dropdownOfSurveys : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
+                numberOfSurveys : this.props.surveys.length,
+                date : this.props.startData,
+                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" ,
+                submitIcon : "fa fa-edit",
+                submitLabel : "Update Question",
+            }
         }
     }
+
 
     // On change handler for the form elements
     handleChange = (event) => {
