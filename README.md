@@ -31,9 +31,9 @@ features for the Kliks application are below:
 *Create Survey page is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagement/CreateSurvey.js).
 
 **Milestone 4:**\
-*\
-*\
-*
+*SurveyManagementPage file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagementPage.js).\
+*CoursesPage file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/CourseManagement/CoursesPage.js).\
+*SearchSurveys file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagement/SearchSurveys.js).
 
 
 # BP Kliks App Milestone Changes
@@ -109,6 +109,10 @@ add courses, view all created courses, create questions, create surveys, and vie
 and the ability to broadcast questions to students that are online. -->
 
 **Milestone 4 Changes:**
+For milestone 4, we worked on creating the student page, making some bug fixes, cleaning up the active Questions page,\
+and adding more functionalities to the surveys aspect of the application. For the active questions, an instructor now has the ability to\
+deactive and active questions, and view questions that are active and not active. The UI for this is build, but there is logic that still needs to be completed. For SearchSurveys, an\ instructor now can search for surveys, remove surveys, sort surveys based on different sort criterians. For courses, an instructor can now add a student that has an vaid student account.\
+In addition, to beiong able to add students, an instructor can edit and remove students from a\ course. The bug fixes that were made were refreshing the courses table, automatically\ refreshing the other tables, and making the ids unique across all objects that are created and\ saved to MonogDB.
 
 # Demo Videos
 **Milestone 1** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EYJFRvVwQB1Ei845_Z_hgXYBFDZqn2fp3BTiS6R-f82o5A?e=lfTQXZ).\
@@ -116,8 +120,8 @@ and the ability to broadcast questions to students that are online. -->
 **Milestone 3** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EUnBud1mBoBKoCTawpHX7a4BI_U_xZn1SlEScKeXlOO9rQ?e=Drp26a).\
 **Milestone 4** demo video located [here]().
 
-<!-- # BP Kliks Tests
-The [tests](https://github.com/wsu-cpts489-fa20/bp-kliks/tree/tests) for the kliks application are located in the tests branch. -->
+# BP Kliks Tests
+The [tests](https://github.com/wsu-cpts489-fa20/bp-kliks/tree/master/client/src/tests) for the kliks application are located here.
 
 Tests for the Kliks application are ran when new tests are made or changes are made to the tests directory and a push to the master branch is made.
 
