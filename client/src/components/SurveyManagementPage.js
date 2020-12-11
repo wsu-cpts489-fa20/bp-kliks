@@ -278,7 +278,6 @@ class SurveyManagementPage extends React.Component {
                     surveys={this.state.surveys}
                     mode={this.props.mode}
                     changeMode={this.props.changeMode}
-                    // saveQuestion={this.editQuestion}
                     saveQuestion={this.saveQuestion}
                     editQuestion={this.editQuestion}
                     >
@@ -297,9 +296,11 @@ class SurveyManagementPage extends React.Component {
             case AppMode.SURVEY_MANAGEMENT_SEARCH:
                 return (
                     <SearchQestions
+                    menuOpen={this.props.menuOpen}
                     setEditId={this.setEditId}
                     setDeleteId={this.setDeleteId}
                     deleteQuestion={this.deleteQuestion}
+                    questions={this.state.questions}
                     >
                     </SearchQestions>
                 );

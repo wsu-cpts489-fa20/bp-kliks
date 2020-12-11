@@ -25,18 +25,7 @@ class SearchSurveys extends React.Component {
       };
     }
 
-    toggleSearch = () => {
-      this.setState({isSearch: !this.state.isSort});
-    }
-
-    toggleSort = () => {
-      this.setState({isSort: !this.state.isSort});
-    }
-
-    setSort = (sortName) => {
-      this.setState({sortType: sortName});
-    }
-
+    // Handles the sorting and search for the array of questions and updates it.
     handleSurveys = (surveys) => {
       let sortedSurveys = this.props.surveys;//surveys;
       let isSearch = this.state.isSearch;
@@ -249,8 +238,6 @@ class SearchSurveys extends React.Component {
     //render--render the entire surveys table with header, displaying a "No
     //Responses made" message in case the table is empty.
     render() {
-      // var rows =  this.renderTable();
-
       return(
       <div id="searchSurveyTableMode" className="padded-page">
         <h1></h1>

@@ -61,6 +61,7 @@ class FileUpload extends React.Component {
 
       this.setState({ selectedOptions: selectedOptions }, ()=> { console.log("String representation:"); console.log(this.state.selectedOptions.toString()); console.log(this.state.selectedOptions);});
     }
+  }
 
     render(){
         return(
