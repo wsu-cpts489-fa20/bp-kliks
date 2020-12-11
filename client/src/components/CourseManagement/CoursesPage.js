@@ -100,11 +100,9 @@ class CoursesPage extends React.Component {
 
     // handle adding a student to the currently selected course
     addStudent = async (newStudent) => {
-        console.log(newStudent);
-        console.log("Adding a student for course: " + this.state.courseId);
 
-        const url = '/students/' + this.state.courseId;
-        const res = await fetch(url, {
+        let url = '/students/' + this.state.courseId;
+        let res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -120,6 +118,25 @@ class CoursesPage extends React.Component {
 
         // refetch the students list
         this.handleChangeCourse(this.state.courseId, this.state.courseName);
+
+        // fetch the course in question so it can be added to the student's account
+        url = "/courses/" + this.props.userObj.id;
+        res = await fetch(url, {method: 'GET'});
+        if (res.status != 200) {
+            let msg = await res.text();
+            console.log("There was an error obtaining students for instructor " + msg);
+            return;
+        } 
+        let body = await res.json();
+        body = JSON.parse(body);
+
+        body = body.filter(function (response) {
+            return response.courseID === this.state.courseId;
+        }.bind(this));
+        body = body[0];
+
+        // add course to atudent's account
+        this.addCourse(body, newStudent.userID);
     }
 
     editStudent = async (studentInfo, originalId) => {
@@ -144,8 +161,6 @@ class CoursesPage extends React.Component {
     }
 
     deleteStudent = async (studentId) => {
-        console.log("In Courses Page deleteStudent!!!");
-        console.log(studentId);
 
        // delete using route
        const url = '/students/' + this.state.courseId + '/' + studentId;
@@ -162,9 +177,9 @@ class CoursesPage extends React.Component {
         this.handleChangeCourse(this.state.courseId, this.state.courseName);
     }
 
-    addCourse = async (courseData) => {
+    addCourse = async (courseData, userId = this.props.userObj.id) => {
 
-        const url = '/courses/' + this.props.userObj.id;
+        const url = '/courses/' + userId;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',

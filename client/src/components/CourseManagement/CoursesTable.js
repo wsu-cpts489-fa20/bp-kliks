@@ -16,7 +16,6 @@ class CoursesTable extends React.Component {
     }
 
     viewStudents = (courseId, courseName) => {
-        console.log("Opening students for courseId: " + courseId);
 
         // update courseID state in app
         this.props.changeCourse(courseId, courseName);
@@ -24,7 +23,6 @@ class CoursesTable extends React.Component {
     }
 
     handleEditCourse = (id, name) => {
-        console.log("Editing " + id);
         
         this.setState({
             courseId: id,
@@ -35,7 +33,6 @@ class CoursesTable extends React.Component {
     }
 
     handleDeleteCourse = (id, name) => {
-        console.log("Deleting " + id);
 
         this.setState({
             courseId: id,
@@ -61,7 +58,6 @@ class CoursesTable extends React.Component {
     }
 
     editCourse = async (courseInfo) => {
-        console.log(courseInfo);
 
         // update course using route
         const url = '/courses/' + this.props.userId + '/' + this.state.courseId;

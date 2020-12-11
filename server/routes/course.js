@@ -59,13 +59,13 @@ router.get('/courses/:userId', async(req, res) => {
   try {
     let thisUser = await User.findOne({id: req.params.userId});
     if (!thisUser) {
-      return res.status(400).message("No user account with specified userId was found in database.");
+      return res.status(400).send("No user account with specified userId was found in database.");
     } else {
       return res.status(200).json(JSON.stringify(thisUser.courses));
     }
   } catch (err) {
     console.log(err);
-    return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
+    return res.status(400).send("Unexpected error occurred when looking up user in database: " + err);
   }
 });
 

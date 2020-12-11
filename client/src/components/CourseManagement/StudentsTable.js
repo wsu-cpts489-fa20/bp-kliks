@@ -24,12 +24,10 @@ class StudentsTable extends React.Component {
         });
 
         this.props.changeMode(AppMode.STUDENTS_EDIT);
-        console.log("Editing student: " + userId);
     }
 
     // handles a click on delete student button in the table
     handleDeleteStudent = (userId, displayName) => {
-        console.log("Deleting student: " + userId);
 
         this.setState({
             id: userId,
@@ -40,13 +38,11 @@ class StudentsTable extends React.Component {
     }
 
     editStudent = async (studentInfo, originalId) => {
-        console.log(studentInfo);
 
         this.props.editStudent(studentInfo, originalId);
     }
 
     deleteStudent = async () => {
-        console.log(this.state.id);
 
         this.props.deleteStudent(this.state.id);
     }
@@ -76,7 +72,6 @@ class StudentsTable extends React.Component {
     }
 
     render() {
-        console.log(this.props.mode);
         return(
             <div className="padded-page">
                 <h1></h1>
