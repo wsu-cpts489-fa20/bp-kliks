@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchField from 'react-search-field'
+import AppMode from '../../AppMode';
 //import ConfirmDeleteRound from './ConfirmDeleteRound.js';
 // import AppMode from './../AppMode.js';
 
@@ -41,12 +42,11 @@ class SubmittedResponse extends React.Component {
     this.setState({searchKey : event.target.value});
   }
 
-  editRound = (id) => {
-    //this.props.setEditId(id);
-    //this.props.changeMode(AppMode.SURVEY_MANAGEMENT);
+  editQuestion = (id) => {
+    this.props.setEditId(id);
   }
 
-  deleteRound = () => {
+  deleteQuestion = () => {
     //this.props.deleteRound();
     //this.setState({showConfirmDelete:false});
 
@@ -74,7 +74,7 @@ class SubmittedResponse extends React.Component {
         rowString += question.question.questionTitle;
         rowString += question.question.questionText + " ";
         rowString += question.question.questionAnswers + " ";
-        rowString += question.question.questionActive + " ";
+        rowString += question.question.questionActive == false ? "No" : "Yes" + " ";
 
         if(rowString.toUpperCase().indexOf(this.state.searchKey.toUpperCase()) > -1){
           searchedQuestions.push(question);
@@ -114,8 +114,9 @@ class SubmittedResponse extends React.Component {
     return final_questions;
   }  
 
-  renderTable = () => {
-    var questions = this.updateQuestions(this.props.questions);
+  // Renders the Questions table
+  renderTable = (propQuestions) => {
+    var questions = this.updateQuestions(propQuestions); //Get the latest questions.
 
     let table = [];
     if (this.state.ActiveFilter == false)
@@ -125,9 +126,9 @@ class SubmittedResponse extends React.Component {
           <tr key={r}>
             <td>{questions[r].question.questionTitle}</td>
             <td>{questions[r].question.questionText}</td>
-            <td>{questions[r].question.questionAnswers}</td>
+            <td>{questions[r].question.questionType}</td>
             <td>{questions[r].question.questionActive == false ? "No" : "Yes"}</td>
-            <td><button onClick={this.props.menuOpen ? null : null}>
+            <td><button onClick={this.props.menuOpen ? null : () => this.editQuestion(questions[r])}>
                   <span className="fa fa-eye"></span></button></td>
             <td><button onClick={this.props.menuOpen ? null : 
               null}>
@@ -139,15 +140,15 @@ class SubmittedResponse extends React.Component {
     else if (this.state.ActiveFilter == true)
     {
       for (let r = 0; r < questions.length; r++) {
-        if (questions[r].questionActive == true)
+        if (questions[r].question.questionActive == true)
         {
           table.push(
             <tr key={r}>
               <td>{questions[r].question.questionTitle}</td>
               <td>{questions[r].question.questionText}</td>
-              <td>{questions[r].question.questionAnswers}</td>
-              <td>{questions[r].question.questionActive}</td>
-              <td><button onClick={this.props.menuOpen ? null : null}>
+              <td>{questions[r].question.questionType}</td>
+              <td>{questions[r].question.questionActive == false ? "No" : "Yes"}</td>
+              <td><button onClick={this.props.menuOpen ? null : () => this.editQuestion(questions[r]) }>
                     <span className="fa fa-eye"></span></button></td>
               <td><button onClick={this.props.menuOpen ? null : 
                 null}>
@@ -227,7 +228,7 @@ class SubmittedResponse extends React.Component {
           {Object.keys(this.props.questions).length === 0 ? 
             <tr>
             <td colSpan="6" style={{fontStyle: "italic"}}>There no questions that have been created.</td>
-            </tr> : this.renderTable()
+            </tr> : this.renderTable(this.props.questions)
           }
           </tbody>
         <tbody>

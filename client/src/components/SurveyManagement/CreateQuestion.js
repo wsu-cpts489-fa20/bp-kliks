@@ -45,8 +45,13 @@ class CreateQuestion extends React.Component {
             this.state = {
                 dropdownOfSurveys : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "",
                 numberOfSurveys : this.props.surveys.length,
-                date : this.props.startData,
-                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" ,
+                date : this.props.question.question.date,
+                answerType : this.props.question.question.questionType,
+                question: this.props.question.question.questionText,
+                title : this.props.question.question.questionTitle,
+                answers : this.props.question.question.questionAnswers,
+                active : this.props.question.question.questionActive,                
+                surveyID : this.props.surveyID ,
                 submitIcon : "fa fa-edit",
                 submitLabel : "Update Question",
             }
@@ -68,6 +73,7 @@ class CreateQuestion extends React.Component {
             questionTitle: this.state.title,
             questionText: this.state.question,
             questionType: this.state.answerType,
+            date : this.state.date,
             questionAnswers:this.state.answers,
             acceptableAnswerTypes: this.state.acceptableAnswerTypes,
             questionActive: this.state.active,
@@ -75,8 +81,7 @@ class CreateQuestion extends React.Component {
         }
 
         // Make a call to saveQuestion in the parent component to save the question to MongoDB.
-        setTimeout(this.props.saveQuestion, 100, this.state.surveyID, newQuestion);
-        this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
+        setTimeout(this.props.saveQuestion, 1000, this.state.surveyID, newQuestion);
     }
 
     // Handles when the user clicks on add survey [If there are no sureys]

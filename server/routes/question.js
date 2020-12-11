@@ -17,6 +17,7 @@ router.post('/questions/:surveyID',  async (req, res, next) => {
     !req.body.hasOwnProperty("questionTitle") || 
     !req.body.hasOwnProperty("questionText") ||
     !req.body.hasOwnProperty("questionType") ||
+    !req.body.hasOwnProperty("date") ||
     !req.body.hasOwnProperty("questionAnswers") || 
     !req.body.hasOwnProperty("acceptableAnswerTypes") ||
     !req.body.hasOwnProperty("questionActive"))

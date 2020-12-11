@@ -22,7 +22,7 @@ class SurveyManagementPage extends React.Component {
             surveys : [],
             errorMsg : "",
             deleteId: "",
-            editId: "",
+            editId: {},
             surveyToDelete : {}
         };
     }
@@ -41,7 +41,9 @@ class SurveyManagementPage extends React.Component {
     //setEditId -- Capture in this.state.editId the unique id of the item
     //the user is considering editing.
     setEditId = (val) => {
-        this.setState({editId: val});
+        this.setState({editId: val}, () => {
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_EDIT);
+        });
     }
 
     /*
@@ -72,7 +74,7 @@ class SurveyManagementPage extends React.Component {
     */
     editQuestion = async (surveyId, updatedQuestion) => {
         const url = '/questions/' + surveyId + '/' + 
-            this.questions[this.state.editId].questionID;
+            this.state.editId.questionID;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -270,12 +272,14 @@ class SurveyManagementPage extends React.Component {
                     </CreateQuestion>
                 );
             case AppMode.SURVEY_MANAGEMENT_EDIT:
-                let thisEntry = {...this.questions[this.state.editId]}
-                thisEntry.date = thisEntry.date.substr(0,10);
+                // console.log(this.state.editId);
+                // let thisEntry = {...this.state.editId}
+                // thisEntry.date = thisEntry.question.date.substr(0,10);
                 return (
                     <CreateQuestion
-                    startData={thisEntry}
+                    // startData={thisEntry}
                     surveys={this.state.surveys}
+                    question={this.state.editId}
                     mode={this.props.mode}
                     changeMode={this.props.changeMode}
                     saveQuestion={this.saveQuestion}
@@ -299,8 +303,10 @@ class SurveyManagementPage extends React.Component {
                     menuOpen={this.props.menuOpen}
                     setEditId={this.setEditId}
                     setDeleteId={this.setDeleteId}
+                    updateQuestions={this.updateSurveys}
                     deleteQuestion={this.deleteQuestion}
                     questions={this.state.questions}
+                    changeMode={this.props.changeMode}
                     >
                     </SearchQestions>
                 );
