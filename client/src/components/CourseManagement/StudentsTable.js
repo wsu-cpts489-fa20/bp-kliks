@@ -2,20 +2,46 @@
 
 import React from 'react';
 import AppMode from "./../../AppMode.js";
+import EditStudent from "./EditStudent.js";
 
 class StudentsTable extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            id: "",
+            displayName: "",
+        };
     }
 
     // handles a click on edit student button in the table
-    editStudent = (userId) => {
+    handleEditStudent = (userId, display) => {
+
+        this.setState({
+            id: userId,
+            displayName: display,
+        });
+
+        this.props.changeMode(AppMode.STUDENTS_EDIT);
         console.log("Editing student: " + userId);
     }
 
     // handles a click on delete student button in the table
-    deleteStudent = (userId) => {
+    handleDeleteStudent = (userId, displayName) => {
         console.log("Deleting student: " + userId);
+
+        this.setState({
+            id: userId,
+            displayName: displayName,
+        });
+
+        this.props.changeMode(AppMode.STUDENTS_DELETE);
+    }
+
+    editStudent = async (studentInfo, originalId) => {
+        console.log(studentInfo);
+
+        this.props.editStudent(studentInfo, originalId);
     }
 
     //renderTable -- render an HTML table displaying the rounds logged
@@ -30,10 +56,10 @@ class StudentsTable extends React.Component {
             {this.props.userType === "Instructor" ? 
                 <div className="instructor-buttons">
                     <td><button onClick={this.props.menuOpen ? null : () => 
-                        this.editStudent(this.props.students[r].userID)}>
+                        this.handleEditStudent(this.props.students[r].userID, this.props.students[r].studentDisplayName)}>
                             <span className="fa fa-pencil-square-o"></span></button></td>
                     <td><button onClick={this.props.menuOpen ? null : () => 
-                        this.deleteStudent(this.props.students[r].userID)}>
+                        this.handleDeleteStudent(this.props.students[r].userID, this.props.students[r].studentDisplayName)}>
                             <span className="fa fa-trash-o"></span></button></td>
                 </div> : null}
             </tr> 
@@ -43,6 +69,7 @@ class StudentsTable extends React.Component {
     }
 
     render() {
+        console.log(this.props.mode);
         return(
             <div className="padded-page">
                 <h1></h1>
@@ -66,6 +93,13 @@ class StudentsTable extends React.Component {
                         }
                     </tbody>
                 </table>
+                {this.props.mode === AppMode.STUDENTS_EDIT ?
+                <EditStudent
+                changeMode={this.props.changeMode}
+                editStudent={this.editStudent}
+                displayName={this.state.displayName}
+                id={this.state.id} />
+                : null}
             </div>
         )
     }

@@ -23,6 +23,8 @@ modeTitle[AppMode.COURSES_EDIT] = "Edit Course";
 modeTitle[AppMode.STUDENTS] = "Students";
 modeTitle[AppMode.STUDENTS_CREATE] = "Add a Student";
 modeTitle[AppMode.STUDENTS_UPLOAD] = "Students";
+modeTitle[AppMode.STUDENTS_EDIT] = "Edit Student";
+modeTitle[AppMode.STUDENTS_DELETE] = "Delete Student";
 
 const modeToPage = {};
 
@@ -53,6 +55,8 @@ modeToPage[AppMode.COURSES_EDIT] = CoursesPage;
 modeToPage[AppMode.STUDENTS] = CoursesPage;
 modeToPage[AppMode.STUDENTS_CREATE] = CoursesPage;
 modeToPage[AppMode.STUDENTS_UPLOAD] = CoursesPage;
+modeToPage[AppMode.STUDENTS_EDIT] = CoursesPage;
+modeToPage[AppMode.STUDENTS_DELETE] = CoursesPage;
 
 
 class App extends React.Component {

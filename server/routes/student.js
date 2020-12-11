@@ -61,7 +61,7 @@ router.get('/students/:courseId', async(req, res) => {
 //UPDATE student route: Updates a specific student 
 //for a given course in the users collection (PUT)
 router.put('/students/:courseId/:userId', async (req, res, next) => {
-    console.log("in /courses (PUT) route with params = " + 
+    console.log("in /students (PUT) route with params = " + 
                 JSON.stringify(req.params) + " and body = " + 
                 JSON.stringify(req.body));
     if (!req.body.hasOwnProperty("userID") ||
@@ -73,8 +73,8 @@ router.put('/students/:courseId/:userId', async (req, res, next) => {
     try {
       let status = await User.updateMany(
         {"courses.courseID": req.params.courseId,
-          'courses.0.students': {"userID" : req.params.userId}},
-        {$set: { 'courses.0.students' : req.body}},
+          'courses.students.userID': req.params.userId},
+        {$set: { 'courses.$.students' : req.body}},
         function (val){
             console.log(val);
         }

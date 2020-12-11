@@ -122,6 +122,29 @@ class CoursesPage extends React.Component {
         this.handleChangeCourse(this.state.courseId, this.state.courseName);
     }
 
+    editStudent = async (studentInfo, originalId) => {
+        console.log("In Courses Page editStudent!!!");
+        console.log(studentInfo);
+
+        // update course using route
+        const url = '/students/' + this.state.courseId + '/' + originalId;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'PUT',
+            body: JSON.stringify(studentInfo)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            console.log("Student successfully updated");
+        } else {
+            console.log("Error occurred while updating student");
+        }
+        // refetch the students list
+        this.handleChangeCourse(this.state.courseId, this.state.courseName);
+    }
+
     addCourse = async (courseData) => {
 
         const url = '/courses/' + this.props.userObj.id;
@@ -162,7 +185,10 @@ class CoursesPage extends React.Component {
                     students={this.state.students}
                     userType={this.props.userObj.userType}
                     menuOpen={this.props.menuOpen}
-                    changeMode={this.props.changeMode}/>
+                    changeMode={this.props.changeMode}
+                    courseId={this.state.courseId}
+                    mode={this.props.mode}
+                    editStudent={this.editStudent}/>
                 }
                 </center>
 
