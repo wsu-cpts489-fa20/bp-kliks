@@ -1,0 +1,32 @@
+Retrospective Meeting notes:
+1.) Milestone 2 Grading: 
+- Talked about the different sections
+- Retrospective Meeting Summary	
+- Testing Link: The links are working correctly, confused why we received such a low score
+
+2.) UPDATES:
+Rebecca: Done with issues night of 12/2/2020, so that test issue can get completed on time. Wrapping up a way to add courses tonight.
+Dane: Started working on the button issue, but ran into a problem with npm so was not sure if changes were being applied. But, the rest of the issues require other issues to be done.
+Marco: Finished the issue just waiting on Dane to see how he renders the table [Blocked by Dane issue]
+Osman: Created another issue for the actually saving questions and surveys. Created a PR for issue #38. Transferred issue #30 to Marco Arceo.
+Verenice: Reassign issue #37 to marco and Verenice will be doing UI tasks [issue #39]. But, still working on issue #39
+
+3.) Questions/Concerns:
+--Initally, instructor were not able to create questions without having serveys, and we did not have a create
+survey
+--npm issues [pertaining to old version of npm].
+--Rolling one of the student issues into Milestone 4 beucase we do not have a student UI.
+
+4.) What is going well:
+-Everything
+-Development: Being able to keep up with the speed at which we are moving and being abel to take on alot of work for weekly sprints.
+
+5.) What not working: 
+-Developers having issues with NPM; Marco found fix with updating NPM to version 6.14.9
+	Run Powershell as Administrator:
+		1. Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+		2. npm install -g npm-windows-upgrade
+		3. npm-windows-upgrade
+
+6.) Improve:
+-Plan retrospective earlier

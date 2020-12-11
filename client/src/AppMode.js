@@ -4,20 +4,27 @@ const AppMode = {
     LOGIN: "LoginMode",
 
     SURVEY_MANAGEMENT: "SurveyMode",
-    SURVEY_MANAGEMENT_RESPONSES: "SurveyModeResponses",
+    SURVEY_MANAGEMENT_RESPONSES: "SurveyModeResponses", //Searching Responses
     SURVEY_MANAGEMENT_CREATE: "SurveyModeCreate",
-    SURVEY_MANAGEMENT_SEARCH: "SurveyModeSearch",
+    SURVEY_MANAGEMENT_EDIT: "SurveyModeEdit",
+    SURVEY_MANAGEMENT_CREATE_SURVEY : "SurveyModeCreateSurvey",
+    SURVEY_MANAGEMENT_SEARCH: "SurveyModeSearch", //Searching Questions
+    SURVEY_MANAGEMENT_SEARCH_SURVEYS : "SurveyModeSurveysSearch", //Searching Surveys
 
     ROUNDS: "RoundsMode",
     ROUNDS_LOGROUND: "RoundsMode-LogRound",
     ROUNDS_EDITROUND: "RoundsMode-EditRound",
 
     COURSES: "CoursesMode",
-    ADD_COURSES: "AddCourses",
+    COURSE_CREATE: "AddCourses",
+    COURSES_DELETE: "DeleteCourses",
+    COURSES_EDIT: "EditCourses",
 
     STUDENTS: "StudentsMode",
     STUDENTS_UPLOAD: "UploadStudents",
-    STUDENT_CREATE: "AddStudents"
+    STUDENTS_CREATE: "AddStudents",
+    STUDENTS_EDIT: "EditStudents",
+    STUDENTS_DELETE: "DeleteStudents",
 };
 
 Object.freeze(AppMode); //This ensures that the object is immutable.

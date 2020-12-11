@@ -26,14 +26,14 @@ features for the Kliks application are below:
 *Course route file that is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/server/routes/course.js).
 
 **Milestone 3:**\
-*\
-*\
-*
+*CreateQuestion.js file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagement/CreateQuestion.js).\
+*Course Page file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/CourseManagement/CoursesPage.js).\
+*Create Survey page is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagement/CreateSurvey.js).
 
 **Milestone 4:**\
-*\
-*\
-*
+*SurveyManagementPage file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagementPage.js).\
+*CoursesPage file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/CourseManagement/CoursesPage.js).\
+*SearchSurveys file is located [here](https://github.com/wsu-cpts489-fa20/bp-kliks/blob/master/client/src/components/SurveyManagement/SearchSurveys.js).
 
 
 # BP Kliks App Milestone Changes
@@ -102,18 +102,28 @@ features for the Kliks application are below:
             *   Delete questions route.
 
 **Milestone 3 Changes:**\
+The changes that were made in milestone dealt mainly on frontend work. One of the main things that we did was add some UI for the student side of the application.\
+Unlike before, now we STUDENTs are able to view the courses that they are taking and the students in that course. On the Instructor side, instructors are now able to\
+add courses, view all created courses, create questions, create surveys, and view surveys. We also worked on updating the sideMenu content.\
+<!-- Below are tasks that we also added the dashboard pages for the instructor page. In addition, we also added the ability to edit questions, view saved questions and active questions\
+and the ability to broadcast questions to students that are online. -->
+
 **Milestone 4 Changes:**
+For milestone 4, we worked on creating the student page, making some bug fixes, cleaning up the active Questions page,\
+and adding more functionalities to the surveys aspect of the application. For the active questions, an instructor now has the ability to\
+deactive and active questions, and view questions that are active and not active. The UI for this is build, but there is logic that still needs to be completed. For SearchSurveys, an\ instructor now can search for surveys, remove surveys, sort surveys based on different sort criterians. For courses, an instructor can now add a student that has an vaid student account.\
+In addition, to beiong able to add students, an instructor can edit and remove students from a\ course. The bug fixes that were made were refreshing the courses table, automatically\ refreshing the other tables, and making the ids unique across all objects that are created and\ saved to MonogDB.
 
 # Demo Videos
 **Milestone 1** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EYJFRvVwQB1Ei845_Z_hgXYBFDZqn2fp3BTiS6R-f82o5A?e=lfTQXZ).\
 **Milestone 2** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EZQWneBwPQlOoSml5YvrWKsBhytCH0yv_a1eoKIin89UFg?e=B161j1).\
-**Milestone 3** demo video located [here]().\
+**Milestone 3** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EUnBud1mBoBKoCTawpHX7a4BI_U_xZn1SlEScKeXlOO9rQ?e=Drp26a).\
 **Milestone 4** demo video located [here]().
 
 # BP Kliks Tests
-The [tests](https://github.com/wsu-cpts489-fa20/bp-kliks/tree/tests) for the kliks application are located in the tests branch.
+The [tests](https://github.com/wsu-cpts489-fa20/bp-kliks/tree/master/client/src/tests) for the kliks application are located here.
 
-Tests for the Kliks application are ran when new tests are made and a push to the test branch is made.
+Tests for the Kliks application are ran when new tests are made or changes are made to the tests directory and a push to the master branch is made.
 
 In order to run the tests the following commands have to be ran:
 *npm install testcafe*  -- React selectors 
@@ -122,7 +132,7 @@ In order to run the tests the following commands have to be ran:
 # Test Videos Below
 **Milestone 1** test video located [here](https://emailwsu.sharepoint.com/:i:/r/teams/2020.fall.PULLM.Cpt.S.489-2.Kliks/Shared%20Documents/2.%20Kliks/milestone1Tests.gif?csf=1&web=1&e=RRSgPZ).\
 **Milestone 2** test video located [here](https://emailwsu.sharepoint.com/:i:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/Eff57N1Yn1pHpghcn7qDg_EBYiCv74Jnu0QlBZlpE_8X8A?e=uX4hGm).\
-**Milestone 3** test video located [here]().\
+**Milestone 3** test video located [here](https://emailwsu.sharepoint.com/:i:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EY7utKEbRuBOhl1YTM7qN54BXIy5d0kqwuyuIWldHI6_ew?e=LvyU9E).\
 **Milestone 4** test video located [here]().
 
 

@@ -101,7 +101,7 @@ class SubmittedResponse extends React.Component {
   //Rounds Logged" message in case the table is empty.
   render() {
     return(
-    <div className="padded-page">
+    <div className="padded-page" id={"searchQuestionsMode"}>
       <center>
       <h4>Question Filter (Active Only or All Questions): </h4>  
       <label class="switch"><input type="checkbox" id="togBtn" onClick={this.switchHandler}/>

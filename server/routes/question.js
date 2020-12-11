@@ -1,3 +1,4 @@
+const { default: ObjectID } = require('bson-objectid');
 var express = require('express');
 var router = express.Router();
 var Survey = require('./../schemas/survey');
@@ -17,12 +18,15 @@ router.post('/questions/:surveyID',  async (req, res, next) => {
     !req.body.hasOwnProperty("questionText") ||
     !req.body.hasOwnProperty("questionType") ||
     !req.body.hasOwnProperty("questionAnswers") || 
+    !req.body.hasOwnProperty("acceptableAnswerTypes") ||
     !req.body.hasOwnProperty("questionActive"))
     {
         return res.status(400).sent("POST request on /questions formulated incorrectly." +
-        "Body must contain all 6 required fields, questionID, quiestionTitle, questionText, questionType, questionAnswers, questionActive");
+        "Body must contain all 6 required fields, questionID, quiestionTitle, questionText, questionType, acceptableAnswerTypes, questionAnswers, questionActive");
     }
   try {
+      req.body["_id"] = ObjectID();
+      req.body.questionID = req.body._id.str;
       thisSurvey = await Survey.updateOne(
         {surveyID: req.params.surveyID},
         {$push: {questions: req.body}});
@@ -31,7 +35,7 @@ router.post('/questions/:surveyID',  async (req, res, next) => {
           res.status(400).send("Unexpected error occurred when adding question to"+
             " database. question was not added.");
         } else {
-          return res.status(201).send("New Question for '" + 
+          return res.status(200).send("New Question for '" + 
           req.params.surveyID + "' successfully created.");
         }
     
@@ -47,14 +51,14 @@ router.put('/questions/:surveyID/:questionID', async (req, res, next) => {
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
   // Make sure only these props are being added to the database for question
-  const validProps = ['questionID', 'questionTitle','questionText', 'questionType', 'questionAnswers', 'questionActive'];
+  const validProps = ['questionID', 'questionTitle','questionText', 'questionType','acceptableAnswerTypes', 'questionAnswers', 'questionActive'];
   let bodyObj = {...req.body};
   delete bodyObj._id; //Not needed for update
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("questions/ PUT request formulated incorrectly." +
         "It includes " + bodyProp + ". However, only the following props are allowed: " +
-        "'questionID', 'questionTitle','questionText', 'questionType', 'questionAnswers', 'questionActive'");
+        "'questionID', 'questionTitle','questionText', 'questionType', 'acceptableAnswerTypes', 'questionAnswers', 'questionActive'");
     } else {
       bodyObj["questions.$." + bodyProp] = bodyObj[bodyProp];
       delete bodyObj[bodyProp];
@@ -110,7 +114,7 @@ router.get('/questions/:surveyId', async(req, res) => {
       return res.status(200).json(JSON.stringify(thisSurvey.questions));
     }
   } catch (err) {
-    console.log()
+    console.log(err);
     return res.status(400).message("Unexpected error occurred when looking up question in database: " + err);
   }
 });
