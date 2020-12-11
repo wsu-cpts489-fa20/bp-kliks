@@ -1,11 +1,10 @@
+// CreateQuestion: Allows an instructor to create a question and save it the database.
+
 import React from 'react';
 import FileUpload from './AnswerTypes/FileUpload';
 import FreeResponse from './AnswerTypes/FreeResponse';
 import MultipleChoice from './AnswerTypes/MultipleChoice';
 import AppMode from '../../AppMode';
-import { v4 as uuid } from 'uuid';
-import Switch from 'react-input-switch';
-
 
 const answerTypes = {};
 answerTypes["multipleChoice"] = MultipleChoice;
@@ -22,7 +21,8 @@ class CreateQuestion extends React.Component {
         this.questionTitleRef = React.createRef();
         this.surveySelectionRef = React.createRef();
         this.dateRef = React.createRef();
-        
+
+        // Set the correct content based on whether we are editing or creating a question.
         if (this.props.mode == AppMode.SURVEY_MANAGEMENT_CREATE)
         {
             this.state = {
@@ -35,10 +35,10 @@ class CreateQuestion extends React.Component {
                 answers : [],
                 active : false,
                 acceptableAnswerTypes : [],
-                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" ,
-                submitIcon = "fa fa-save",
-                submitLabel = "Save Question"
-            }    
+                surveyID : this.props.surveys.length > 0 ? this.props.surveys[0].surveyID : "" 
+            }   
+            this.state.submitIcon = "fa fa-save";
+            this.state.submitLabel = "Save Question" ;
         } 
         else
         {
@@ -62,7 +62,7 @@ class CreateQuestion extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
         var newQuestion = {
-            questionID: uuid(),
+            questionID: "32534t" /* Random string, is changed in the route. */,
             questionTitle: this.state.title,
             questionText: this.state.question,
             questionType: this.state.answerType,
@@ -72,6 +72,7 @@ class CreateQuestion extends React.Component {
             responses:  []
         }
 
+        // Make a call to saveQuestion in the parent component to save the question to MongoDB.
         setTimeout(this.props.saveQuestion, 100, this.state.surveyID, newQuestion);
         this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
     }
@@ -93,6 +94,7 @@ class CreateQuestion extends React.Component {
     getSurveys = () => {
         var surveys = [];
   
+        // Go through the surveys and create the survey dropdown options 
         for(var index = 0; index < this.props.surveys.length; index++)
         {
           surveys.push(<option name={this.props.surveys[index].surveyID} key={this.props.surveys[index].surveyID} id={this.props.surveys[index].surveyID} value={this.props.surveys[index].surveyID}>{this.props.surveys[index].surveyTitle}</option>);
@@ -118,13 +120,15 @@ class CreateQuestion extends React.Component {
     // Handles the changes that occur to the dropdown menu 
     handleDropdownChange = (event) => {
         const name = event.target.name; 
-        this.setState({[name]: event.target.value,
+        // Set the state.
+        this.setState({[name]: event.target.value, 
           surveyID : event.target.value
         }, this.checkDataValidity);        
     }
 
     // data validator for the form elements
     checkDataValidity = () => {
+        // Check whether the dropdown of surveys contains anything that is selected.
         if(this.state.dropdownOfSurveys == ""){
             this.surveySelectionRef.current.setCustomValidity("No Survey selected.");
         }
@@ -132,6 +136,7 @@ class CreateQuestion extends React.Component {
             this.surveySelectionRef.current.setCustomValidity("");
         }
 
+        // Must have a question
         if(this.state.question.length == 0){
             this.questionTextRef.current.setCustomValidity("Question does not have a any text.");
         }
@@ -139,6 +144,7 @@ class CreateQuestion extends React.Component {
             this.questionTextRef.current.setCustomValidity("");
         }
 
+        // Must have a title
         if(this.state.title.length == 0){
             this.questionTitleRef.current.setCustomValidity("Question does not have a title.");
         }
@@ -146,6 +152,7 @@ class CreateQuestion extends React.Component {
             this.questionTitleRef.current.setCustomValidity("");
         }
 
+        // Make sure that the date that is chosen is not a past date.
         let today = new Date(Date.now()-(new Date()).getTimezoneOffset()*60000);
         if(this.state.date < today.toISOString().substr(0,10)){
             this.dateRef.current.setCustomValidity("Cannot create a question for the past.");
@@ -158,14 +165,14 @@ class CreateQuestion extends React.Component {
     render(){
         const AnswerType = answerTypes[this.state.answerType];
         return(
-            <form className="padded-page" onSubmit={this.handleSubmit}>
+            <form className="padded-page" id={"createQuestionMode"} onSubmit={this.handleSubmit}>
                 {
                 this.props.surveys.length == 0 ?
                 <center>
                     <p></p>
                     <p>There are no surveys, please create surveys in order to create questions </p>
                     <p></p>
-                    <button type="button" style={{width: "50%",fontSize: "36px"}} onClick={this.onAddSurvey}
+                    <button type="button" style={{width: "50%",fontSize: "36px"}} id={"createQuestion-createSurveyBtn"} onClick={this.onAddSurvey}
                     className="btn btn-primary btn-color-theme">
                         <span className="fa fa-plus"/>&nbsp; Add a survey
                     </button>
@@ -177,7 +184,9 @@ class CreateQuestion extends React.Component {
                         style={{fontSize: "20px"}}
                         >
                             Question Title:
-                            <input name="title" className="form-control form-center" value={this.state.title} onChange={this.handleChange}
+                            <input name="title"
+                            id={"createQuestion-title"}
+                            className="form-control form-center" value={this.state.title} onChange={this.handleChange}
                             ref={this.questionTitleRef}
                             minLength={1}
                             type="text"/>
@@ -187,7 +196,9 @@ class CreateQuestion extends React.Component {
                                 style={{fontSize: "20px"}}
                             >Question:
                                 <textarea name="question" className="form-control" rows="6" cols="75" 
-                                placeholder="Enter Question here" value={this.state.question}
+                                placeholder="Enter Question here"
+                                id={"createQuestion-question"}
+                                value={this.state.question}
                                 ref={this.questionTextRef}
                                 minLength={1}
                                 onChange={this.handleChange}
@@ -199,7 +210,9 @@ class CreateQuestion extends React.Component {
                         >
                             Date:
                             <input name="date" className="form-control form-center" 
-                            type="date" value={this.state.date} onChange={this.handleChange}
+                            type="date" 
+                            id={"createQuestion-date"}
+                            value={this.state.date} onChange={this.handleChange}
                             ref={this.dateRef}
                             />
                         </label>
@@ -223,7 +236,7 @@ class CreateQuestion extends React.Component {
                         <label style={{fontSize: "20px"}}>
                             Activate Question after Creation:
                             <p></p>
-                            <label className="switch"><input type={"checkbox"} id={"togBtn"} onClick={this.switchHandler}/>
+                            <label className="switch"><input type={"checkbox"} id={"createQuestion-togBtn"} onClick={this.switchHandler}/>
                                 <div className="slider round">
                                 <span className="on" style={{textAlign:"left"}}>YES</span><span className="off"  style={{textAlign:"right"}}>NO</span>
                                 </div>
@@ -233,7 +246,9 @@ class CreateQuestion extends React.Component {
                         <label
                             style={{fontSize: "20px"}}
                         >Answer Type:
-                        <select name="answerType" value={this.state.answerType} onChange={this.handleChange} 
+                        <select name="answerType" 
+                        id={"createQuestion-answerTypeDropdown"}
+                        value={this.state.answerType} onChange={this.handleChange} 
                         className="form-control form-center">
                         <option value="shortAnswer">Short Answer</option>
                         <option value="multipleChoice">Multiple Choice</option>
@@ -247,7 +262,9 @@ class CreateQuestion extends React.Component {
                         >
                         </AnswerType>
                         <p></p>
-                        <button type="submit" style={{width: "70%",fontSize: "36px"}} 
+                        <button 
+                        id={"createQuestion-createQuestionBtn"}
+                        type="submit" style={{width: "70%",fontSize: "36px"}} 
                         className="btn btn-primary btn-color-theme">
                             <span className={this.state.submitIcon}/>&nbsp; {this.state.submitLabel}
                         </button>

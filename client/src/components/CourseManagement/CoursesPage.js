@@ -10,6 +10,7 @@ import CoursesTable from './CoursesTable';
 import FloatingButton from './../FloatingButton.js';
 import UploadStudents from './UploadStudents.js';
 import AddCourse from './AddCourse.js';
+import AddStudent from './AddStudent';
 
 class CoursesPage extends React.Component {
 
@@ -57,8 +58,7 @@ class CoursesPage extends React.Component {
 
     // handle click on the add students button
     handleAddStudent = () => {
-        //this.handleChangeMode(AppMode.STUDENTS_CREATE);
-        console.log("Adding a student");
+        
         this.props.changeMode(AppMode.STUDENTS_CREATE);
     }
 
@@ -100,13 +100,86 @@ class CoursesPage extends React.Component {
 
     // handle adding a student to the currently selected course
     addStudent = async (newStudent) => {
-        console.log("Adding a student for course: " + this.state.courseId);
+
+        let url = '/students/' + this.state.courseId;
+        let res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'POST',
+            body: JSON.stringify(newStudent)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            console.log("Successfully added student");
+        } else {
+            console.log("Error adding student");
+        }
+
+        // refetch the students list
+        this.handleChangeCourse(this.state.courseId, this.state.courseName);
+
+        // fetch the course in question so it can be added to the student's account
+        url = "/courses/" + this.props.userObj.id;
+        res = await fetch(url, {method: 'GET'});
+        if (res.status != 200) {
+            let msg = await res.text();
+            console.log("There was an error obtaining students for instructor " + msg);
+            return;
+        } 
+        let body = await res.json();
+        body = JSON.parse(body);
+
+        body = body.filter(function (response) {
+            return response.courseID === this.state.courseId;
+        }.bind(this));
+        body = body[0];
+
+        // add course to atudent's account
+        this.addCourse(body, newStudent.userID);
     }
 
-    addCourse = async (courseData) => {
-        console.log("Creating a new course: " + courseData);
+    editStudent = async (studentInfo, originalId) => {
 
-        const url = '/courses/' + this.props.userObj.id;
+        // update course using route
+        const url = '/students/' + this.state.courseId + '/' + originalId;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            method: 'PUT',
+            body: JSON.stringify(studentInfo)}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            console.log("Student successfully updated");
+        } else {
+            console.log("Error occurred while updating student");
+        }
+        // refetch the students list
+        this.handleChangeCourse(this.state.courseId, this.state.courseName);
+    }
+
+    deleteStudent = async (studentId) => {
+
+       // delete using route
+       const url = '/students/' + this.state.courseId + '/' + studentId;
+       const res = await fetch(url, 
+                    {method: 'DELETE'}); 
+        if (res.status == 200) {
+            console.log("Successfully deleted student")
+        } else {
+            const resText = await res.text();
+            console.log("Student deletion failed with error: " + resText);
+        }
+
+        // refetch the students list
+        this.handleChangeCourse(this.state.courseId, this.state.courseName);
+    }
+
+    addCourse = async (courseData, userId = this.props.userObj.id) => {
+
+        const url = '/courses/' + userId;
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -120,6 +193,8 @@ class CoursesPage extends React.Component {
         } else {
             console.log("Error adding course");
         }
+
+        this.props.updateUser();
     }
 
     render() {
@@ -136,16 +211,21 @@ class CoursesPage extends React.Component {
                     changeMode={this.props.changeMode}
                     mode={this.props.mode}
                     userId={this.props.userObj.id}
-                    changeCourse={this.handleChangeCourse}/> :
+                    changeCourse={this.handleChangeCourse}
+                    updateUser={this.props.updateUser}/> :
                     <StudentsTable 
                     students={this.state.students}
                     userType={this.props.userObj.userType}
                     menuOpen={this.props.menuOpen}
-                    changeMode={this.props.changeMode}/>
+                    changeMode={this.props.changeMode}
+                    courseId={this.state.courseId}
+                    mode={this.props.mode}
+                    editStudent={this.editStudent}
+                    deleteStudent={this.deleteStudent}/>
                 }
                 </center>
 
-                {this.props.userObj.userType === "Instructor" &&  this.props.mode === AppMode.STUDENTS ?
+                {this.props.userObj.userType === "Instructor" &&  (this.props.mode === AppMode.STUDENTS || this.props.mode === AppMode.STUDENTS_CREATE) ?
                 <div className="floatingbtn-container">
                 <FloatingButton
                 id={"AddStudentBtn"}
@@ -172,6 +252,13 @@ class CoursesPage extends React.Component {
                 changeMode={this.props.changeMode}
                 addCourse={this.addCourse}
                 instructorId={this.props.userObj.id} />
+                : null}
+
+                {this.props.mode === AppMode.STUDENTS_CREATE ?
+                <AddStudent
+                changeMode={this.props.changeMode}
+                addStudent={this.addStudent}
+                courseName={this.state.courseName} />
                 : null}
 
             </div>

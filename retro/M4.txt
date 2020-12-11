@@ -1,0 +1,44 @@
+Retrospective Meeting Notes (12/07/2020 3:00PM - 3:40PM) -- (UPDATE-Meeting: 3:00-3:20): Anything with UPDATE is for the mid-point meeting on Wed.
+1. Milestone 3 Grading:
+- Tables not loading issus mentioned --> Will be fixing that during this milestone.
+
+2. Planning/Updates
+- Osman:
+    - Will take on the issue of adding unique ids to objects that are being saved to MongoDB.
+    - UPDATE: Delete surveys should be done by tonight and will be updating the Tables to refresh. In addition will be taking on the issue to solve the error that is in the            master branch.
+- Verenice:
+    - No updates.
+    - UPDATES:No updates
+- Rebecca:
+    - Will take on the issue of making sure that tables refresh after modifying/creating/deleting table items.
+    - UPDATES: PR for Edit and Deleting courses. And Tables should be able to able to refresh. Work on Students and Tests.
+- Dane:
+    - Finished over the weekend on issue #40, and will create PR for the issue by EOD tomorrow.
+    - Half way done with issue #36, should be done by tomorrow.
+    - UPDATE: Sorting questions would not work when trying to repopulate the table. Other issue is still being worked on.
+            getting a null error on the first issue, but Osman will take care of it.
+
+- Marco:
+    - Finishing up the courses Test issue.
+    - Should be able to get started on the active questions issue with most of issue #40 being completed.
+    - UPDATE: No update.
+
+4. What is going well?
+- Everything is going well.
+
+5. What is not working?
+- Time and sprint restrictions.
+
+6. Improve?
+- Meeting before demo time.
+
+3. Questions/Concerns:
+- No Questions or concerns.
+
+7. Notes
+- A few new issues were created:
+    - Frontend issues
+    - Bug fixing issues
+    - Testing issues
+- Poker planning on the new issues.
+- Closed issues that we were not going to have time to do.

@@ -16,7 +16,6 @@ class CoursesTable extends React.Component {
     }
 
     viewStudents = (courseId, courseName) => {
-        console.log("Opening students for courseId: " + courseId);
 
         // update courseID state in app
         this.props.changeCourse(courseId, courseName);
@@ -24,7 +23,6 @@ class CoursesTable extends React.Component {
     }
 
     handleEditCourse = (id, name) => {
-        console.log("Editing " + id);
         
         this.setState({
             courseId: id,
@@ -35,7 +33,6 @@ class CoursesTable extends React.Component {
     }
 
     handleDeleteCourse = (id, name) => {
-        console.log("Deleting " + id);
 
         this.setState({
             courseId: id,
@@ -57,10 +54,10 @@ class CoursesTable extends React.Component {
         }
 
         this.props.changeMode(AppMode.COURSES);
+        this.props.updateUser();
     }
 
     editCourse = async (courseInfo) => {
-        console.log(courseInfo);
 
         // update course using route
         const url = '/courses/' + this.props.userId + '/' + this.state.courseId;
@@ -77,6 +74,7 @@ class CoursesTable extends React.Component {
         } else {
             console.log("Error occurred while updating course");
         }
+        this.props.updateUser();
     }
 
     //renderTable -- render an HTML table displaying the rounds logged
@@ -94,7 +92,7 @@ class CoursesTable extends React.Component {
             </td>
             <td><button onClick={this.props.menuOpen ? null : () => 
                 this.viewStudents(this.props.courses[r].courseID, this.props.courses[r].courseName)}>
-                    <span className="fa fa-users"></span></button></td>
+                    <span id="studentView" className="fa fa-users"></span></button></td>
             {this.props.userType === "Instructor" ? 
                 <div className="instructor-buttons">
                     <td><button onClick={this.props.menuOpen ? null : () => 

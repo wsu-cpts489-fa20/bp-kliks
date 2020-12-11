@@ -1,10 +1,11 @@
+// CreateSurvey: Allows an instructor to create a survey and save it the database.
+
 import React from 'react';
 import FileUpload from './AnswerTypes/FileUpload';
 import FreeResponse from './AnswerTypes/FreeResponse';
 import MultipleChoice from './AnswerTypes/MultipleChoice';
 import CreateQuestion from './CreateQuestion';
 import AppMode from '../../AppMode';
-import { v4 as uuid } from 'uuid';
 
 const answerTypes = {};
 answerTypes["multipleChoice"] = MultipleChoice;
@@ -53,8 +54,8 @@ class CreateSurvey extends React.Component {
             courseID : this.state.courseID
           };
 
-          setTimeout(this.props.saveSurvey, 100, uuid(), newSurvey);
-          this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+          // Make a call to the saveSurvey to save the survey to MongoDB
+          setTimeout(this.props.saveSurvey, 1000, "efr423f" /* Random string, is changed in the route. */, newSurvey);
         }
     }
 
@@ -62,6 +63,7 @@ class CreateSurvey extends React.Component {
     getCourses = () => {
       var courses = [];
 
+      // Go through all of the courses and create the dropdown option.
       for(var index = 0; index < this.props.userObj.courses.length; index++)
       {
         const id = this.props.userObj.courses[index].courseSemester + "-"  + this.props.userObj.courses[index].courseYear +
@@ -107,11 +109,13 @@ class CreateSurvey extends React.Component {
 
     render(){
         return(
-            <form className="padded-page" onSubmit={this.handleSubmit}>
+            <form className="padded-page" id={"createSurvey-page"} onSubmit={this.handleSubmit}>
             <center>
               <label>
                 Survey Title:
-                <input name="surveyTitle" className="form-control form-center"
+                <input name="surveyTitle" 
+                id={"createSurvey-title"}
+                className="form-control form-center"
                 value={this.state.surveyTitle}
                 onChange={this.handleChange}
                 minLength={1}
@@ -121,7 +125,9 @@ class CreateSurvey extends React.Component {
               <p></p>
               <label>
                 Date:
-                <input name="date" className="form-control form-center" 
+                <input name="date" 
+                  id={"createSurvey-date"}
+                  className="form-control form-center" 
                   type="date" value={this.state.date} onChange={this.handleChange} 
                   ref={this.surveyDateRef}/>
               </label>
@@ -140,8 +146,10 @@ class CreateSurvey extends React.Component {
             </select> 
             </label>
             <p></p>
-            <button type="submit" style={{width: "50%",fontSize: "36px"}}
-            className="btn btn-primary btn-color-theme">
+            <button type="submit" 
+              id={"createSurvey-creatBtn"}
+              style={{width: "50%",fontSize: "36px"}}
+              className="btn btn-primary btn-color-theme">
               <span className="fa fa-plus"/>&nbsp; Create survey
             </button>
             </center>

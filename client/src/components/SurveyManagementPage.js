@@ -1,3 +1,7 @@
+// Main manage surveyManagement page
+// From here an instructor can CreateQuestions, CreateSurveys, SearchSurveys, View Active questions, search for questions, and view all
+// of the responses that students made.
+
 import React from 'react';
 import CreateSurvey from './SurveyManagement/CreateSurvey.js';
 import ActiveQuestions from './SurveyManagement/ActiveQuestions.js'
@@ -8,6 +12,8 @@ import CreateQuestion from './SurveyManagement/CreateQuestion.js';
 import SearchSurveys from './SurveyManagement/SearchSurveys.js';
 
 class SurveyManagementPage extends React.Component {
+
+    // Constructor for the component that takes in the props and sets the state of the component.
     constructor(props){
         super(props);
         this.state = {
@@ -16,10 +22,14 @@ class SurveyManagementPage extends React.Component {
             surveys : [],
             errorMsg : "",
             deleteId: "",
-            editId: ""
+            editId: "",
+            surveyToDelete : {}
         };
+    }
 
-        this.getQuestions();
+    //componentDidMount
+    componentDidMount() {
+        this.updateSurveys();
     }
 
     //setDeleteId -- Capture in this.state.deleteId the unique id of the item
@@ -35,7 +45,7 @@ class SurveyManagementPage extends React.Component {
     }
 
     /*
-        Save a question to the mongoDB 
+        Save a question to the mongoDB by calling the POST route for questions
     */
     saveQuestion = async (surveyId, newQuestion) => {
         const url = '/questions/' + surveyId;
@@ -49,17 +59,16 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             this.setState({errorMsg: ""});
-            this.getQuestions();
+            await this.updateSurveys();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
 
     /*
-        Edit a question to the mongoDB 
+        Edit a question to the mongoDB by calling the PUT route for questions
     */
     editQuestion = async (surveyId, updatedQuestion) => {
         const url = '/questions/' + surveyId + '/' + 
@@ -78,6 +87,7 @@ class SurveyManagementPage extends React.Component {
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH);
         } else {
             console.log("Question Updated!");
+            await this.updateSurveys();
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH);
         }
     }
@@ -85,6 +95,7 @@ class SurveyManagementPage extends React.Component {
     //deleteQuestion -- Delete the current user's question uniquely identified by
     //this.state.deleteId, delete from the database, and reset deleteId to empty.
     deleteQuestion = async () => {
+        // Make a request to the questions DELETE route to remove the question.
         const url = '/questions/' + this.props.userObj.id + '/' + 
             this.questions[this.state.deleteId].questionID;
         const res = await fetch(url, {
@@ -93,7 +104,6 @@ class SurveyManagementPage extends React.Component {
                 'Content-Type': 'application/json'
                 },
             method: 'DELETE'
-            //body: JSON.stringify()
         }); 
         const msg = await res.text();
         if (res.status != 200) {
@@ -109,6 +119,7 @@ class SurveyManagementPage extends React.Component {
         Save a survey to the mongoDB 
     */
     saveSurvey = async (surveyID, newSurvey) => {
+        // Make a request to the surveys POST route to add the survey.        
         const url = '/surveys/' + surveyID;
         const res = await fetch(url, {
             headers: {
@@ -120,73 +131,121 @@ class SurveyManagementPage extends React.Component {
         const msg = await res.text();
         if (res.status != 200) {
             this.setState({errorMsg: msg});
-            this.getQuestions();
             this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         } else {
             this.setState({errorMsg: ""});
-            this.getQuestions();
+            await this.updateSurveys(); //call update to update the array state variables.
             this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
 
-    /* 
-        Name: getQuestions
-        Purpose: Gets all of the questions, surveys, and responses for the particular instructor.
-    */     
-    getQuestions = async () => {
-
+    // Updates surveys like the updateUser except for Surveys
+    updateSurveys = async () => {
         var courses = [];
         courses = this.props.userObj.courses.map((course) => {
             return course.courseID;
         });
-
+    
+        // Checks if there are courses, if there are no courses send we just send an array with an empty string.
         if(courses.length == 0){
             courses = [""]
         }
-
-        let response = await fetch("/responses/" + this.props.userObj.id+"/"+JSON.stringify(courses)); //["cpts489Fall2020"]
-    
-        if (response.status == 200) {
-            response = await response.json();
-            const obj = JSON.parse(response);    
         
-            var getAllResponses = (questions) => {
-                if(questions.length == 0){
-                  return [];
-                }
-            
-                var responses = [];
-                var newquestions = [];
-                questions.forEach((survey) => {
-                  survey.questions.forEach((question) => {
-                    newquestions.push({
+        // Make a request to get the surveys
+        let response = await fetch("/all/surveys/" + JSON.stringify(courses), {method: 'GET'});
+        if (response.status != 200) {
+          let msg = await response.text();
+          console.log("There was an error refreshing the user: " + msg);
+          return;
+        } 
+        let surveys = await response.json();
+        surveys = JSON.parse(surveys);
+
+        // If we get back nothing then we can set the state to empty arrays
+        if(surveys.length == 0){
+            this.setState({
+                surveys: [],
+                questions: [],
+                responses: []
+            });
+            return;
+        }
+
+        var questions = this.seperateQuestions(surveys); // Get all of the questions.
+        var responses = this.seperateResponses(surveys); // Get all of the responses.
+
+        // Udpate the surveys, questions, and responses.
+        this.setState({
+            surveys: surveys,
+            questions: questions,
+            responses : responses
+        });
+    }
+
+    // Gets the questions from the surveys that were just retrieved 
+    seperateQuestions = (surveys) => {
+        var questions = [];
+        surveys.forEach((survey)=>{
+            survey.questions.forEach((question)=> {
+                questions.push(
+                    {
                         questionID: question.questionID,
                         surveyID: survey.surveyID,
                         responses: question.responses,
                         survey: survey,
-                        question: question
-                      });
-                    question.responses.forEach((response) => {
-                        responses.push({
-                          questionID: question.questionID,
-                          surveyID: survey.surveyID,
-                          response: response,
-                          survey: survey,
-                          question: question,
-                          responseType: response.students.length > 1 ? "Group" : "Individual"
+                        question: question,
+                    });
+            });
+        });
+
+        return questions;
+    }
+
+    // Gets the responses from the surveys that were just retrieved 
+    seperateResponses = (surveys) => {
+        var responses = [];
+        // Run through all of the surveys and questions then the responses and begin to push them into the responses object.
+        surveys.forEach((survey)=>{
+            survey.questions.forEach((question)=> {
+                question.responses.forEach((response) => {
+                    responses.push({
+                            questionID: question.questionID,
+                            surveyID: survey.surveyID,
+                            response: response,
+                            survey: survey,
+                            question: question,
+                            responseType: response.students.length > 1 ? "Group" : "Individual"
                         });
                     });
-                  });
                 });
-                return [responses, newquestions];
-              }
-    
-            var data = getAllResponses(obj);
-            this.setState({
-              surveys : obj,
-              questions : data[1],
-              responses : data[0]
             });
+        return responses;        
+    }
+
+    // Sets the survey that is going to be delete.
+    setSurveyDelete = (survey) => {
+        // Setting the unique identifier that will be delete [The survey itself.]
+        this.setState({
+            surveyToDelete : survey
+        });
+    }
+
+    // Delete Surveys by calling the DELETE route for SURVEYS
+    deleteSurvey = async () => {
+        if(this.state.surveyToDelete == {}){
+            return;
+        }
+
+        const url = '/surveys/' + this.state.surveyToDelete.surveyID;
+        const res = await fetch(url, {method: 'DELETE'}); 
+        const msg = await res.text();
+        if (res.status != 200) {
+            this.setState({errorMsg: "An error occurred when attempting to delete survey from MongoDB: " 
+            + msg});
+            this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
+        } else {
+            await this.updateSurveys(); // here, we want to update the surveys after this call.
+            this.props.refreshOnUpdate(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
         }
     }
 
@@ -219,7 +278,9 @@ class SurveyManagementPage extends React.Component {
                     surveys={this.state.surveys}
                     mode={this.props.mode}
                     changeMode={this.props.changeMode}
-                    saveQuestion={this.editQuestion}
+                    // saveQuestion={this.editQuestion}
+                    saveQuestion={this.saveQuestion}
+                    editQuestion={this.editQuestion}
                     >
                     </CreateQuestion>
                 );
@@ -246,8 +307,11 @@ class SurveyManagementPage extends React.Component {
                 return (
                     <SearchSurveys
                     surveys={this.state.surveys}
-                    getQuestions={this.getQuestions}
+                    userObj={this.props.userObj}
+                    updateSurveys={this.updateSurveys}
                     menuOpen={this.props.menuOpen}
+                    setSurveyDelete={this.setSurveyDelete}
+                    deleteSurvey={this.deleteSurvey}
                     >
                     </SearchSurveys>
                 );
@@ -255,7 +319,7 @@ class SurveyManagementPage extends React.Component {
                 return (
                     <SubmittedResponse
                     userObj={this.props.userObj}
-                    getQuestions={this.getQuestions}
+                    updateResponses={this.updateSurveys}
                     questions={this.state.questions}
                     responses={this.state.responses}
                     menuOpen={this.props.menuOpen}
@@ -267,68 +331,3 @@ class SurveyManagementPage extends React.Component {
 }
 
 export default SurveyManagementPage;
-
-
-/*
-    CODE TO HOW HOW TO CALL THE METHODS FOR RESPONSE
-
-BELOW IS HOW YOU CAN CALL THE GET METHOD FOR responses
-        const url = '/responses/' + this.props.userObj.id;
-        const res = await fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-                },
-            method: 'GET',
-            body: JSON.stringify({"courses": ["cpts489Fall2020"]})}); 
-        const msg = await res.text();
-        if (res.status == 200) {
-          console.log("getQuestions: SUCCESS");
-          console.log(res);
-          console.log(msg);
-        } else {
-          console.log(res);
-          console.log(msg);
-          console.log("getQuestions: ERROR");
-        }
-
-    
-BELOW IS HOW YOU CAN CALL THE CREATE METHOD FOR responses
-    var newResponse = {
-    "students": [
-        {
-        "userID": "marco.arceo@wsu.edu",
-        "studentDisplayName": "marco.arceo@wsu.edu"
-        }],
-    "responseId": "rID55",
-    "responseDateTime": "Wed Nov 12 2020 14:19:12 GMT-0800",
-    "surveyResponse": "Choice 5"
-    }
-
-    var newData = {
-    "response" : newResponse,
-    "questionID": "questionID1",
-    "courseID": "cpts489Fall2020",
-    "surveyID": "testID",
-    }
-    
-    
-    const url = '/responses/';// + this.props.userObj.id;
-    const res = await fetch(url, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
-        method: 'POST',
-        body: JSON.stringify(newData)}); 
-    const msg = await res.text();
-    if (res.status == 200) {
-        console.log("getQuestions: SUCCESS");
-        console.log(res);
-        console.log(msg);
-    } else {
-        console.log(res);
-        console.log(msg);
-        console.log("getQuestions: ERROR");
-    }
-*/

@@ -5,10 +5,12 @@ import App from './App.js';
 class SideMenu extends React.Component {
 
   setGeneralMode = (mode) => {
-    if(AppMode.SURVEY_MANAGEMENT === mode|| AppMode.SURVEY_MANAGEMENT_CREATE === mode || 
+    if(AppMode.SURVEY_MANAGEMENT === mode|| 
+      AppMode.SURVEY_MANAGEMENT_CREATE === mode || 
+      AppMode.SURVEY_MANAGEMENT_CREATE_SURVEY  === mode||
       AppMode.SURVEY_MANAGEMENT_RESPONSES === mode 
       || AppMode.SURVEY_MANAGEMENT_SEARCH === mode
-      || AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS){
+      || AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS === mode){
       return AppMode.SURVEY_MANAGEMENT;
     } else {
       return mode;
@@ -40,7 +42,7 @@ renderModeMenuItems = () => {
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_SEARCH_SURVEYS);
           }}>
-            <span className="fa fa-plus"></span>&nbsp;Search Surveys</a>
+            <span className="fa fa-search"></span>&nbsp;Search Surveys</a>
         <a className="sidemenu-item " id="surveyManagement-create" onClick={(e) => { 
           e.preventDefault();
           this.props.changeMode(AppMode.SURVEY_MANAGEMENT_CREATE);

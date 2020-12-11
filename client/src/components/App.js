@@ -23,6 +23,8 @@ modeTitle[AppMode.COURSES_EDIT] = "Edit Course";
 modeTitle[AppMode.STUDENTS] = "Students";
 modeTitle[AppMode.STUDENTS_CREATE] = "Add a Student";
 modeTitle[AppMode.STUDENTS_UPLOAD] = "Students";
+modeTitle[AppMode.STUDENTS_EDIT] = "Edit Student";
+modeTitle[AppMode.STUDENTS_DELETE] = "Delete Student";
 
 const modeToPage = {};
 
@@ -53,6 +55,8 @@ modeToPage[AppMode.COURSES_EDIT] = CoursesPage;
 modeToPage[AppMode.STUDENTS] = CoursesPage;
 modeToPage[AppMode.STUDENTS_CREATE] = CoursesPage;
 modeToPage[AppMode.STUDENTS_UPLOAD] = CoursesPage;
+modeToPage[AppMode.STUDENTS_EDIT] = CoursesPage;
+modeToPage[AppMode.STUDENTS_DELETE] = CoursesPage;
 
 
 class App extends React.Component {
@@ -136,6 +140,21 @@ class App extends React.Component {
     this.setState({showEditAccountDialog: false});
   }
 
+  updateUser = async () => {
+    // Get the current user
+    let url = "/users/" + this.state.userObj.id;
+    let res = await fetch(url, {method: 'GET'});
+    if (res.status != 200) {
+        let msg = await res.text();
+        console.log("There was an error refreshing the user: " + msg);
+        return;
+    } 
+    let body = await res.json();
+    body = JSON.parse(body);
+    console.log("refreshed User: " + body);
+    this.setState({userObj: body});
+  }
+
   //editAccountDone -- called after successful edit or
   //deletion of user account. msg contains the status
   //message and deleted indicates whether an account was
@@ -198,6 +217,7 @@ class App extends React.Component {
             mode={this.state.mode}
             changeMode={this.handleChangeMode}
             userObj={this.state.userObj}
+            updateUser={this.updateUser}
             refreshOnUpdate={this.refreshOnUpdate}/>
       </div>
     );  

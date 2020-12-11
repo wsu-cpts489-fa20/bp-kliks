@@ -1,3 +1,4 @@
+const { default: ObjectID } = require('bson-objectid');
 var express = require('express');
 var router = express.Router();
 const Survey = require('./../schemas/survey');
@@ -6,6 +7,29 @@ const Survey = require('./../schemas/survey');
 //Survey ACCOUNT MANAGEMENT ROUTES
 ////////////////////////////////
 
+
+//READ Survey route: Retrieves all the Surveys with the specified surveyID from surveys collection (GET)
+router.get('/all/surveys/:courses', async(req, res, next) => {
+  console.log("in /all/surveys route (GET) with courses = " + 
+    JSON.stringify(req.params.courses));
+    var courses = JSON.parse(req.params.courses);
+  try {
+    let thisSurvey = await Survey.find({courseID:  { $in: courses }});
+
+    if(thisSurvey){
+      return res.status(200).json(JSON.stringify(thisSurvey));
+    }
+    else{
+      return res.status(404).send("No surveys with courses " +
+        req.params.courses + " was found in database.");
+    }
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when looking up Surveys with course ids " +
+      req.params.courses + " in database: " + err);
+  }
+});
 
 //READ Survey route: Retrieves the Survey with the specified surveyID from surveys collection (GET)
 router.get('/surveys/:surveyId', async(req, res, next) => {
@@ -20,7 +44,7 @@ router.get('/surveys/:surveyId', async(req, res, next) => {
         return res.status(200).json(JSON.stringify(thisSurvey));
       }
     } catch (err) {
-      console.log()
+      console.log(err);
       return res.status(400).send("Unexpected error occurred when looking up Survey with id " +
         req.params.surveyID + " in database: " + err);
     }
@@ -39,12 +63,16 @@ router.get('/surveys/:surveyId', async(req, res, next) => {
         "It must contain 'surveyTitle','surveyDate','courseID' in message body.")
     }
     try {
+      
       let thisSurvey = await Survey.findOne({id: req.params.surveyID});
       if (thisSurvey) { //account already exists
         res.status(400).send("There is already a survey with this ID '" + 
           req.params.surveyID + "'.");
       } else { //account available -- add to database
+        req.body["_id"] = ObjectID();
+        req.params.surveyID = req.body._id.str;
         thisSurvey = await new Survey({
+          _id: req.body._id,
           surveyID: req.params.surveyID,
           surveyTitle: req.body.surveyTitle,
           surveyDate: req.body.surveyDate,
@@ -55,6 +83,7 @@ router.get('/surveys/:surveyId', async(req, res, next) => {
           req.params.surveyID + "' successfully created.");
       }
     } catch (err) {
+      console.log(err);
       return res.status(400).send("Unexpected error occurred when adding or looking up Survey in database. " + err);
     }
   });
@@ -84,6 +113,7 @@ router.get('/surveys/:surveyId', async(req, res, next) => {
             res.status(200).send("Survey " + req.params.surveyID + " successfully updated.")
           }
         } catch (err) {
+          console.log(err);
           res.status(400).send("Unexpected error occurred when updating Survey data in database: " + err);
         }
   });
@@ -102,7 +132,7 @@ router.get('/surveys/:surveyId', async(req, res, next) => {
         req.params.surveyID + " was successfully deleted.");
       }
     } catch (err) {
-      console.log()
+      console.log(err);
       return res.status(400).send("Unexpected error occurred when attempting to delete Survey with id " +
         req.params.surveyID + ": " + err);
     }
