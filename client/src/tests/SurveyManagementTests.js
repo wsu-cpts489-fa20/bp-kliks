@@ -8,7 +8,7 @@ fixture `Questions/Survey Management Tests`
     .page(isLocalTesting ? DEV_TEST_URL : DEPLOY_TEST_URL);
 
 // /*
-//     BELOW ARE THE VIEW QUESTIONS TABLE TESTS
+//     BELOW ARE THE QUESTIONS TABLE TESTS 
 // */ 
 
 // View Questions
