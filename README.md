@@ -118,7 +118,7 @@ In addition, to beiong able to add students, an instructor can edit and remove s
 **Milestone 1** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EYJFRvVwQB1Ei845_Z_hgXYBFDZqn2fp3BTiS6R-f82o5A?e=lfTQXZ).\
 **Milestone 2** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EZQWneBwPQlOoSml5YvrWKsBhytCH0yv_a1eoKIin89UFg?e=B161j1).\
 **Milestone 3** demo video located [here](https://emailwsu.sharepoint.com/:v:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EUnBud1mBoBKoCTawpHX7a4BI_U_xZn1SlEScKeXlOO9rQ?e=Drp26a).\
-**Milestone 4** demo video located [here]().
+**Milestone 4** Did an inclass demo.
 
 # BP Kliks Tests
 The [tests](https://github.com/wsu-cpts489-fa20/bp-kliks/tree/master/client/src/tests) for the kliks application are located here.
@@ -133,7 +133,7 @@ In order to run the tests the following commands have to be ran:
 **Milestone 1** test video located [here](https://emailwsu.sharepoint.com/:i:/r/teams/2020.fall.PULLM.Cpt.S.489-2.Kliks/Shared%20Documents/2.%20Kliks/milestone1Tests.gif?csf=1&web=1&e=RRSgPZ).\
 **Milestone 2** test video located [here](https://emailwsu.sharepoint.com/:i:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/Eff57N1Yn1pHpghcn7qDg_EBYiCv74Jnu0QlBZlpE_8X8A?e=uX4hGm).\
 **Milestone 3** test video located [here](https://emailwsu.sharepoint.com/:i:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EY7utKEbRuBOhl1YTM7qN54BXIy5d0kqwuyuIWldHI6_ew?e=LvyU9E).\
-**Milestone 4** test video located [here]().
+**Milestone 4** test video located [here](https://emailwsu.sharepoint.com/:i:/t/2020.fall.PULLM.Cpt.S.489-2.Kliks/EYgf5_rOmOFLh9fYWPuSQCkBiffO7gtylMq4mhXWaGap3w?e=caG334).
 
 
 # The resources to set up the GitActions for TestCafe
