@@ -7,6 +7,41 @@ const DEV_TEST_URL = 'http://localhost:8081';
 fixture `Questions/Survey Management Tests`
     .page(isLocalTesting ? DEV_TEST_URL : DEPLOY_TEST_URL);
 
+// /*
+//     BELOW ARE THE VIEW QUESTIONS TABLE TESTS
+// */ 
+
+// View Questions
+test('View Surveys: Surveys', async t => {
+    await t
+    .typeText('#emailInput', "osman@wsu.edu")
+    .typeText('#passwordInput', accounts.surveysStudent.password)
+    .click('#loginButton')
+
+    .click('#menuBtn')
+    .click('#surveyManagement-search')
+    
+    .expect(Selector('#searchQuestionsTableMode').exists).eql(true)
+    .expect(Selector('#searchQuestionsTableBody').child().count).gte(2)
+});
+
+// Search Questions
+test('Search Surveys: Search', async t => {
+    await t
+    .typeText('#emailInput', "osman@wsu.edu")
+    .typeText('#passwordInput', accounts.surveysStudent.password)
+    .click('#loginButton')
+
+    .click('#menuBtn')
+    .click('#surveyManagement-search')
+
+    .typeText('#searchQuestions', "ge45hreth")
+    .pressKey('enter')
+    
+    .expect(Selector('#searchQuestionsTableMode').exists).eql(true)
+    .expect(Selector('#searchQuestionsTableBody').child().count).eql(1)
+});
+    
 
 // /*
 //     BELOW ARE THE VIEW SURVEY TABLE TESTS
