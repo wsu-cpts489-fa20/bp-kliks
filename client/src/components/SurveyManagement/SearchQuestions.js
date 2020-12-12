@@ -162,7 +162,6 @@ class SubmittedResponse extends React.Component {
     }
 
   switchHandler = () => {
-    // console.log(this.state.ActiveFilter);
     if (this.state.ActiveFilter == false)
     {
       this.setState({ActiveFilter: true});
@@ -177,7 +176,7 @@ class SubmittedResponse extends React.Component {
   //Rounds Logged" message in case the table is empty.
   render() {
     return(
-    <div className="padded-page" id={"searchQuestionsMode"}>
+    <div className="padded-page" id="searchQuestionsTableMode">
       <center>
       <h4>Question Filter (Active Only or All Questions): </h4>  
       <label class="switch"><input type="checkbox" id="togBtn" onClick={this.switchHandler}/>
@@ -200,19 +199,6 @@ class SubmittedResponse extends React.Component {
                onKeyUp={this.onSearchTable}
                />
         </div> 
-        
-         {/* <div className="input-group center-search" style={{justifyContent: "center", paddingBottom: "20px"}}>
-            <SearchField
-              classNames="search-width"
-              placeholder="Search question"
-              onSearchClick={this.onSearchClicked}
-          /> */}
-             {/* <span className="input-group-prepend">
-                 <div className="input-group-text bg-transparent border-right-0"><i className="fa fa-search"></i></div>
-             </span>
-             <input className="form-control py-2 border-left-0 border" placeholder="Search Rounds" type="search" value="" id="searchRounds"
-             onkeyup="searchRoundsTable(this.value)" onSearch onsearch="searchRoundsTable(this.value)"/> */}
-         {/* </div> */}
       <table className="table table-hover">
         <thead className="thead-light">
         <tr>
@@ -224,7 +210,7 @@ class SubmittedResponse extends React.Component {
           <th>Delete</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="searchQuestionsTableBody">
           {Object.keys(this.props.questions).length === 0 ? 
             <tr>
             <td colSpan="6" style={{fontStyle: "italic"}}>There no questions that have been created.</td>
